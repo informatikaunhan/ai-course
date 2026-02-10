@@ -12,9 +12,9 @@
 | **Bobot SKS** | 3 SKS (Teori) |
 | **Semester** | 4 (Empat) |
 | **Prasyarat** | Struktur Data dan Algoritma (SDA201), Statistika dan Probabilitas (STP301) |
-| **Program Studi** | Teknik Informatika / Ilmu Komputer |
+| **Program Studi** | Informatikq |
 | **Dosen Pengampu** | Anindito, S.Kom., S.S., S.H., M.TI., CHFI. |
-| **Tahun Akademik** | [Tahun Akademik] |
+| **Tahun Akademik** | 2025/2026 |
 
 ---
 
