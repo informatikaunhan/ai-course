@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pertemuan 06: Constraint Satisfaction Problems (CSP)</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/league.min.css">
+    
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css">
+    
+    <!-- Custom Theme -->
+    <link rel="stylesheet" href="unhan-theme.css">
+    
+    <style>
+        /* Fallback styles if unhan-theme.css is not available */
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+        }
+        .reveal .slides section {
+            text-align: left;
+        }
+        .reveal .slides section.center {
+            text-align: center;
+        }
+        .reveal table {
+            margin: 20px auto;
+            font-size: 0.7em;
+        }
+        .reveal table th {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px;
+        }
+        .reveal table td {
+            padding: 8px 12px;
+            border: 1px solid #444;
+        }
+        .reveal .highlight-box {
+            background-color: rgba(37, 99, 235, 0.2);
+            border-left: 4px solid #2563eb;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .definition-box {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .warning-box {
+            background-color: rgba(245, 158, 11, 0.2);
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .two-column {
+            display: flex;
+            gap: 40px;
+        }
+        .reveal .two-column > div {
+            flex: 1;
+        }
+        .reveal .emoji-large {
+            font-size: 3em;
+        }
+        .reveal .quiz-option {
+            background-color: rgba(100, 100, 100, 0.3);
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .reveal .quiz-option:hover {
+            background-color: rgba(37, 99, 235, 0.4);
+        }
+        .reveal code {
+            background-color: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .reveal pre code {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .reveal .small-text {
+            font-size: 0.6em;
+        }
+        .reveal .medium-text {
+            font-size: 0.8em;
+        }
+        .reveal img {
+            max-height: 450px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- ==================== SLIDE 1: TITLE ==================== -->
+            <section class="center">
+                <h1>Kecerdasan Artifisial</h1>
+                <h3>Pertemuan 06</h3>
+                <h2>Constraint Satisfaction Problems (CSP)</h2>
+                <p class="small-text" style="margin-top: 50px;">
+                    Mata Kuliah: Kecerdasan Artifisial (AI401) | 3 SKS
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 2: LEARNING OUTCOMES ==================== -->
+            <section>
+                <h2>🎯 Capaian Pembelajaran</h2>
+                <p>Setelah pertemuan ini, mahasiswa mampu:</p>
+                <ol class="small-text">
+                    <li class="fragment">Memformulasikan masalah sebagai CSP</li>
+                    <li class="fragment">Menerapkan teknik constraint propagation</li>
+                    <li class="fragment">Mengimplementasikan algoritma AC-3</li>
+                    <li class="fragment">Menerapkan backtracking search untuk CSP</li>
+                    <li class="fragment">Menggunakan heuristik MRV, Degree, dan LCV</li>
+                    <li class="fragment">Mengimplementasikan forward checking</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 3: AGENDA ==================== -->
+            <section>
+                <h2>📋 Agenda Hari Ini</h2>
+                <div class="two-columns">
+                    <div>
+                        <h4>Bagian 1</h4>
+                        <ul class="small-text">
+                            <li>Definisi CSP</li>
+                            <li>Contoh CSP Klasik</li>
+                            <li>Constraint Graph</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Bagian 2</h4>
+                        <ul class="small-text">
+                            <li>Constraint Propagation</li>
+                            <li>Backtracking Search</li>
+                            <li>Heuristik & Forward Checking</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 4: MOTIVATION ==================== -->
+            <section>
+                <h2>🤔 Mengapa CSP?</h2>
+                <div class="box-info">
+                    <p><strong>Problem:</strong> Algoritma pencarian sebelumnya (BFS, DFS, A*) memperlakukan state sebagai "black box"</p>
+                </div>
+                <div class="fragment">
+                    <p class="small-text">CSP memungkinkan kita:</p>
+                    <ul class="small-text">
+                        <li class="fragment">Mengeksploitasi <span class="highlight">struktur internal</span> masalah</li>
+                        <li class="fragment">Mendeteksi <span class="highlight">failure lebih awal</span></li>
+                        <li class="fragment">Menggunakan <span class="highlight">heuristik domain-independent</span></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 5: CSP DEFINITION ==================== -->
+            <section>
+                <h2>📐 Definisi Formal CSP</h2>
+                <div class="box-definition">
+                    <strong>CSP</strong> didefinisikan oleh tiga komponen:
+                    <ol class="small-text">
+                        <li><strong>X</strong> = {X₁, X₂, ..., Xₙ} : himpunan <em>variabel</em></li>
+                        <li><strong>D</strong> = {D₁, D₂, ..., Dₙ} : himpunan <em>domain</em></li>
+                        <li><strong>C</strong> = {C₁, C₂, ..., Cₘ} : himpunan <em>constraint</em></li>
+                    </ol>
+                </div>
+                <p class="fragment small text-center">Solusi: Assignment lengkap yang memenuhi <strong>semua</strong> constraint</p>
+            </section>
+
+            <!-- ==================== SLIDE 6: CSP COMPONENTS TABLE ==================== -->
+            <section>
+                <h2>Komponen CSP</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Komponen</th>
+                        <th>Deskripsi</th>
+                        <th>Contoh (Map Coloring)</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Variabel (X)</strong></td>
+                        <td>Entitas yang diberi nilai</td>
+                        <td>WA, NT, SA, Q, NSW, V, T</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Domain (D)</strong></td>
+                        <td>Nilai yang mungkin</td>
+                        <td>{Merah, Hijau, Biru}</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Constraint (C)</strong></td>
+                        <td>Batasan yang dipenuhi</td>
+                        <td>Tetangga ≠ warna sama</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 7: CONSTRAINT TYPES ==================== -->
+            <section>
+                <h2>Jenis-Jenis Constraint</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Jenis</th>
+                        <th>Variabel</th>
+                        <th>Contoh</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Unary</strong></td>
+                        <td>1 variabel</td>
+                        <td>X₁ ≠ Merah</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Binary</strong></td>
+                        <td>2 variabel</td>
+                        <td>X₁ ≠ X₂</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Higher-order</strong></td>
+                        <td>> 2 variabel</td>
+                        <td>X₁ + X₂ + X₃ ≤ 10</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Global</strong></td>
+                        <td>Banyak variabel</td>
+                        <td>Alldiff(X₁, X₂, ..., Xₙ)</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 8: MAP COLORING ==================== -->
+            <section>
+                <h2>🗺️ Contoh: Map Coloring</h2>
+                <img src="images/p06-01-constraint-graph-australia.png" alt="Constraint Graph Australia">
+                <p class="small-text">Gambar: Constraint graph untuk pewarnaan peta Australia</p>
+            </section>
+
+            <!-- ==================== SLIDE 9: MAP COLORING FORMULATION ==================== -->
+            <section>
+                <h2>Formulasi Map Coloring</h2>
+                <div class="two-columns">
+                    <div>
+                        <p><strong>Variabel:</strong></p>
+                        <p class="small-text">WA, NT, SA, Q, NSW, V, T</p>
+                        <p><strong>Domain:</strong></p>
+                        <p class="small-text">{R, G, B} untuk semua</p>
+                    </div>
+                    <div>
+                        <p><strong>Constraint:</strong></p>
+                        <ul class="small-text">
+                            <li>WA ≠ NT</li>
+                            <li>WA ≠ SA</li>
+                            <li>NT ≠ SA</li>
+                            <li>NT ≠ Q</li>
+                            <li>SA ≠ Q</li>
+                            <li>SA ≠ NSW</li>
+                            <li>SA ≠ V</li>
+                            <li>Q ≠ NSW</li>
+                            <li>NSW ≠ V</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 10: N-QUEENS ==================== -->
+            <section>
+                <h2>👑 Contoh: N-Queens Problem</h2>
+                <img src="images/p06-02-nqueens-problem.png" alt="4-Queens Problem">
+                <p class="small-text">Gambar: Solusi valid 4-Queens dan constraint-nya</p>
+            </section>
+
+            <!-- ==================== SLIDE 11: N-QUEENS FORMULATION ==================== -->
+            <section>
+                <h2>Formulasi N-Queens</h2>
+                <div class="box-definition">
+                    <p><strong>Variabel:</strong> Q₁, Q₂, ..., Qₙ (satu ratu per kolom)</p>
+                    <p><strong>Domain:</strong> {1, 2, ..., N} (baris yang mungkin)</p>
+                </div>
+                <div class="fragment">
+                    <p><strong>Constraint:</strong></p>
+                    <ul class="small-text">
+                        <li>Tidak sebaris: Qᵢ ≠ Qⱼ untuk semua i ≠ j</li>
+                        <li>Tidak sediagonal: |Qᵢ - Qⱼ| ≠ |i - j|</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 12: SUDOKU ==================== -->
+            <section>
+                <h2>🔢 Contoh: Sudoku</h2>
+                <div class="two-columns">
+                    <div>
+                        <p><strong>Variabel:</strong></p>
+                        <p class="small-text">81 sel (X₁₁ ... X₉₉)</p>
+                        <p><strong>Domain:</strong></p>
+                        <p class="small-text">{1-9} atau singleton</p>
+                    </div>
+                    <div>
+                        <p><strong>Constraint:</strong></p>
+                        <ul class="small-text">
+                            <li>9 Alldiff (baris)</li>
+                            <li>9 Alldiff (kolom)</li>
+                            <li>9 Alldiff (kotak 3×3)</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="fragment small box-info">Total: 27 × C(9,2) = <strong>972 binary constraint</strong></p>
+            </section>
+
+            <!-- ==================== SLIDE 13: CRYPTARITHMETIC ==================== -->
+            <section>
+                <h2>🔤 Contoh: Cryptarithmetic</h2>
+                <div class="box-definition">
+                    <p style="font-size: 1.5em; text-align: center;">SEND + MORE = MONEY</p>
+                </div>
+                <div class="fragment small">
+                    <p><strong>Variabel:</strong> S, E, N, D, M, O, R, Y, C₁, C₂, C₃, C₄</p>
+                    <p><strong>Constraint:</strong></p>
+                    <ul class="small-text">
+                        <li>Alldiff(S, E, N, D, M, O, R, Y)</li>
+                        <li>S ≠ 0, M ≠ 0</li>
+                        <li>D + E = Y + 10×C₁</li>
+                        <li>... (column constraints)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 14: CSP AS SEARCH ==================== -->
+            <section>
+                <h2>🔍 CSP sebagai Search Problem</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Komponen</th>
+                        <th>Definisi untuk CSP</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Initial State</td>
+                        <td>Assignment kosong { }</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Successor</td>
+                        <td>Assign nilai ke variabel</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Goal Test</td>
+                        <td>Assignment lengkap + semua constraint terpenuhi</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Path Cost</td>
+                        <td>Konstan (tidak relevan)</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 15: COMMUTATIVE PROPERTY ==================== -->
+            <section>
+                <h2>✨ Sifat Komutatif</h2>
+                <div class="box-info">
+                    <strong>Commutative Property:</strong> Urutan assignment variabel tidak mempengaruhi hasil akhir
+                </div>
+                <p class="fragment small">Implikasi:</p>
+                <ul class="small-text">
+                    <li class="fragment">Pilih <strong>satu variabel</strong> per level</li>
+                    <li class="fragment">Branching factor = d (ukuran domain)</li>
+                    <li class="fragment">Search tree lebih kecil</li>
+                </ul>
+            </section>
+
+            <!-- ==================== SLIDE 16: CONSTRAINT PROPAGATION ==================== -->
+            <section>
+                <h2>🌊 Constraint Propagation</h2>
+                <div class="box-definition">
+                    <strong>Constraint Propagation:</strong> Teknik mengurangi domain variabel dengan memanfaatkan constraint
+                </div>
+                <p class="fragment">Tujuan:</p>
+                <ul class="small-text">
+                    <li class="fragment">Deteksi <span class="highlight">inconsistency</span> lebih awal</li>
+                    <li class="fragment">Kurangi <span class="highlight">search space</span></li>
+                    <li class="fragment">Hapus nilai yang <span class="warning">tidak mungkin</span></li>
+                </ul>
+            </section>
+
+            <!-- ==================== SLIDE 17: NODE CONSISTENCY ==================== -->
+            <section>
+                <h2>📍 Node Consistency</h2>
+                <div class="box-definition">
+                    <strong>Node Consistency:</strong> Semua nilai dalam domain memenuhi <em>unary constraint</em>
+                </div>
+                <div class="fragment">
+                    <p><strong>Contoh:</strong></p>
+                    <ul class="small-text">
+                        <li>D(X₁) = {1, 2, 3, 4, 5}</li>
+                        <li>Constraint: X₁ > 2 dan X₁ ≤ 4</li>
+                        <li class="fragment highlight">Hasil: D(X₁) = {3, 4}</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 18: ARC CONSISTENCY ==================== -->
+            <section>
+                <h2>↔️ Arc Consistency</h2>
+                <div class="box-definition">
+                    <strong>Arc Consistency:</strong> Untuk setiap nilai di D(Xᵢ), ada nilai di D(Xⱼ) yang memenuhi constraint
+                </div>
+                <img src="images/p06-03-arc-consistency.png" alt="Arc Consistency" class="fragment">
+            </section>
+
+            <!-- ==================== SLIDE 19: ARC CONSISTENCY EXAMPLE ==================== -->
+            <section>
+                <h2>Contoh Arc Consistency</h2>
+                <p>D(X₁) = {1, 2, 3}, D(X₂) = {1, 2}, Constraint: X₁ < X₂</p>
+                <div class="fragment">
+                    <p><strong>Arc (X₁, X₂):</strong></p>
+                    <ul class="small-text">
+                        <li>X₁=1: Ada X₂>1? ✓ (X₂=2)</li>
+                        <li>X₁=2: Ada X₂>2? ✗ Hapus!</li>
+                        <li>X₁=3: Ada X₂>3? ✗ Hapus!</li>
+                    </ul>
+                    <p class="highlight">D(X₁) = {1}</p>
+                </div>
+                <div class="fragment">
+                    <p><strong>Arc (X₂, X₁):</strong></p>
+                    <ul class="small-text">
+                        <li>X₂=1: Ada X₁<1? ✗ Hapus!</li>
+                        <li>X₂=2: Ada X₁<2? ✓ (X₁=1)</li>
+                    </ul>
+                    <p class="highlight">D(X₂) = {2}</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 20: AC-3 ALGORITHM ==================== -->
+            <section>
+                <h2>🔄 Algoritma AC-3</h2>
+                <pre><code class="python">def AC3(csp):
+    queue = all_arcs(csp)
+    while queue not empty:
+        (Xi, Xj) = queue.pop()
+        if REVISE(csp, Xi, Xj):
+            if domain[Xi] is empty:
+                return False
+            for Xk in neighbors[Xi] - {Xj}:
+                queue.add((Xk, Xi))
+    return True</code></pre>
+                <p class="fragment small box-info">Kompleksitas: <strong>O(ed³)</strong> — e = edges, d = domain size</p>
+            </section>
+
+            <!-- ==================== SLIDE 21: REVISE FUNCTION ==================== -->
+            <section>
+                <h2>Fungsi REVISE</h2>
+                <pre><code class="python">def REVISE(csp, Xi, Xj):
+    revised = False
+    for x in domain[Xi]:
+        # Cek apakah ada support di Xj
+        if no y in domain[Xj] satisfies 
+           constraint(Xi, Xj):
+            domain[Xi].remove(x)
+            revised = True
+    return revised</code></pre>
+            </section>
+
+            <!-- ==================== SLIDE 22: BACKTRACKING SEARCH ==================== -->
+            <section>
+                <h2>🔙 Backtracking Search</h2>
+                <div class="box-definition">
+                    <strong>Backtracking:</strong> DFS yang memilih satu variabel per langkah dan backtrack saat tidak ada nilai legal
+                </div>
+                <img src="images/p06-04-backtracking-search.png" alt="Backtracking Search Tree" class="fragment">
+            </section>
+
+            <!-- ==================== SLIDE 23: BACKTRACKING PSEUDOCODE ==================== -->
+            <section>
+                <h2>Algoritma Backtracking</h2>
+                <pre><code class="python">def BACKTRACK(assignment, csp):
+    if assignment is complete:
+        return assignment
+    var = SELECT_UNASSIGNED_VARIABLE(csp)
+    for value in ORDER_DOMAIN_VALUES(var):
+        if value is consistent:
+            assignment[var] = value
+            result = BACKTRACK(assignment, csp)
+            if result != failure:
+                return result
+            del assignment[var]
+    return failure</code></pre>
+            </section>
+
+            <!-- ==================== SLIDE 24: VARIABLE ORDERING HEURISTICS ==================== -->
+            <section>
+                <h2>📊 Heuristik Pemilihan Variabel</h2>
+                <div class="two-columns">
+                    <div class="fragment">
+                        <div class="box-info">
+                            <h4>MRV</h4>
+                            <p class="small-text">Minimum Remaining Values</p>
+                            <p class="small-text">Pilih variabel dengan <strong>domain terkecil</strong></p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="box-warning">
+                            <h4>Degree Heuristic</h4>
+                            <p class="small-text">Tiebreaker untuk MRV</p>
+                            <p class="small-text">Pilih yang <strong>constraint terbanyak</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 25: MRV EXAMPLE ==================== -->
+            <section>
+                <h2>Contoh MRV</h2>
+                <table>
+                    <tr>
+                        <th>Variabel</th>
+                        <th>Domain</th>
+                        <th>|Domain|</th>
+                    </tr>
+                    <tr>
+                        <td>A</td>
+                        <td>{1, 2, 3, 4}</td>
+                        <td>4</td>
+                    </tr>
+                    <tr class="fragment" style="background: rgba(16, 185, 129, 0.3);">
+                        <td><strong>B ✓</strong></td>
+                        <td>{1, 2}</td>
+                        <td><strong>2</strong></td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>{1, 2, 3}</td>
+                        <td>3</td>
+                    </tr>
+                </table>
+                <p class="fragment small box-info">MRV = "Fail-First" → Temukan failure lebih awal!</p>
+            </section>
+
+            <!-- ==================== SLIDE 26: VALUE ORDERING ==================== -->
+            <section>
+                <h2>🎯 Heuristik Pemilihan Nilai</h2>
+                <div class="box-definition">
+                    <h4>LCV (Least Constraining Value)</h4>
+                    <p class="small-text">Pilih nilai yang menghilangkan <strong>paling sedikit</strong> nilai dari domain tetangga</p>
+                </div>
+                <img src="images/p06-05-lcv-heuristic.png" alt="LCV Heuristic" class="fragment">
+            </section>
+
+            <!-- ==================== SLIDE 27: LCV EXAMPLE ==================== -->
+            <section>
+                <h2>Contoh LCV</h2>
+                <p class="small-text">A memiliki tetangga B dan C, Constraint: A ≠ B, A ≠ C</p>
+                <p class="small-text">D(A) = {R, G, B}, D(B) = {R, G}, D(C) = {G, B}</p>
+                <table class="smaller fragment">
+                    <tr>
+                        <th>Nilai A</th>
+                        <th>Hilang dari B</th>
+                        <th>Hilang dari C</th>
+                        <th>Total</th>
+                    </tr>
+                    <tr>
+                        <td>R</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>1 ✓</td>
+                    </tr>
+                    <tr>
+                        <td>G</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>1 ✓</td>
+                    </tr>
+                </table>
+                <p class="fragment small">Pilih <strong>A = R</strong> atau <strong>A = B</strong> (LCV = 1)</p>
+            </section>
+
+            <!-- ==================== SLIDE 28: FORWARD CHECKING ==================== -->
+            <section>
+                <h2>⏩ Forward Checking</h2>
+                <div class="box-definition">
+                    <strong>Forward Checking:</strong> Hapus nilai inkonsisten dari domain variabel tetangga segera setelah setiap assignment
+                </div>
+                <ul class="small fragment">
+                    <li>Deteksi failure <span class="highlight">lebih awal</span></li>
+                    <li>Jika domain tetangga kosong → <span class="warning">backtrack!</span></li>
+                </ul>
+            </section>
+
+            <!-- ==================== SLIDE 29: FORWARD CHECKING ILLUSTRATION ==================== -->
+            <section>
+                <h2>Ilustrasi Forward Checking</h2>
+                <img src="images/p06-06-forward-checking.png" alt="Forward Checking Process">
+                <p class="small-text">Gambar: Domain dikurangi setelah setiap assignment</p>
+            </section>
+
+            <!-- ==================== SLIDE 30: FORWARD CHECKING EXAMPLE ==================== -->
+            <section>
+                <h2>Contoh Forward Checking</h2>
+                <p class="small-text">Map coloring: WA, NT, SA dengan D = {R, G, B}</p>
+                <div class="fragment">
+                    <p><strong>Step 1:</strong> Assign WA = R</p>
+                    <ul class="small-text">
+                        <li>D(NT) = {G, B} (hapus R)</li>
+                        <li>D(SA) = {G, B} (hapus R)</li>
+                    </ul>
+                </div>
+                <div class="fragment">
+                    <p><strong>Step 2:</strong> Assign NT = G</p>
+                    <ul class="small-text">
+                        <li>D(SA) = {B} (hapus G)</li>
+                    </ul>
+                </div>
+                <div class="fragment">
+                    <p><strong>Step 3:</strong> Assign SA = B ✓</p>
+                    <p class="small success">Solusi: {WA: R, NT: G, SA: B}</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 31: TREE-STRUCTURED CSP ==================== -->
+            <section>
+                <h2>🌲 Tree-Structured CSP</h2>
+                <div class="box-definition">
+                    <strong>Tree-structured CSP:</strong> Constraint graph membentuk tree (tanpa cycle)
+                </div>
+                <p class="fragment">Keuntungan:</p>
+                <ul class="small-text">
+                    <li class="fragment">Dapat diselesaikan dalam <strong>O(nd²)</strong></li>
+                    <li class="fragment">Tanpa backtracking!</li>
+                </ul>
+                <div class="fragment box-info small">
+                    <strong>Algoritma:</strong> Arc consistency dari leaf ke root, lalu assign dari root ke leaf
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 32: CUTSET CONDITIONING ==================== -->
+            <section>
+                <h2>✂️ Cutset Conditioning</h2>
+                <div class="box-definition">
+                    <strong>Cutset:</strong> Variabel yang jika dihapus menghasilkan tree structure
+                </div>
+                <p class="fragment small">Jika cutset berukuran c:</p>
+                <p class="fragment">Kompleksitas: <strong>O(d<sup>c</sup> × (n-c)d²)</strong></p>
+            </section>
+
+            <!-- ==================== SLIDE 33: DEFENSE APPLICATION ==================== -->
+            <section>
+                <h2>🎖️ Aplikasi Pertahanan</h2>
+                <div class="box-info">
+                    <h4>Resource Allocation</h4>
+                    <p class="small-text">Alokasi tim/unit ke sektor operasi dengan berbagai constraint</p>
+                </div>
+                <div class="fragment box-warning">
+                    <h4>Frequency Assignment</h4>
+                    <p class="small-text">Alokasi frekuensi komunikasi tanpa interference</p>
+                </div>
+                <div class="fragment box-success">
+                    <h4>Scheduling</h4>
+                    <p class="small-text">Penjadwalan patroli, operasi, dan shift personel</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 34: CASE STUDY ==================== -->
+            <section>
+                <h2>📋 Studi Kasus: Alokasi Tim</h2>
+                <p class="small-text">4 tim (Alpha, Bravo, Charlie, Delta) ke 4 sektor (S1-S4)</p>
+                <div class="fragment">
+                    <p><strong>Constraint:</strong></p>
+                    <ul class="small-text">
+                        <li>Alpha tidak boleh ke S1</li>
+                        <li>Bravo-Charlie harus adjacent</li>
+                        <li>Delta tidak boleh ke S4</li>
+                    </ul>
+                </div>
+                <div class="fragment box-success">
+                    <p><strong>Solusi:</strong> Alpha:S4, Bravo:S2, Charlie:S1, Delta:S3</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 35: QUIZ 1 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 1:</strong></p>
+                <p>Apa yang dimaksud dengan Arc Consistency?</p>
+                <div class="quiz-option fragment">A. Semua nilai memenuhi unary constraint</div>
+                <div class="quiz-option fragment">B. Graph tidak memiliki cycle</div>
+                <div class="quiz-option fragment" style="background: rgba(16, 185, 129, 0.3);">C. Setiap nilai memiliki support di tetangga ✓</div>
+                <div class="quiz-option fragment">D. Semua constraint terpenuhi</div>
+            </section>
+
+            <!-- ==================== SLIDE 36: QUIZ 2 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 2:</strong></p>
+                <p>MRV heuristic memilih variabel dengan:</p>
+                <div class="quiz-option fragment">A. Domain terbesar</div>
+                <div class="quiz-option fragment" style="background: rgba(16, 185, 129, 0.3);">B. Domain terkecil ✓</div>
+                <div class="quiz-option fragment">C. Constraint paling sedikit</div>
+                <div class="quiz-option fragment">D. Constraint paling banyak</div>
+                <p class="fragment small box-info">MRV = "Fail-First" → Temukan failure lebih awal!</p>
+            </section>
+
+            <!-- ==================== SLIDE 37: QUIZ 3 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 3:</strong></p>
+                <p>Kompleksitas waktu algoritma AC-3 adalah:</p>
+                <div class="quiz-option fragment">A. O(n²)</div>
+                <div class="quiz-option fragment">B. O(nd²)</div>
+                <div class="quiz-option fragment" style="background: rgba(16, 185, 129, 0.3);">C. O(ed³) ✓</div>
+                <div class="quiz-option fragment">D. O(2ⁿ)</div>
+            </section>
+
+            <!-- ==================== SLIDE 38: SUMMARY ==================== -->
+            <section>
+                <h2>📝 Ringkasan</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Konsep</th>
+                        <th>Deskripsi</th>
+                    </tr>
+                    <tr>
+                        <td><strong>CSP</strong></td>
+                        <td>Variabel + Domain + Constraint</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Node Consistency</strong></td>
+                        <td>Unary constraint satisfaction</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Arc Consistency</strong></td>
+                        <td>Binary constraint support</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AC-3</strong></td>
+                        <td>O(ed³) arc consistency</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MRV + Degree</strong></td>
+                        <td>Variable ordering heuristics</td>
+                    </tr>
+                    <tr>
+                        <td><strong>LCV</strong></td>
+                        <td>Value ordering heuristic</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Forward Checking</strong></td>
+                        <td>Early failure detection</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 39: NEXT WEEK ==================== -->
+            <section>
+                <h2>📅 Pertemuan Berikutnya</h2>
+                <div class="box-info">
+                    <h3>Pertemuan 07: Review dan Latihan Komprehensif</h3>
+                    <p class="small-text">Persiapan Ujian Tengah Semester (UTS)</p>
+                </div>
+                <ul class="small-text">
+                    <li class="fragment">Review Pertemuan 1-6</li>
+                    <li class="fragment">Latihan soal komprehensif</li>
+                    <li class="fragment">Tips mengerjakan UTS</li>
+                </ul>
+            </section>
+
+            <!-- ==================== SLIDE 40: REFERENCES ==================== -->
+            <section>
+                <h2>📚 Referensi</h2>
+                <ol class="small-text">
+                    <li>Russell, S. & Norvig, P. (2020). <em>Artificial Intelligence: A Modern Approach</em> (4th Ed.). Pearson. <strong>Chapter 6</strong></li>
+                    <li>Poole, D.L. & Mackworth, A.K. (2023). <em>Artificial Intelligence: Foundations of Computational Agents</em> (3rd Ed.). Cambridge University Press. <strong>Chapter 4</strong></li>
+                    <li>CS188 Berkeley AI Materials: <a href="https://inst.eecs.berkeley.edu/~cs188/">https://inst.eecs.berkeley.edu/~cs188/</a></li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 41: CLOSING ==================== -->
+            <section class="center">
+                <h1>Terima Kasih</h1>
+                <h3>🤖 Kecerdasan Artifisial</h3>
+                <p>Pertemuan 06: Constraint Satisfaction Problems (CSP)</p>
+                <br>
+                <p class="small-text">Ada pertanyaan?</p>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/math/math.min.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            showSlideNumber: 'all',
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            pdfSeparateFragments: false,
+            plugins: [ RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+        });
+    </script>
+</body>
+</html>
