@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pertemuan 12: Jaringan Bayesian</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/league.min.css">
+    
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css">
+    
+    <!-- Custom Theme -->
+    <link rel="stylesheet" href="unhan-theme.css">
+    
+    <style>
+        /* Fallback styles if unhan-theme.css is not available */
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+        }
+        .reveal .slides section {
+            text-align: left;
+        }
+        .reveal .slides section.center {
+            text-align: center;
+        }
+        .reveal table {
+            margin: 20px auto;
+            font-size: 0.7em;
+        }
+        .reveal table th {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px;
+        }
+        .reveal table td {
+            padding: 8px 12px;
+            border: 1px solid #444;
+        }
+        .reveal .highlight-box {
+            background-color: rgba(37, 99, 235, 0.2);
+            border-left: 4px solid #2563eb;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .definition-box {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .warning-box {
+            background-color: rgba(245, 158, 11, 0.2);
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .two-column {
+            display: flex;
+            gap: 40px;
+        }
+        .reveal .two-column > div {
+            flex: 1;
+        }
+        .reveal .emoji-large {
+            font-size: 3em;
+        }
+        .reveal .quiz-option {
+            background-color: rgba(100, 100, 100, 0.3);
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .reveal .quiz-option:hover {
+            background-color: rgba(37, 99, 235, 0.4);
+        }
+        .reveal code {
+            background-color: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .reveal pre code {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .reveal .small-text {
+            font-size: 0.6em;
+        }
+        .reveal .medium-text {
+            font-size: 0.8em;
+        }
+        .reveal img {
+            max-height: 450px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- ==================== SLIDE 1: TITLE ==================== -->
+            <section class="center">
+                <h1>Kecerdasan Artifisial</h1>
+                <h3>Pertemuan 12</h3>
+                <h2>Jaringan Bayesian</h2>
+                <p class="small-text" style="margin-top: 50px;">
+                    Mata Kuliah: Kecerdasan Artifisial (AI401) | 3 SKS
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 2: LEARNING OUTCOMES ==================== -->
+            <section>
+                <h2>🎯 Capaian Pembelajaran</h2>
+                <p>Setelah pertemuan ini, mahasiswa mampu:</p>
+                <ol class="medium-text">
+                    <li class="fragment">Menjelaskan motivasi jaringan Bayesian sebagai representasi compact</li>
+                    <li class="fragment">Membangun jaringan Bayesian (topologi DAG dan tabel CPT)</li>
+                    <li class="fragment">Menghitung distribusi probabilitas gabungan dari struktur jaringan</li>
+                    <li class="fragment">Mengidentifikasi conditional independence dari struktur graf</li>
+                    <li class="fragment">Menerapkan d-separation untuk menentukan independensi</li>
+                    <li class="fragment">Melakukan inferensi eksak (enumeration dan variable elimination)</li>
+                    <li class="fragment">Menjelaskan konsep dasar approximate inference</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 3: AGENDA ==================== -->
+            <section>
+                <h2>📋 Agenda Hari Ini</h2>
+                <div class="two-column">
+                    <div>
+                        <h4>Bagian 1</h4>
+                        <ul class="medium-text">
+                            <li>Motivasi Jaringan Bayesian</li>
+                            <li>Struktur: DAG dan CPT</li>
+                            <li>Semantik: Chain Rule</li>
+                            <li>Contoh: Alarm Network</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Bagian 2</h4>
+                        <ul class="medium-text">
+                            <li>Conditional Independence</li>
+                            <li>Tiga Pola Koneksi</li>
+                            <li>D-Separation</li>
+                            <li>Inferensi Eksak</li>
+                            <li>Approximate Inference</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 4: REVIEW PERTEMUAN 11 ==================== -->
+            <section>
+                <h2>🔄 Review: Pertemuan 11</h2>
+                <p>Pada pertemuan sebelumnya kita mempelajari:</p>
+                <ul class="medium-text">
+                    <li class="fragment"><strong>Probabilitas bersyarat</strong> dan Teorema Bayes</li>
+                    <li class="fragment"><strong>Full joint distribution</strong> untuk penalaran probabilistik</li>
+                    <li class="fragment"><strong>Conditional independence</strong> untuk menyederhanakan komputasi</li>
+                </ul>
+                <div class="fragment warning-box medium-text">
+                    ⚠️ <strong>Masalah:</strong> Full joint distribution memerlukan parameter yang sangat banyak — tidak praktis untuk domain besar!
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 5: CURSE OF DIMENSIONALITY ==================== -->
+            <section>
+                <h2>💥 Curse of Dimensionality</h2>
+                <p class="medium-text">Full joint distribution untuk <em>n</em> variabel Boolean memerlukan <strong>2<sup>n</sup> - 1</strong> parameter:</p>
+                <table class="medium-text fragment">
+                    <tr>
+                        <th>Variabel Boolean</th>
+                        <th>Parameter</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>31</td>
+                        <td>✅ Kecil</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>1.023</td>
+                        <td>⚠️ Manageable</td>
+                    </tr>
+                    <tr>
+                        <td>20</td>
+                        <td>1.048.575</td>
+                        <td>❌ Besar</td>
+                    </tr>
+                    <tr>
+                        <td>30</td>
+                        <td>~1 miliar</td>
+                        <td>❌ Tidak Praktis</td>
+                    </tr>
+                </table>
+                <p class="fragment highlight-box medium-text">💡 Kita butuh representasi yang lebih <strong>compact</strong>!</p>
+            </section>
+
+            <!-- ==================== SLIDE 6: SOLUSI - BAYESIAN NETWORK ==================== -->
+            <section>
+                <h2>💡 Solusi: Jaringan Bayesian</h2>
+                <div class="definition-box">
+                    <strong>Jaringan Bayesian</strong> (Bayesian Network) adalah representasi grafis compact dari distribusi probabilitas gabungan yang mengeksploitasi <strong>conditional independence</strong> antar variabel.
+                </div>
+                <p class="fragment medium-text"><strong>Ide kunci:</strong> Sebagian besar variabel hanya bergantung langsung pada sejumlah <em>kecil</em> variabel lain.</p>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Keuntungan:</strong></p>
+                    <ul class="medium-text">
+                        <li class="fragment">📦 Representasi compact</li>
+                        <li class="fragment">👁️ Intuitif — graf menunjukkan hubungan kausal</li>
+                        <li class="fragment">🧩 Modular — spesifikasi lokal per variabel</li>
+                        <li class="fragment">⚡ Inferensi efisien tersedia</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 7: DRAMATIC REDUCTION ==================== -->
+            <section>
+                <h2>📊 Pengurangan Dramatis</h2>
+                <p class="medium-text"><strong>Contoh:</strong> Sistem pertahanan udara dengan 20 variabel Boolean</p>
+                <div class="two-column">
+                    <div class="fragment">
+                        <div class="warning-box" style="text-align: center;">
+                            <h4>Full Joint Distribution</h4>
+                            <p style="font-size: 2em;"><strong>1.048.575</strong></p>
+                            <p class="medium-text">parameter</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="definition-box" style="text-align: center;">
+                            <h4>Jaringan Bayesian</h4>
+                            <p style="font-size: 2em;"><strong>160</strong></p>
+                            <p class="medium-text">parameter (avg 3 parent)</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="fragment highlight-box medium-text" style="text-align: center;">Pengurangan lebih dari <strong>6.500×</strong> lipat!</p>
+            </section>
+
+            <!-- ==================== SLIDE 8: KOMPONEN BAYESIAN NETWORK ==================== -->
+            <section>
+                <h2>🏗️ Dua Komponen Utama</h2>
+                <img src="images/p12-01-bayesian-network-components.png" alt="Komponen Jaringan Bayesian">
+                <p class="small-text">Gambar 12.1: Dua komponen utama jaringan Bayesian — DAG dan CPT</p>
+            </section>
+
+            <!-- ==================== SLIDE 9: DAG ==================== -->
+            <section>
+                <h2>1️⃣ Directed Acyclic Graph (DAG)</h2>
+                <div class="definition-box">
+                    <strong>DAG</strong> adalah graf berarah tanpa siklus yang menunjukkan hubungan ketergantungan antar variabel.
+                </div>
+                <div class="fragment">
+                    <table class="medium-text">
+                        <tr>
+                            <th>Istilah</th>
+                            <th>Arti</th>
+                            <th>Contoh</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Node</strong></td>
+                            <td>Variabel acak</td>
+                            <td>Cuaca, Alarm, Radar</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Edge (A → B)</strong></td>
+                            <td>A mempengaruhi B secara langsung</td>
+                            <td>Cuaca → Visibilitas</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Parent</strong></td>
+                            <td>Node yang menunjuk ke node lain</td>
+                            <td>Parent(Alarm) = {Pencurian, Gempa}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Root node</strong></td>
+                            <td>Node tanpa parent</td>
+                            <td>Pencurian, Gempa</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 10: CPT ==================== -->
+            <section>
+                <h2>2️⃣ Conditional Probability Table (CPT)</h2>
+                <div class="definition-box">
+                    <strong>CPT</strong> adalah tabel yang menentukan <code>P(Node | Parents)</code> untuk setiap kombinasi nilai parent.
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Jumlah parameter CPT:</strong></p>
+                    <ul class="medium-text">
+                        <li>Root node (Boolean): <strong>1</strong> parameter</li>
+                        <li>Node dengan <em>k</em> parent Boolean: <strong>2<sup>k</sup></strong> parameter</li>
+                    </ul>
+                </div>
+                <div class="fragment warning-box medium-text">
+                    ⚠️ Jumlah parent harus kecil agar compact! Jika setiap node punya max 3 parent → max 8 parameter per node.
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 11: ALARM NETWORK ==================== -->
+            <section>
+                <h2>🔔 Contoh Klasik: Alarm Network</h2>
+                <p class="medium-text"><strong>Skenario:</strong> Alarm pencuri bisa dipicu oleh pencurian atau gempa. Tetangga John dan Mary mungkin menelepon jika alarm berbunyi.</p>
+                <img src="images/p12-02-alarm-network.png" alt="Alarm Network" style="max-height: 380px;">
+                <p class="small-text">Gambar 12.2: Alarm Network — contoh klasik dari AIMA (Russell & Norvig)</p>
+            </section>
+
+            <!-- ==================== SLIDE 12: ALARM NETWORK CPT ==================== -->
+            <section>
+                <h2>📊 CPT Alarm Network</h2>
+                <div class="two-column">
+                    <div>
+                        <p class="medium-text"><strong>Root nodes:</strong></p>
+                        <table class="small-text">
+                            <tr><th>P(Burglary)</th><th>P(Earthquake)</th></tr>
+                            <tr><td>0.001</td><td>0.002</td></tr>
+                        </table>
+                        <p class="medium-text fragment"><strong>Alarm | B, E:</strong></p>
+                        <table class="small-text fragment">
+                            <tr><th>B</th><th>E</th><th>P(A=T)</th></tr>
+                            <tr><td>T</td><td>T</td><td>0.95</td></tr>
+                            <tr><td>T</td><td>F</td><td>0.94</td></tr>
+                            <tr><td>F</td><td>T</td><td>0.29</td></tr>
+                            <tr><td>F</td><td>F</td><td>0.001</td></tr>
+                        </table>
+                    </div>
+                    <div>
+                        <p class="medium-text"><strong>JohnCalls | A:</strong></p>
+                        <table class="small-text">
+                            <tr><th>A</th><th>P(J=T)</th></tr>
+                            <tr><td>T</td><td>0.90</td></tr>
+                            <tr><td>F</td><td>0.05</td></tr>
+                        </table>
+                        <p class="medium-text fragment"><strong>MaryCalls | A:</strong></p>
+                        <table class="small-text fragment">
+                            <tr><th>A</th><th>P(M=T)</th></tr>
+                            <tr><td>T</td><td>0.70</td></tr>
+                            <tr><td>F</td><td>0.01</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <p class="fragment highlight-box small-text">Total: <strong>10 parameter</strong> vs 31 untuk full joint distribution (5 variabel Boolean)</p>
+            </section>
+
+            <!-- ==================== SLIDE 13: SEMANTIK - CHAIN RULE ==================== -->
+            <section>
+                <h2>📐 Semantik: Chain Rule</h2>
+                <div class="definition-box" style="text-align: center;">
+                    <p><strong>Chain Rule Jaringan Bayesian:</strong></p>
+                    <p style="font-size: 1.1em;">\[P(x_1, x_2, ..., x_n) = \prod_{i=1}^{n} P(x_i \mid Parents(X_i))\]</p>
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Untuk Alarm Network:</strong></p>
+                    <p class="medium-text" style="text-align: center;">
+                        \[P(b, e, a, j, m) = P(b) \cdot P(e) \cdot P(a|b,e) \cdot P(j|a) \cdot P(m|a)\]
+                    </p>
+                </div>
+                <p class="fragment highlight-box medium-text">
+                    💡 Distribusi gabungan = <strong>produk semua CPT</strong> dengan nilai yang sesuai
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 14: CONTOH PERHITUNGAN ==================== -->
+            <section>
+                <h2>🔢 Contoh Perhitungan Joint Probability</h2>
+                <p class="medium-text"><strong>Hitung:</strong> P(pencurian, ¬gempa, alarm, john, mary)</p>
+                <div class="fragment">
+                    <p class="small-text">\[P(b, \neg e, a, j, m) = P(b) \cdot P(\neg e) \cdot P(a|b, \neg e) \cdot P(j|a) \cdot P(m|a)\]</p>
+                </div>
+                <div class="fragment">
+                    <table class="small-text">
+                        <tr>
+                            <th>P(b)</th>
+                            <th>P(¬e)</th>
+                            <th>P(a|b,¬e)</th>
+                            <th>P(j|a)</th>
+                            <th>P(m|a)</th>
+                            <th>Produk</th>
+                        </tr>
+                        <tr>
+                            <td>0.001</td>
+                            <td>0.998</td>
+                            <td>0.94</td>
+                            <td>0.90</td>
+                            <td>0.70</td>
+                            <td><strong>≈ 0.000591</strong></td>
+                        </tr>
+                    </table>
+                </div>
+                <p class="fragment definition-box small-text">
+                    ✅ Cukup <strong>kalikan nilai CPT</strong> yang sesuai — tidak perlu menyimpan seluruh tabel joint!
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 15: CONDITIONAL INDEPENDENCE ==================== -->
+            <section>
+                <h2>🔗 Conditional Independence</h2>
+                <div class="definition-box">
+                    <strong>Local Markov Property:</strong> Setiap node bersifat conditionally independent dari semua non-descendant diberikan parent-nya.
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Pada Alarm Network:</strong></p>
+                    <ul class="medium-text">
+                        <li class="fragment">John ⊥ Mary | Alarm ✅</li>
+                        <li class="fragment">Burglary ⊥ Earthquake ✅ (tidak punya parent sama)</li>
+                        <li class="fragment">John ⊥ Earthquake | Alarm ✅</li>
+                    </ul>
+                </div>
+                <p class="fragment highlight-box medium-text">
+                    💡 Conditional independence ini yang memungkinkan representasi compact!
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 16: TIGA POLA KONEKSI ==================== -->
+            <section>
+                <h2>🔀 Tiga Pola Koneksi Fundamental</h2>
+                <img src="images/p12-03-three-connection-patterns.png" alt="Tiga Pola Koneksi" style="max-height: 380px;">
+                <p class="small-text">Gambar 12.3: Tiga pola koneksi — Chain, Common Cause, Common Effect</p>
+            </section>
+
+            <!-- ==================== SLIDE 17: CHAIN ==================== -->
+            <section>
+                <h2>Pola 1: Rantai (Chain)</h2>
+                <p class="medium-text" style="text-align: center; font-size: 1.2em;"><strong>A → B → C</strong></p>
+                <table class="medium-text">
+                    <tr>
+                        <th>Kondisi B</th>
+                        <th>A dan C</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Tidak diobservasi</td>
+                        <td style="background-color: rgba(239, 68, 68, 0.3);"><strong>❌ Dependen</strong></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Diobservasi</td>
+                        <td style="background-color: rgba(16, 185, 129, 0.3);"><strong>✅ Independen</strong></td>
+                    </tr>
+                </table>
+                <div class="fragment highlight-box medium-text">
+                    🎖️ <strong>Contoh:</strong> Pesawat Musuh → Deteksi Radar → Sirene<br>
+                    <span class="small-text">Jika sudah tahu radar mendeteksi, info pesawat musuh tidak menambah info tentang sirene</span>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 18: COMMON CAUSE ==================== -->
+            <section>
+                <h2>Pola 2: Penyebab Bersama (Fork)</h2>
+                <p class="medium-text" style="text-align: center; font-size: 1.2em;"><strong>A ← B → C</strong></p>
+                <table class="medium-text">
+                    <tr>
+                        <th>Kondisi B</th>
+                        <th>A dan C</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Tidak diobservasi</td>
+                        <td style="background-color: rgba(239, 68, 68, 0.3);"><strong>❌ Dependen</strong></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Diobservasi</td>
+                        <td style="background-color: rgba(16, 185, 129, 0.3);"><strong>✅ Independen</strong></td>
+                    </tr>
+                </table>
+                <div class="fragment highlight-box medium-text">
+                    🎖️ <strong>Contoh:</strong> Macet ← Hujan → Banjir<br>
+                    <span class="small-text">Jika sudah tahu hujan atau tidak, info macet tidak mengubah prob. banjir</span>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 19: COMMON EFFECT / V-STRUCTURE ==================== -->
+            <section>
+                <h2>Pola 3: Efek Bersama (Collider) ⭐</h2>
+                <p class="medium-text" style="text-align: center; font-size: 1.2em;"><strong>A → B ← C</strong></p>
+                <table class="medium-text">
+                    <tr>
+                        <th>Kondisi B</th>
+                        <th>A dan C</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Tidak diobservasi</td>
+                        <td style="background-color: rgba(16, 185, 129, 0.3);"><strong>✅ Independen</strong></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Diobservasi</td>
+                        <td style="background-color: rgba(239, 68, 68, 0.3);"><strong>❌ Dependen!</strong></td>
+                    </tr>
+                </table>
+                <div class="fragment warning-box medium-text">
+                    ⚠️ <strong>KEBALIKAN</strong> dari Chain dan Fork! Observasi pada B justru <em>mengaktifkan</em> dependensi.
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 20: EXPLAINING AWAY ==================== -->
+            <section>
+                <h2>🔍 Explaining Away</h2>
+                <div class="definition-box">
+                    <strong>Explaining Away:</strong> Mengetahui satu penyebab dari efek yang diamati <em>mengurangi</em> probabilitas penyebab lain.
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Contoh:</strong> JammingMusuh → RadarGagal ← KerusakanHardware</p>
+                    <ul class="medium-text">
+                        <li class="fragment">Tanpa info radar: Jamming ⊥ Kerusakan</li>
+                        <li class="fragment">Radar gagal: Bisa jamming ATAU kerusakan</li>
+                        <li class="fragment">Radar gagal + diketahui hardware rusak → kemungkinan jamming <strong>menurun</strong></li>
+                    </ul>
+                </div>
+                <p class="fragment highlight-box medium-text">
+                    💡 Kerusakan hardware sudah "menjelaskan" kegagalan radar, sehingga jamming menjadi kurang mungkin
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 21: RINGKASAN TIGA POLA ==================== -->
+            <section>
+                <h2>📝 Ringkasan Tiga Pola Koneksi</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Pola</th>
+                        <th>Struktur</th>
+                        <th>B Tidak Obs.</th>
+                        <th>B Obs.</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Chain</strong></td>
+                        <td>A → B → C</td>
+                        <td style="background-color: rgba(239, 68, 68, 0.3);">Dependen</td>
+                        <td style="background-color: rgba(16, 185, 129, 0.3);">Independen</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fork</strong></td>
+                        <td>A ← B → C</td>
+                        <td style="background-color: rgba(239, 68, 68, 0.3);">Dependen</td>
+                        <td style="background-color: rgba(16, 185, 129, 0.3);">Independen</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Collider</strong></td>
+                        <td>A → B ← C</td>
+                        <td style="background-color: rgba(16, 185, 129, 0.3);">Independen</td>
+                        <td style="background-color: rgba(239, 68, 68, 0.3);">Dependen</td>
+                    </tr>
+                </table>
+                <p class="fragment warning-box medium-text">
+                    ⚠️ <strong>Ingat:</strong> Collider (V-structure) berperilaku <em>kebalikan</em> dari Chain dan Fork!
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 22: D-SEPARATION ==================== -->
+            <section>
+                <h2>🚧 D-Separation</h2>
+                <div class="definition-box">
+                    <strong>D-Separation (Directional Separation):</strong> Kriteria grafis untuk menentukan apakah dua variabel bersifat conditionally independent diberikan set variabel ketiga.
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Aturan:</strong> X dan Y <strong>d-separated</strong> oleh Z jika <em>setiap</em> undirected path antara X dan Y <strong>terblokir</strong> oleh Z.</p>
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Path terblokir jika mengandung node V dimana:</strong></p>
+                    <ul class="medium-text">
+                        <li>V ∈ Z dan V bukan collider (chain/fork), ATAU</li>
+                        <li>V ∉ Z dan V descendant-nya ∉ Z, dan V adalah collider</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 23: D-SEPARATION RULES ==================== -->
+            <section>
+                <h2>🚧 Aturan Blocking</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Pola pada Path</th>
+                        <th>Kondisi Blocked</th>
+                        <th>Kondisi Active</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Chain: → V →</td>
+                        <td>V ∈ Z (diobservasi)</td>
+                        <td>V ∉ Z</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Fork: ← V →</td>
+                        <td>V ∈ Z (diobservasi)</td>
+                        <td>V ∉ Z</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Collider: → V ←</td>
+                        <td>V ∉ Z dan descendant(V) ∉ Z</td>
+                        <td>V ∈ Z atau descendant(V) ∈ Z</td>
+                    </tr>
+                </table>
+                <p class="fragment highlight-box medium-text">
+                    💡 <strong>D-separated</strong> → conditionally independent<br>
+                    <strong>D-connected</strong> → mungkin dependen
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 24: MARKOV BLANKET ==================== -->
+            <section>
+                <h2>🛡️ Markov Blanket</h2>
+                <div class="definition-box">
+                    <strong>Markov Blanket</strong> dari node X adalah set minimal yang membuat X conditionally independent dari <em>semua node lain</em>.
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Markov Blanket(X) =</strong></p>
+                    <ul class="medium-text">
+                        <li><strong>Parents(X)</strong> — node yang langsung mempengaruhi X</li>
+                        <li><strong>Children(X)</strong> — node yang langsung dipengaruhi X</li>
+                        <li><strong>Co-parents(X)</strong> — parent lain dari children X</li>
+                    </ul>
+                </div>
+                <div class="fragment highlight-box medium-text">
+                    🔔 <strong>Contoh Alarm Network:</strong><br>
+                    Markov Blanket(Alarm) = {Burglary, Earthquake, JohnCalls, MaryCalls}
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 25: INFERENSI - OVERVIEW ==================== -->
+            <section>
+                <h2>🔮 Inferensi pada Jaringan Bayesian</h2>
+                <div class="definition-box">
+                    <strong>Inferensi:</strong> Menghitung probabilitas variabel tertentu diberikan observasi (evidence) pada variabel lain.
+                </div>
+                <div class="fragment">
+                    <table class="medium-text">
+                        <tr>
+                            <th>Jenis Query</th>
+                            <th>Notasi</th>
+                            <th>Deskripsi</th>
+                        </tr>
+                        <tr>
+                            <td>Posterior probability</td>
+                            <td>\(P(X \mid e)\)</td>
+                            <td>Prob. X diberikan evidence e</td>
+                        </tr>
+                        <tr>
+                            <td>Most probable explanation</td>
+                            <td>\(\arg\max_x P(x \mid e)\)</td>
+                            <td>Nilai X paling mungkin</td>
+                        </tr>
+                    </table>
+                </div>
+                <p class="fragment medium-text">
+                    <strong>Contoh:</strong> P(Burglary | JohnCalls=T, MaryCalls=T) = ?
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 26: INFERENCE BY ENUMERATION ==================== -->
+            <section>
+                <h2>📝 Inference by Enumeration</h2>
+                <div class="definition-box medium-text">
+                    Menghitung posterior dengan <strong>menjumlahkan</strong> semua hidden variables:
+                    \[P(X \mid e) = \alpha \sum_{y} P(X, e, y)\]
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Variabel:</strong></p>
+                    <ul class="small-text">
+                        <li><strong>X</strong> = query variable (yang dicari)</li>
+                        <li><strong>e</strong> = evidence variables (yang diketahui)</li>
+                        <li><strong>y</strong> = hidden variables (yang dijumlahkan)</li>
+                        <li><strong>α</strong> = konstanta normalisasi</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 27: ENUMERATION EXAMPLE ==================== -->
+            <section>
+                <h2>🔢 Contoh: P(B | j, m)</h2>
+                <p class="small-text">Hitung P(Burglary | JohnCalls=T, MaryCalls=T)</p>
+                <p class="small-text fragment">\[P(B \mid j, m) = \alpha \sum_{e} \sum_{a} P(B) \cdot P(e) \cdot P(a|B,e) \cdot P(j|a) \cdot P(m|a)\]</p>
+                <div class="fragment">
+                    <p class="small-text"><strong>Untuk B = true:</strong> Enumerasi 4 kombinasi (e, a)</p>
+                    <table class="small-text">
+                        <tr><th>e</th><th>a</th><th>Produk</th></tr>
+                        <tr><td>T</td><td>T</td><td>1.197 × 10⁻⁶</td></tr>
+                        <tr><td>T</td><td>F</td><td>5.0 × 10⁻¹¹</td></tr>
+                        <tr><td>F</td><td>T</td><td>5.909 × 10⁻⁴</td></tr>
+                        <tr><td>F</td><td>F</td><td>2.994 × 10⁻⁸</td></tr>
+                    </table>
+                    <p class="small-text">P(b, j, m) ≈ 5.922 × 10⁻⁴</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 28: ENUMERATION RESULT ==================== -->
+            <section>
+                <h2>🔢 Hasil: P(B | j, m)</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>B</th>
+                        <th>P(B, j, m)</th>
+                        <th>P(B | j, m)</th>
+                    </tr>
+                    <tr>
+                        <td>true</td>
+                        <td>5.922 × 10⁻⁴</td>
+                        <td><strong>≈ 0.284 (28.4%)</strong></td>
+                    </tr>
+                    <tr>
+                        <td>false</td>
+                        <td>1.492 × 10⁻³</td>
+                        <td>≈ 0.716 (71.6%)</td>
+                    </tr>
+                </table>
+                <div class="fragment highlight-box medium-text">
+                    💡 Meskipun <em>kedua</em> tetangga menelepon, probabilitas pencurian "hanya" <strong>28.4%</strong> karena:
+                    <ul class="small-text">
+                        <li>Prior pencurian sangat rendah (0.001)</li>
+                        <li>Ada kemungkinan penyebab lain (gempa, false alarm)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 29: VARIABLE ELIMINATION ==================== -->
+            <section>
+                <h2>⚡ Variable Elimination</h2>
+                <div class="definition-box medium-text">
+                    <strong>Variable Elimination:</strong> Algoritma inferensi eksak yang mengeliminasi variabel hidden satu per satu, menyimpan hasil antara sebagai <strong>faktor</strong>.
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Keunggulan vs Enumeration:</strong></p>
+                    <ul class="medium-text">
+                        <li class="fragment">Menghindari <strong>perhitungan ulang</strong> sub-ekspresi yang sama</li>
+                        <li class="fragment">Menggunakan <strong>dynamic programming</strong></li>
+                        <li class="fragment">Kompleksitas lebih rendah pada jaringan terstruktur</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 30: VE STEPS ==================== -->
+            <section>
+                <h2>⚡ Langkah Variable Elimination</h2>
+                <ol class="medium-text">
+                    <li class="fragment">Tulis query sebagai produk faktor</li>
+                    <li class="fragment">Pilih variabel hidden untuk dieliminasi</li>
+                    <li class="fragment"><strong>Pointwise multiply</strong> faktor yang mengandung variabel tersebut</li>
+                    <li class="fragment"><strong>Sum out</strong> variabel dari faktor gabungan → faktor baru</li>
+                    <li class="fragment">Ulangi sampai semua hidden variables tereliminasi</li>
+                    <li class="fragment"><strong>Normalisasi</strong> hasil akhir</li>
+                </ol>
+                <p class="fragment warning-box medium-text">
+                    ⚠️ <strong>Urutan eliminasi mempengaruhi efisiensi</strong> — mencari urutan optimal adalah NP-hard!
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 31: VE VS ENUMERATION ==================== -->
+            <section>
+                <h2>📊 Perbandingan Metode Inferensi</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Aspek</th>
+                        <th>Enumeration</th>
+                        <th>Variable Elimination</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Pendekatan</td>
+                        <td>Brute force</td>
+                        <td>Dynamic programming</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Redundansi</td>
+                        <td>Banyak perhitungan ulang</td>
+                        <td>Minimal</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Kompleksitas</td>
+                        <td>O(n · 2<sup>n</sup>)</td>
+                        <td>O(n · 2<sup>w</sup>) — w = treewidth</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Memori</td>
+                        <td>Rendah</td>
+                        <td>Lebih tinggi (simpan faktor)</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 32: KONSTRUKSI BAYES NET ==================== -->
+            <section>
+                <h2>🏗️ Membangun Jaringan Bayesian</h2>
+                <p class="medium-text"><strong>Panduan konstruksi dari domain:</strong></p>
+                <ol class="medium-text">
+                    <li class="fragment">Identifikasi variabel-variabel yang relevan</li>
+                    <li class="fragment">Tentukan <strong>urutan kausal</strong> (penyebab → efek)</li>
+                    <li class="fragment">Untuk setiap variabel, tentukan <strong>parent minimal</strong></li>
+                    <li class="fragment">Buat <strong>CPT</strong> untuk setiap variabel</li>
+                    <li class="fragment">Verifikasi: tidak ada <strong>siklus</strong> dalam graf</li>
+                </ol>
+                <div class="fragment definition-box medium-text">
+                    💡 <strong>Tips:</strong> Selalu gunakan urutan kausal! Arah panah mengikuti arah sebab-akibat menghasilkan jaringan yang lebih compact.
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 33: CONTOH KONSTRUKSI MILITER ==================== -->
+            <section>
+                <h2>🎖️ Contoh: Sistem C2 Pertahanan Udara</h2>
+                <p class="medium-text"><strong>Variabel:</strong> IntelMusuh, Cuaca, AncamanUdara, DeteksiRadar, SistemAlarm, ScrambleJet</p>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Struktur kausal:</strong></p>
+                    <ul class="small-text">
+                        <li>IntelMusuh → AncamanUdara</li>
+                        <li>Cuaca → AncamanUdara</li>
+                        <li>Cuaca → DeteksiRadar</li>
+                        <li>AncamanUdara → DeteksiRadar</li>
+                        <li>DeteksiRadar → SistemAlarm</li>
+                        <li>SistemAlarm → ScrambleJet</li>
+                    </ul>
+                </div>
+                <p class="fragment highlight-box small-text">
+                    💡 Cuaca mempengaruhi <em>dua</em> hal: apakah pesawat musuh bisa terbang DAN apakah radar bisa mendeteksi
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 34: APPROXIMATE INFERENCE ==================== -->
+            <section>
+                <h2>🎲 Approximate Inference</h2>
+                <div class="warning-box medium-text">
+                    ⚠️ <strong>Masalah:</strong> Inferensi eksak pada jaringan besar bisa sangat lambat (NP-hard secara umum).
+                </div>
+                <div class="fragment">
+                    <div class="definition-box">
+                        <strong>Approximate Inference</strong> menggunakan metode <strong>sampling</strong> untuk mengestimasi probabilitas.
+                    </div>
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Ide dasar:</strong></p>
+                    <ul class="medium-text">
+                        <li>Generate <strong>N sampel</strong> dari distribusi</li>
+                        <li>Hitung <strong>frekuensi relatif</strong> sebagai estimasi probabilitas</li>
+                        <li>Semakin banyak sampel → estimasi semakin akurat</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 35: PRIOR SAMPLING ==================== -->
+            <section>
+                <h2>🎲 Prior Sampling</h2>
+                <p class="medium-text"><strong>Prosedur:</strong></p>
+                <ol class="medium-text">
+                    <li class="fragment">Urutkan node secara <strong>topological order</strong></li>
+                    <li class="fragment">Untuk setiap node (dari root):
+                        <ul class="small-text">
+                            <li>Gunakan CPT dan nilai parent yang sudah di-sample</li>
+                            <li>Generate nilai secara random sesuai distribusi</li>
+                        </ul>
+                    </li>
+                    <li class="fragment">Ulangi N kali → N complete samples</li>
+                    <li class="fragment">Estimasi: \(\hat{P}(X=x) = \frac{count(X=x)}{N}\)</li>
+                </ol>
+                <p class="fragment definition-box medium-text">
+                    ✅ Dijamin: sampel sesuai dengan distribusi joint probability dari jaringan Bayesian
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 36: QUIZ 1 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 1:</strong></p>
+                <p class="medium-text">Pada pola V-structure (A → B ← C), kapan A dan C menjadi <em>dependen</em>?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Ketika B tidak diobservasi</div>
+                <div class="quiz-option fragment" data-fragment-index="2">B. Ketika A diobservasi</div>
+                <div class="quiz-option fragment" data-fragment-index="3" style="background-color: rgba(16, 185, 129, 0.4);">C. Ketika B (atau descendant B) diobservasi ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. A dan C selalu independen</div>
+                <p class="fragment small-text highlight-box">💡 Ini adalah fenomena "explaining away" — observasi pada efek bersama mengaktifkan dependensi antar penyebab</p>
+            </section>
+
+            <!-- ==================== SLIDE 37: QUIZ 2 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 2:</strong></p>
+                <p class="medium-text">Alarm Network memiliki 5 variabel Boolean. Berapa total parameter dalam jaringan Bayesian vs full joint distribution?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. 10 vs 15</div>
+                <div class="quiz-option fragment" data-fragment-index="2" style="background-color: rgba(16, 185, 129, 0.4);">B. 10 vs 31 ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="3">C. 31 vs 10</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. 20 vs 31</div>
+                <p class="fragment small-text highlight-box">💡 BN: B(1) + E(1) + A(4) + J(2) + M(2) = 10. Full joint: 2⁵ - 1 = 31</p>
+            </section>
+
+            <!-- ==================== SLIDE 38: QUIZ 3 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 3:</strong></p>
+                <p class="medium-text">Apa Markov Blanket dari node Alarm dalam Alarm Network?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. {JohnCalls, MaryCalls}</div>
+                <div class="quiz-option fragment" data-fragment-index="2">B. {Burglary, Earthquake}</div>
+                <div class="quiz-option fragment" data-fragment-index="3" style="background-color: rgba(16, 185, 129, 0.4);">C. {Burglary, Earthquake, JohnCalls, MaryCalls} ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. {Burglary, Earthquake, JohnCalls, MaryCalls, Alarm}</div>
+                <p class="fragment small-text highlight-box">💡 Markov Blanket = Parents + Children + Co-parents. Alarm punya parents {B,E}, children {J,M}, dan tidak ada co-parent tambahan.</p>
+            </section>
+
+            <!-- ==================== SLIDE 39: SUMMARY ==================== -->
+            <section>
+                <h2>📝 Ringkasan</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Konsep</th>
+                        <th>Poin Kunci</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Jaringan Bayesian</strong></td>
+                        <td>Representasi compact joint distribution via DAG + CPT</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Chain Rule</strong></td>
+                        <td>P(x₁,...,xₙ) = ∏ P(xᵢ | Parents(Xᵢ))</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3 Pola Koneksi</strong></td>
+                        <td>Chain & Fork: obs. blocks | Collider: obs. activates</td>
+                    </tr>
+                    <tr>
+                        <td><strong>D-Separation</strong></td>
+                        <td>Kriteria grafis untuk conditional independence</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Markov Blanket</strong></td>
+                        <td>Parents + Children + Co-parents</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Enumeration</strong></td>
+                        <td>Sum out hidden variables, normalize</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Variable Elimination</strong></td>
+                        <td>Dynamic programming dengan faktor</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 40: NEXT WEEK ==================== -->
+            <section>
+                <h2>📅 Pertemuan Berikutnya</h2>
+                <div class="highlight-box">
+                    <h3>Pertemuan 13: Supervised Learning</h3>
+                    <p class="medium-text">Pembelajaran Mesin — Pembelajaran Terawasi</p>
+                </div>
+                <ul class="medium-text">
+                    <li class="fragment">Paradigma pembelajaran mesin</li>
+                    <li class="fragment">Decision Tree (ID3/C4.5, information gain)</li>
+                    <li class="fragment">Naive Bayes Classifier</li>
+                    <li class="fragment">Evaluasi model (accuracy, precision, recall, F1)</li>
+                </ul>
+            </section>
+
+            <!-- ==================== SLIDE 41: REFERENCES ==================== -->
+            <section>
+                <h2>📚 Referensi</h2>
+                <ol class="small-text">
+                    <li>Russell, S. & Norvig, P. (2020). <em>Artificial Intelligence: A Modern Approach</em> (4th Ed.). Pearson. <strong>Chapter 13-14</strong></li>
+                    <li>Bishop, C.M. (2006). <em>Pattern Recognition and Machine Learning</em>. Springer. <strong>Chapter 8</strong>.</li>
+                    <li>Koller, D. & Friedman, N. (2009). <em>Probabilistic Graphical Models</em>. MIT Press. Chapter 3-9.</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 42: CLOSING ==================== -->
+            <section class="center">
+                <h1>Terima Kasih</h1>
+                <h3>🤖 Kecerdasan Artifisial</h3>
+                <p>Pertemuan 12: Jaringan Bayesian</p>
+                <br>
+                <p class="small-text">Ada pertanyaan?</p>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/math/math.min.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            showSlideNumber: 'all',
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            pdfSeparateFragments: false,
+            plugins: [ RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+        });
+    </script>
+</body>
+</html>
