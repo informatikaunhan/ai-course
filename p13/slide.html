@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pertemuan 13: Pembelajaran Mesin - Supervised Learning</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/league.min.css">
+    
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css">
+    
+    <!-- Custom Theme -->
+    <link rel="stylesheet" href="unhan-theme.css">
+    
+    <style>
+        /* Fallback styles if unhan-theme.css is not available */
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+        }
+        .reveal .slides section {
+            text-align: left;
+        }
+        .reveal .slides section.center {
+            text-align: center;
+        }
+        .reveal table {
+            margin: 20px auto;
+            font-size: 0.7em;
+        }
+        .reveal table th {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px;
+        }
+        .reveal table td {
+            padding: 8px 12px;
+            border: 1px solid #444;
+        }
+        .reveal .highlight-box {
+            background-color: rgba(37, 99, 235, 0.2);
+            border-left: 4px solid #2563eb;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .definition-box {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .warning-box {
+            background-color: rgba(245, 158, 11, 0.2);
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .two-column {
+            display: flex;
+            gap: 40px;
+        }
+        .reveal .two-column > div {
+            flex: 1;
+        }
+        .reveal .emoji-large {
+            font-size: 3em;
+        }
+        .reveal .quiz-option {
+            background-color: rgba(100, 100, 100, 0.3);
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .reveal .quiz-option:hover {
+            background-color: rgba(37, 99, 235, 0.4);
+        }
+        .reveal code {
+            background-color: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .reveal pre code {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .reveal .small-text {
+            font-size: 0.6em;
+        }
+        .reveal .medium-text {
+            font-size: 0.8em;
+        }
+        .reveal img {
+            max-height: 450px;
+            border-radius: 8px;
+        }
+        .reveal .tree-node {
+            display: inline-block;
+            background: rgba(37, 99, 235, 0.3);
+            border: 2px solid #60a5fa;
+            padding: 8px 16px;
+            border-radius: 8px;
+            margin: 4px;
+            font-weight: bold;
+        }
+        .reveal .tree-leaf {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.3);
+            border: 2px solid #10b981;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin: 4px;
+            font-weight: bold;
+        }
+        .reveal .tree-leaf-red {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.3);
+            border: 2px solid #ef4444;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- ==================== SLIDE 1: TITLE ==================== -->
+            <section class="center">
+                <h1>Kecerdasan Artifisial</h1>
+                <h3>Pertemuan 13</h3>
+                <h2>Pembelajaran Mesin - Supervised Learning</h2>
+                <p class="small-text" style="margin-top: 50px;">
+                    Mata Kuliah: Kecerdasan Artifisial (AI401) | 3 SKS
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 2: LEARNING OUTCOMES ==================== -->
+            <section>
+                <h2>🎯 Capaian Pembelajaran</h2>
+                <p>Setelah pertemuan ini, mahasiswa mampu:</p>
+                <ol class="medium-text">
+                    <li class="fragment">Menjelaskan tiga paradigma pembelajaran mesin</li>
+                    <li class="fragment">Menghitung entropy dan information gain</li>
+                    <li class="fragment">Mengimplementasikan algoritma ID3 untuk decision tree</li>
+                    <li class="fragment">Menerapkan Naive Bayes classifier</li>
+                    <li class="fragment">Menjelaskan konsep regresi linear</li>
+                    <li class="fragment">Mengevaluasi model dengan metrik dan cross-validation</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 3: AGENDA ==================== -->
+            <section>
+                <h2>📋 Agenda Hari Ini</h2>
+                <div class="two-column">
+                    <div>
+                        <h4>Bagian 1</h4>
+                        <ul class="medium-text">
+                            <li>Paradigma Machine Learning</li>
+                            <li>Decision Tree</li>
+                            <li>Entropy & Information Gain</li>
+                            <li>Algoritma ID3</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Bagian 2</h4>
+                        <ul class="medium-text">
+                            <li>Naive Bayes Classifier</li>
+                            <li>Regresi Linear</li>
+                            <li>Evaluasi Model</li>
+                            <li>Cross-Validation</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 4: WHAT IS ML ==================== -->
+            <section>
+                <h2>🤖 Apa itu Machine Learning?</h2>
+                <div class="definition-box">
+                    <strong>Machine Learning</strong> adalah cabang AI yang memungkinkan sistem komputer belajar dan meningkatkan kinerja dari pengalaman (data) tanpa diprogram secara eksplisit.
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Definisi Tom Mitchell (1997):</strong></p>
+                    <div class="highlight-box">
+                        <p class="medium-text">Program belajar dari pengalaman <strong>E</strong> terhadap tugas <strong>T</strong> dengan ukuran kinerja <strong>P</strong>, jika kinerjanya pada T meningkat seiring E.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 5: T-P-E EXAMPLE ==================== -->
+            <section>
+                <h2>📊 Contoh T, P, E</h2>
+                <p class="medium-text"><strong>Sistem Deteksi Ancaman Radar:</strong></p>
+                <table>
+                    <tr>
+                        <th>Komponen</th>
+                        <th>Deskripsi</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Task (T)</strong></td>
+                        <td>Klasifikasi sinyal radar: ancaman atau bukan</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Performance (P)</strong></td>
+                        <td>Akurasi klasifikasi pada data uji</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Experience (E)</strong></td>
+                        <td>Database sinyal radar historis yang sudah dilabeli</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 6: THREE PARADIGMS ==================== -->
+            <section>
+                <h2>🔄 Tiga Paradigma Machine Learning</h2>
+                <img src="images/p13-01-tiga-paradigma-ml.png" alt="Tiga Paradigma ML">
+                <p class="small-text">Gambar 1.1: Tiga paradigma utama dalam pembelajaran mesin</p>
+            </section>
+
+            <!-- ==================== SLIDE 7: PARADIGM DETAILS ==================== -->
+            <section>
+                <h2>Perbandingan Paradigma ML</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Aspek</th>
+                        <th>Supervised</th>
+                        <th>Unsupervised</th>
+                        <th>Reinforcement</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Data</strong></td>
+                        <td>Berlabel (input + output)</td>
+                        <td>Tanpa label</td>
+                        <td>Reward/punishment</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Tujuan</strong></td>
+                        <td>Prediksi output baru</td>
+                        <td>Temukan pola/struktur</td>
+                        <td>Maksimalkan reward</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Contoh</strong></td>
+                        <td>Klasifikasi, regresi</td>
+                        <td>Clustering, dimensionality reduction</td>
+                        <td>Game AI, robotika</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Militer</strong></td>
+                        <td>Deteksi ancaman radar</td>
+                        <td>Segmentasi sinyal SIGINT</td>
+                        <td>Navigasi drone otonom</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 8: SUPERVISED LEARNING COMPONENTS ==================== -->
+            <section>
+                <h2>📦 Komponen Supervised Learning</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Komponen</th>
+                        <th>Deskripsi</th>
+                        <th>Contoh</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Features (X)</strong></td>
+                        <td>Atribut input</td>
+                        <td>Kecepatan, altitude, RCS</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Label (Y)</strong></td>
+                        <td>Output yang diprediksi</td>
+                        <td>Ancaman / Bukan</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Training Set</strong></td>
+                        <td>Data untuk melatih model</td>
+                        <td>80% data historis</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Test Set</strong></td>
+                        <td>Data untuk menguji model</td>
+                        <td>20% data historis</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 9: DECISION TREE INTRO ==================== -->
+            <section>
+                <h2>🌳 Decision Tree (Pohon Keputusan)</h2>
+                <div class="definition-box">
+                    <strong>Decision Tree</strong> adalah model prediktif yang menggunakan struktur pohon untuk mengambil keputusan berdasarkan serangkaian aturan IF-THEN.
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Komponen utama:</strong></p>
+                    <ul class="medium-text">
+                        <li><strong>Root node</strong> — atribut pertama untuk split</li>
+                        <li><strong>Internal node</strong> — pengujian atribut</li>
+                        <li><strong>Branch</strong> — hasil pengujian</li>
+                        <li><strong>Leaf node</strong> — keputusan akhir (kelas)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 10: DECISION TREE VISUALIZATION ==================== -->
+            <section>
+                <h2>🌳 Contoh Decision Tree</h2>
+                <img src="images/p13-02-struktur-decision-tree.png" alt="Struktur Decision Tree" style="max-height: 400px;">
+                <p class="small-text">Gambar 2.1: Struktur Decision Tree untuk klasifikasi ancaman radar</p>
+            </section>
+
+            <!-- ==================== SLIDE 11: ENTROPY CONCEPT ==================== -->
+            <section>
+                <h2>📐 Entropy (Ketidakpastian)</h2>
+                <div class="definition-box">
+                    <strong>Entropy</strong> mengukur tingkat ketidakpastian (impurity) dalam suatu dataset.
+                </div>
+                <div class="fragment">
+                    <div class="highlight-box">
+                        <p style="text-align: center; font-size: 1.1em;">
+                            H(S) = -∑ p<sub>i</sub> log₂(p<sub>i</sub>)
+                        </p>
+                    </div>
+                </div>
+                <div class="fragment">
+                    <ul class="medium-text">
+                        <li>H(S) = <strong>0</strong> → semua data kelas sama (murni)</li>
+                        <li>H(S) = <strong>1</strong> → data terbagi rata 50:50 (maksimal ketidakpastian)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 12: ENTROPY GRAPH ==================== -->
+            <section>
+                <h2>📈 Grafik Entropy</h2>
+                <img src="images/p13-03-grafik-entropy.png" alt="Grafik Entropy" style="max-height: 380px;">
+                <p class="small-text">Gambar 2.2: Kurva entropy untuk klasifikasi biner</p>
+                <p class="fragment highlight-box medium-text">Entropy maksimum saat distribusi merata (p = 0.5)</p>
+            </section>
+
+            <!-- ==================== SLIDE 13: ENTROPY CALCULATION ==================== -->
+            <section>
+                <h2>🔢 Contoh Perhitungan Entropy</h2>
+                <p class="medium-text"><strong>Dataset:</strong> 14 sinyal radar → 9 Ancaman, 5 Aman</p>
+                <div class="fragment">
+                    <div class="highlight-box">
+                        <p class="medium-text">
+                            H(S) = -(9/14) log₂(9/14) - (5/14) log₂(5/14)
+                        </p>
+                    </div>
+                </div>
+                <div class="fragment">
+                    <p class="medium-text">
+                        H(S) = -(0.643)(−0.637) − (0.357)(−1.486)
+                    </p>
+                    <p class="medium-text">
+                        H(S) = 0.410 + 0.531 = <strong>0.940</strong>
+                    </p>
+                </div>
+                <p class="fragment warning-box medium-text">⚠️ Entropy tinggi (mendekati 1) → perlu atribut yang baik untuk memisahkan data!</p>
+            </section>
+
+            <!-- ==================== SLIDE 14: INFORMATION GAIN ==================== -->
+            <section>
+                <h2>📊 Information Gain</h2>
+                <div class="definition-box">
+                    <strong>Information Gain</strong> mengukur seberapa baik suatu atribut memisahkan data ke dalam kelas-kelas yang lebih murni.
+                </div>
+                <div class="fragment">
+                    <div class="highlight-box">
+                        <p style="text-align: center; font-size: 1.0em;">
+                            Gain(S, A) = H(S) − ∑<sub>v∈Values(A)</sub> (|S<sub>v</sub>|/|S|) × H(S<sub>v</sub>)
+                        </p>
+                    </div>
+                </div>
+                <p class="fragment medium-text">Atribut dengan <strong>information gain tertinggi</strong> dipilih sebagai node berikutnya!</p>
+            </section>
+
+            <!-- ==================== SLIDE 15: IG CALCULATION EXAMPLE ==================== -->
+            <section>
+                <h2>🔢 Contoh Information Gain</h2>
+                <p class="medium-text"><strong>Atribut "Kecepatan"</strong> (Tinggi/Rendah) pada 14 data:</p>
+                <table class="small-text fragment">
+                    <tr>
+                        <th>Kecepatan</th>
+                        <th>Ancaman</th>
+                        <th>Aman</th>
+                        <th>Total</th>
+                        <th>Entropy</th>
+                    </tr>
+                    <tr>
+                        <td>Tinggi</td>
+                        <td>7</td>
+                        <td>1</td>
+                        <td>8</td>
+                        <td>0.544</td>
+                    </tr>
+                    <tr>
+                        <td>Rendah</td>
+                        <td>2</td>
+                        <td>4</td>
+                        <td>6</td>
+                        <td>0.918</td>
+                    </tr>
+                </table>
+                <div class="fragment">
+                    <p class="medium-text">
+                        Gain = 0.940 − (8/14)(0.544) − (6/14)(0.918)
+                    </p>
+                    <p class="medium-text">
+                        Gain = 0.940 − 0.311 − 0.394 = <strong>0.235</strong>
+                    </p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 16: ID3 ALGORITHM ==================== -->
+            <section>
+                <h2>⚙️ Algoritma ID3</h2>
+                <p class="medium-text"><strong>Langkah-langkah membangun decision tree:</strong></p>
+                <ol class="medium-text">
+                    <li class="fragment">Hitung <strong>entropy</strong> keseluruhan dataset</li>
+                    <li class="fragment">Hitung <strong>information gain</strong> untuk setiap atribut</li>
+                    <li class="fragment">Pilih atribut dengan gain <strong>tertinggi</strong> sebagai node</li>
+                    <li class="fragment"><strong>Partisi</strong> dataset berdasarkan nilai atribut</li>
+                    <li class="fragment"><strong>Ulangi</strong> rekursif untuk setiap subset</li>
+                    <li class="fragment">Berhenti jika: semua data satu kelas, atau tidak ada atribut tersisa</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 17: ID3 PSEUDOCODE ==================== -->
+            <section>
+                <h2>💻 Pseudocode ID3</h2>
+                <pre><code class="python" data-trim>
+def ID3(data, attributes, target):
+    # Base cases
+    if all_same_class(data, target):
+        return Leaf(majority_class)
+    if attributes is empty:
+        return Leaf(majority_class)
+    
+    # Pilih atribut terbaik
+    best = argmax(information_gain(data, a) 
+                  for a in attributes)
+    tree = Node(best)
+    
+    # Rekursi untuk setiap nilai
+    for value in best.values:
+        subset = data[best == value]
+        if subset is empty:
+            tree.add(Leaf(majority_class))
+        else:
+            tree.add(ID3(subset, 
+                    attributes - {best}, target))
+    return tree
+                </code></pre>
+            </section>
+
+            <!-- ==================== SLIDE 18: OVERFITTING ==================== -->
+            <section>
+                <h2>⚠️ Overfitting dan Underfitting</h2>
+                <img src="images/p13-04-overfitting-underfitting.png" alt="Overfitting vs Underfitting" style="max-height: 350px;">
+                <p class="small-text">Gambar 2.3: Ilustrasi overfitting vs underfitting</p>
+                <div class="fragment two-column medium-text">
+                    <div class="warning-box">
+                        <strong>Overfitting:</strong> Model terlalu "hafal" data training, gagal di data baru
+                    </div>
+                    <div class="highlight-box">
+                        <strong>Underfitting:</strong> Model terlalu sederhana, tidak menangkap pola
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 19: PRUNING ==================== -->
+            <section>
+                <h2>✂️ Teknik Pruning</h2>
+                <p class="medium-text">Solusi untuk mengatasi overfitting pada decision tree:</p>
+                <div class="two-column medium-text">
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>Pre-Pruning</h4>
+                            <ul>
+                                <li>Batasi kedalaman maksimum</li>
+                                <li>Minimum sampel per leaf</li>
+                                <li>Threshold information gain</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="highlight-box">
+                            <h4>Post-Pruning</h4>
+                            <ul>
+                                <li>Bangun tree lengkap dulu</li>
+                                <li>Hapus subtree yang tidak signifikan</li>
+                                <li>Reduced error pruning</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 20: C4.5 INTRO ==================== -->
+            <section>
+                <h2>🔧 ID3 → C4.5</h2>
+                <p class="medium-text"><strong>C4.5</strong> (oleh Ross Quinlan) memperbaiki kelemahan ID3:</p>
+                <table class="medium-text">
+                    <tr>
+                        <th>Aspek</th>
+                        <th>ID3</th>
+                        <th>C4.5</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Atribut numerik</td>
+                        <td>❌ Hanya kategorikal</td>
+                        <td>✅ Threshold splitting</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Missing values</td>
+                        <td>❌ Tidak bisa</td>
+                        <td>✅ Distribusi probabilistik</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Pruning</td>
+                        <td>❌ Tidak ada</td>
+                        <td>✅ Error-based pruning</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Kriteria split</td>
+                        <td>Information Gain</td>
+                        <td>Gain Ratio</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 21: NAIVE BAYES INTRO ==================== -->
+            <section>
+                <h2>📧 Naive Bayes Classifier</h2>
+                <div class="definition-box">
+                    <strong>Naive Bayes</strong> adalah classifier probabilistik berdasarkan Teorema Bayes dengan asumsi independensi antar fitur.
+                </div>
+                <div class="fragment">
+                    <div class="highlight-box">
+                        <p style="text-align: center; font-size: 1.0em;">
+                            P(C|X) = P(X|C) × P(C) / P(X)
+                        </p>
+                    </div>
+                </div>
+                <div class="fragment medium-text">
+                    <p><strong>Asumsi "Naive":</strong></p>
+                    <p style="text-align: center;">P(x₁, x₂, ..., xₙ | C) = P(x₁|C) × P(x₂|C) × ... × P(xₙ|C)</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 22: NAIVE BAYES EXAMPLE ==================== -->
+            <section>
+                <h2>📧 Contoh: Klasifikasi Email Militer</h2>
+                <p class="medium-text">Klasifikasi email: <strong>Spam</strong> atau <strong>Bukan Spam</strong></p>
+                <table class="small-text fragment">
+                    <tr>
+                        <th>Kata</th>
+                        <th>P(kata|Spam)</th>
+                        <th>P(kata|Bukan)</th>
+                    </tr>
+                    <tr>
+                        <td>"gratis"</td>
+                        <td>0.8</td>
+                        <td>0.1</td>
+                    </tr>
+                    <tr>
+                        <td>"operasi"</td>
+                        <td>0.2</td>
+                        <td>0.7</td>
+                    </tr>
+                    <tr>
+                        <td>"klik"</td>
+                        <td>0.7</td>
+                        <td>0.05</td>
+                    </tr>
+                </table>
+                <div class="fragment">
+                    <p class="medium-text">Email baru mengandung: "gratis", "klik"</p>
+                    <p class="medium-text">P(Spam) = 0.3, P(Bukan) = 0.7</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 23: NAIVE BAYES CALCULATION ==================== -->
+            <section>
+                <h2>🔢 Perhitungan Naive Bayes</h2>
+                <div class="medium-text">
+                    <p class="fragment"><strong>P(Spam | "gratis", "klik"):</strong></p>
+                    <p class="fragment">∝ P(Spam) × P("gratis"|Spam) × P("klik"|Spam)</p>
+                    <p class="fragment">= 0.3 × 0.8 × 0.7 = <strong>0.168</strong></p>
+                </div>
+                <div class="medium-text">
+                    <p class="fragment"><strong>P(Bukan | "gratis", "klik"):</strong></p>
+                    <p class="fragment">∝ P(Bukan) × P("gratis"|Bukan) × P("klik"|Bukan)</p>
+                    <p class="fragment">= 0.7 × 0.1 × 0.05 = <strong>0.0035</strong></p>
+                </div>
+                <div class="fragment definition-box">
+                    <p class="medium-text"><strong>Normalisasi:</strong> P(Spam) = 0.168 / (0.168 + 0.0035) = <strong>97.96%</strong></p>
+                    <p class="medium-text">→ Klasifikasi: <strong>SPAM</strong> ✉️</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 24: LAPLACE SMOOTHING ==================== -->
+            <section>
+                <h2>🧮 Laplace Smoothing</h2>
+                <div class="warning-box">
+                    <p class="medium-text"><strong>Masalah Zero Probability:</strong> Jika P(kata|kelas) = 0, maka seluruh produk menjadi 0!</p>
+                </div>
+                <div class="fragment">
+                    <div class="definition-box">
+                        <p class="medium-text"><strong>Solusi - Laplace Smoothing:</strong></p>
+                        <p style="text-align: center; font-size: 1.0em;">
+                            P(xᵢ|C) = (count(xᵢ, C) + α) / (count(C) + α × |V|)
+                        </p>
+                        <p class="small-text">α = parameter smoothing (biasanya 1), |V| = jumlah nilai unik</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 25: LINEAR REGRESSION ==================== -->
+            <section>
+                <h2>📈 Regresi Linear</h2>
+                <div class="definition-box">
+                    <strong>Regresi Linear</strong> memodelkan hubungan linear antara variabel input (X) dan output kontinu (Y).
+                </div>
+                <div class="fragment">
+                    <div class="highlight-box">
+                        <p style="text-align: center; font-size: 1.1em;">
+                            ŷ = w₀ + w₁x₁ + w₂x₂ + ... + wₙxₙ
+                        </p>
+                    </div>
+                </div>
+                <div class="fragment medium-text">
+                    <p><strong>Perbedaan dari Klasifikasi:</strong></p>
+                    <ul>
+                        <li><strong>Klasifikasi:</strong> Output diskret (kelas)</li>
+                        <li><strong>Regresi:</strong> Output kontinu (angka)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 26: LEAST SQUARES ==================== -->
+            <section>
+                <h2>📏 Metode Least Squares</h2>
+                <p class="medium-text">Tujuan: Minimumkan <strong>Sum of Squared Errors (SSE)</strong></p>
+                <div class="fragment">
+                    <div class="highlight-box">
+                        <p style="text-align: center;">SSE = ∑(yᵢ − ŷᵢ)²</p>
+                    </div>
+                </div>
+                <div class="fragment medium-text">
+                    <p><strong>Rumus untuk regresi linear sederhana</strong> (ŷ = w₀ + w₁x):</p>
+                    <p style="text-align: center;">w₁ = [n∑xᵢyᵢ − ∑xᵢ∑yᵢ] / [n∑xᵢ² − (∑xᵢ)²]</p>
+                    <p style="text-align: center;">w₀ = ȳ − w₁x̄</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 27: REGRESSION EXAMPLE ==================== -->
+            <section>
+                <h2>🎯 Contoh: Jam Latihan vs Akurasi Tembak</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Jam Latihan (x)</th>
+                        <th>Akurasi % (y)</th>
+                    </tr>
+                    <tr><td>2</td><td>55</td></tr>
+                    <tr><td>4</td><td>65</td></tr>
+                    <tr><td>6</td><td>72</td></tr>
+                    <tr><td>8</td><td>80</td></tr>
+                    <tr><td>10</td><td>88</td></tr>
+                </table>
+                <div class="fragment">
+                    <p class="medium-text">Hasil: <strong>ŷ = 44.6 + 4.2x</strong></p>
+                    <p class="medium-text">Prediksi untuk 7 jam latihan: ŷ = 44.6 + 4.2(7) = <strong>74.0%</strong></p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 28: GRADIENT DESCENT ==================== -->
+            <section>
+                <h2>⛰️ Gradient Descent</h2>
+                <img src="images/p13-05-gradient-descent.png" alt="Gradient Descent" style="max-height: 350px;">
+                <p class="small-text">Gambar 4.1: Ilustrasi gradient descent mencari minimum cost function</p>
+                <div class="fragment highlight-box medium-text">
+                    <p>Aturan update: <strong>w ← w − α × ∂J/∂w</strong></p>
+                    <p class="small-text">α = learning rate (kecepatan belajar)</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 29: CONFUSION MATRIX ==================== -->
+            <section>
+                <h2>📊 Confusion Matrix</h2>
+                <img src="images/p13-06-confusion-matrix.png" alt="Confusion Matrix" style="max-height: 300px;">
+                <p class="small-text">Gambar 5.1: Struktur Confusion Matrix 2×2</p>
+                <table class="small-text fragment">
+                    <tr>
+                        <th></th>
+                        <th>Prediksi: Positif</th>
+                        <th>Prediksi: Negatif</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Aktual: Positif</strong></td>
+                        <td style="background-color: rgba(16, 185, 129, 0.3);">TP (True Positive)</td>
+                        <td style="background-color: rgba(239, 68, 68, 0.3);">FN (False Negative)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Aktual: Negatif</strong></td>
+                        <td style="background-color: rgba(239, 68, 68, 0.3);">FP (False Positive)</td>
+                        <td style="background-color: rgba(16, 185, 129, 0.3);">TN (True Negative)</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 30: EVALUATION METRICS ==================== -->
+            <section>
+                <h2>📏 Metrik Evaluasi</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Metrik</th>
+                        <th>Rumus</th>
+                        <th>Fokus</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Accuracy</strong></td>
+                        <td>(TP + TN) / Total</td>
+                        <td>Kebenaran keseluruhan</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Precision</strong></td>
+                        <td>TP / (TP + FP)</td>
+                        <td>Ketepatan prediksi positif</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Recall</strong></td>
+                        <td>TP / (TP + FN)</td>
+                        <td>Cakupan data positif</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>F1-Score</strong></td>
+                        <td>2 × (P×R) / (P+R)</td>
+                        <td>Harmonic mean P & R</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 31: METRIC EXAMPLE ==================== -->
+            <section>
+                <h2>🎖️ Contoh: Deteksi Rudal</h2>
+                <p class="medium-text">Sistem deteksi rudal: TP=85, FP=10, FN=15, TN=890</p>
+                <table class="medium-text fragment">
+                    <tr>
+                        <th>Metrik</th>
+                        <th>Perhitungan</th>
+                        <th>Nilai</th>
+                    </tr>
+                    <tr>
+                        <td>Accuracy</td>
+                        <td>(85+890)/1000</td>
+                        <td>97.5%</td>
+                    </tr>
+                    <tr>
+                        <td>Precision</td>
+                        <td>85/(85+10)</td>
+                        <td>89.5%</td>
+                    </tr>
+                    <tr>
+                        <td>Recall</td>
+                        <td>85/(85+15)</td>
+                        <td>85.0%</td>
+                    </tr>
+                    <tr>
+                        <td>F1-Score</td>
+                        <td>2(0.895×0.85)/(0.895+0.85)</td>
+                        <td>87.2%</td>
+                    </tr>
+                </table>
+                <p class="fragment warning-box medium-text">⚠️ Dalam pertahanan, <strong>Recall lebih penting</strong>! FN = rudal tidak terdeteksi = berbahaya!</p>
+            </section>
+
+            <!-- ==================== SLIDE 32: WHEN TO USE WHICH METRIC ==================== -->
+            <section>
+                <h2>🎯 Kapan Menggunakan Metrik Mana?</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Konteks</th>
+                        <th>Metrik Utama</th>
+                        <th>Alasan</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>🚀 Deteksi rudal</td>
+                        <td><strong>Recall</strong></td>
+                        <td>Jangan lewatkan ancaman!</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>📧 Filter spam</td>
+                        <td><strong>Precision</strong></td>
+                        <td>Jangan buang email penting!</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>🏥 Diagnosis medis</td>
+                        <td><strong>F1-Score</strong></td>
+                        <td>Seimbangkan keduanya</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>📊 Data seimbang</td>
+                        <td><strong>Accuracy</strong></td>
+                        <td>Distribusi kelas merata</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 33: CROSS-VALIDATION ==================== -->
+            <section>
+                <h2>🔄 Cross-Validation</h2>
+                <div class="definition-box">
+                    <strong>Cross-validation</strong> adalah teknik untuk mengevaluasi model dengan membagi data menjadi beberapa fold untuk training dan testing secara bergantian.
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Tujuan:</strong></p>
+                    <ul class="medium-text">
+                        <li>Mengurangi bias dari single train-test split</li>
+                        <li>Mengukur stabilitas model</li>
+                        <li>Mendeteksi overfitting</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 34: K-FOLD CV ==================== -->
+            <section>
+                <h2>📊 K-Fold Cross-Validation</h2>
+                <img src="images/p13-07-k-fold-cv.png" alt="K-Fold CV" style="max-height: 350px;">
+                <p class="small-text">Gambar 6.1: Ilustrasi 5-fold cross-validation</p>
+                <div class="fragment highlight-box medium-text">
+                    <p>Kinerja akhir = <strong>rata-rata akurasi</strong> dari semua fold</p>
+                    <p class="small-text">Standar industri: k = 5 atau k = 10</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 35: STRATIFIED K-FOLD ==================== -->
+            <section>
+                <h2>📊 Stratified K-Fold</h2>
+                <div class="warning-box">
+                    <p class="medium-text"><strong>Masalah:</strong> Data tidak seimbang (misal 95% kelas A, 5% kelas B) → fold mungkin tidak representatif</p>
+                </div>
+                <div class="fragment">
+                    <div class="definition-box">
+                        <p class="medium-text"><strong>Solusi:</strong> Stratified K-Fold memastikan setiap fold memiliki <strong>proporsi kelas yang sama</strong> dengan dataset asli</p>
+                    </div>
+                </div>
+                <div class="fragment medium-text">
+                    <p><strong>Contoh:</strong> Dataset 100 data (90 Aman, 10 Ancaman)</p>
+                    <p>Setiap fold dari 5-fold: 18 Aman + 2 Ancaman = 20 data</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 36: QUIZ 1 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 1:</strong></p>
+                <p>Jika entropy suatu dataset = 0, artinya:</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Data terdistribusi merata antar kelas</div>
+                <div class="quiz-option fragment" data-fragment-index="2">B. Dataset kosong</div>
+                <div class="quiz-option fragment" data-fragment-index="3" style="background-color: rgba(16, 185, 129, 0.4);">C. Semua data berasal dari kelas yang sama ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Algoritma gagal konvergen</div>
+                <p class="fragment small-text highlight-box">💡 Entropy = 0 berarti dataset sudah murni (pure), tidak ada ketidakpastian</p>
+            </section>
+
+            <!-- ==================== SLIDE 37: QUIZ 2 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 2:</strong></p>
+                <p>Dalam sistem deteksi ancaman, metrik mana yang paling penting?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Accuracy</div>
+                <div class="quiz-option fragment" data-fragment-index="2">B. Precision</div>
+                <div class="quiz-option fragment" data-fragment-index="3" style="background-color: rgba(16, 185, 129, 0.4);">C. Recall ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Specificity</div>
+                <p class="fragment small-text highlight-box">💡 Recall tinggi = meminimalkan False Negative (ancaman yang tidak terdeteksi)</p>
+            </section>
+
+            <!-- ==================== SLIDE 38: QUIZ 3 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 3:</strong></p>
+                <p>Apa tujuan utama Laplace smoothing pada Naive Bayes?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Meningkatkan akurasi model secara signifikan</div>
+                <div class="quiz-option fragment" data-fragment-index="2" style="background-color: rgba(16, 185, 129, 0.4);">B. Mengatasi masalah zero probability ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="3">C. Mengurangi jumlah fitur</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Mempercepat waktu training</div>
+            </section>
+
+            <!-- ==================== SLIDE 39: SUMMARY ==================== -->
+            <section>
+                <h2>📝 Ringkasan</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Konsep</th>
+                        <th>Poin Kunci</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Paradigma ML</strong></td>
+                        <td>Supervised, Unsupervised, Reinforcement</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Decision Tree</strong></td>
+                        <td>Entropy → Information Gain → ID3</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Naive Bayes</strong></td>
+                        <td>P(C|X) ∝ P(X|C) × P(C) + Laplace smoothing</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Regresi Linear</strong></td>
+                        <td>ŷ = w₀ + w₁x, metode least squares</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Evaluasi</strong></td>
+                        <td>Accuracy, Precision, Recall, F1-Score</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cross-Validation</strong></td>
+                        <td>K-fold, Stratified K-fold</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 40: NEXT WEEK ==================== -->
+            <section>
+                <h2>📅 Pertemuan Berikutnya</h2>
+                <div class="highlight-box">
+                    <h3>Pertemuan 14: Unsupervised Learning & Reinforcement Learning</h3>
+                    <p class="medium-text">Pembelajaran Mesin Lanjutan</p>
+                </div>
+                <ul class="medium-text">
+                    <li class="fragment">K-Means Clustering</li>
+                    <li class="fragment">Hierarchical Clustering</li>
+                    <li class="fragment">Dimensionality Reduction (PCA)</li>
+                    <li class="fragment">Reinforcement Learning & Q-Learning</li>
+                </ul>
+            </section>
+
+            <!-- ==================== SLIDE 41: REFERENCES ==================== -->
+            <section>
+                <h2>📚 Referensi</h2>
+                <ol class="small-text">
+                    <li>Russell, S. & Norvig, P. (2020). <em>Artificial Intelligence: A Modern Approach</em> (4th Ed.). Pearson. <strong>Chapter 19</strong></li>
+                    <li>Mitchell, T. (1997). <em>Machine Learning</em>. McGraw-Hill. <strong>Chapter 3</strong></li>
+                    <li>Bishop, C.M. (2006). <em>Pattern Recognition and Machine Learning</em>. Springer. <strong>Chapter 4</strong></li>
+                    <li>CS188 Berkeley AI Materials: <a href="https://inst.eecs.berkeley.edu/~cs188/">https://inst.eecs.berkeley.edu/~cs188/</a></li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 42: CLOSING ==================== -->
+            <section class="center">
+                <h1>Terima Kasih</h1>
+                <h3>🤖 Kecerdasan Artifisial</h3>
+                <p>Pertemuan 13: Pembelajaran Mesin - Supervised Learning</p>
+                <br>
+                <p class="small-text">Ada pertanyaan?</p>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/math/math.min.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            showSlideNumber: 'all',
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            pdfSeparateFragments: false,
+            plugins: [ RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+        });
+    </script>
+</body>
+</html>
