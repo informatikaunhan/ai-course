@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pertemuan 02: Pemecahan Masalah dengan Pencarian - Uninformed Search</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/league.min.css">
+    
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css">
+    
+    <!-- Custom Theme -->
+    <link rel="stylesheet" href="unhan-theme.css">
+    
+    <style>
+        /* Fallback styles if unhan-theme.css is not available */
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+        }
+        .reveal .slides section {
+            text-align: left;
+        }
+        .reveal .slides section.center {
+            text-align: center;
+        }
+        .reveal table {
+            margin: 20px auto;
+            font-size: 0.7em;
+        }
+        .reveal table th {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px;
+        }
+        .reveal table td {
+            padding: 8px 12px;
+            border: 1px solid #444;
+        }
+        .reveal .highlight-box {
+            background-color: rgba(37, 99, 235, 0.2);
+            border-left: 4px solid #2563eb;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .definition-box {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .warning-box {
+            background-color: rgba(245, 158, 11, 0.2);
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .two-column {
+            display: flex;
+            gap: 40px;
+        }
+        .reveal .two-column > div {
+            flex: 1;
+        }
+        .reveal .emoji-large {
+            font-size: 3em;
+        }
+        .reveal .quiz-option {
+            background-color: rgba(100, 100, 100, 0.3);
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .reveal .quiz-option:hover {
+            background-color: rgba(37, 99, 235, 0.4);
+        }
+        .reveal code {
+            background-color: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .reveal pre code {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .reveal .small-text {
+            font-size: 0.6em;
+        }
+        .reveal .medium-text {
+            font-size: 0.8em;
+        }
+        .reveal img {
+            max-height: 450px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- ==================== SLIDE 1: TITLE ==================== -->
+            <section class="center">
+                <h1>Kecerdasan Artifisial</h1>
+                <h3>Pertemuan 02</h3>
+                <h2>Pemecahan Masalah dengan Pencarian<br><em>Uninformed Search</em></h2>
+                <p class="small-text" style="margin-top: 50px;">
+                    Mata Kuliah: Kecerdasan Artifisial (AI401) | 3 SKS
+                </p>
+            </section>
+            
+            <!-- ==================== SLIDE 2: LEARNING OUTCOMES ==================== -->
+            <section>
+                <h2>🎯 Capaian Pembelajaran</h2>
+                <p>Setelah pertemuan ini, mahasiswa mampu:</p>
+                <ol class="medium-text">
+                    <li class="fragment">Memformulasikan masalah sebagai problem pencarian</li>
+                    <li class="fragment">Memahami representasi search tree dan search graph</li>
+                    <li class="fragment">Menganalisis algoritma berdasarkan 4 kriteria evaluasi</li>
+                    <li class="fragment">Mengimplementasikan BFS, DFS, dan UCS</li>
+                    <li class="fragment">Memilih algoritma yang tepat untuk berbagai masalah</li>
+                </ol>
+            </section>
+            
+            <!-- ======================= SLIDE 3: MENGAPA PENCARIAN? ======================= -->
+            <section>
+                <h2>Mengapa Pencarian Penting?</h2>
+                <p class="fragment">Pada Pertemuan 1, kita belajar tentang <strong>agen cerdas</strong></p>
+                <p class="fragment">Pertanyaan: <em>Bagaimana agen menemukan urutan aksi untuk mencapai tujuan?</em></p>
+                <div class="fragment" style="background: rgba(37, 99, 235, 0.2); padding: 20px; border-radius: 10px; margin-top: 20px;">
+                    <h3>Jawabannya: PENCARIAN</h3>
+                    <p>Proses sistematis menemukan urutan aksi dari kondisi awal ke kondisi tujuan</p>
+                </div>
+            </section>
+            
+            <!-- ======================= SLIDE 4: KLASIFIKASI ALGORITMA ======================= -->
+            <section>
+                <h2>Klasifikasi Algoritma Pencarian</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kategori</th>
+                            <th>Karakteristik</th>
+                            <th>Contoh</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="fragment">
+                            <td><strong>Uninformed Search</strong><br>(Blind Search)</td>
+                            <td>Tidak ada info tambahan tentang jarak ke goal</td>
+                            <td>BFS, DFS, UCS</td>
+                        </tr>
+                        <tr class="fragment">
+                            <td><strong>Informed Search</strong><br>(Heuristic Search)</td>
+                            <td>Menggunakan heuristik untuk estimasi</td>
+                            <td>Greedy, A*<br><em>(Pertemuan 3)</em></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            
+            <!-- ======================= SLIDE 5: KOMPONEN PROBLEM PENCARIAN ======================= -->
+            <section>
+                <h2>Komponen Problem Pencarian</h2>
+                <div style="display: flex; justify-content: space-around; align-items: center;">
+                    <div style="text-align: left;">
+                        <ol>
+                            <li class="fragment"><strong>State Space (S)</strong> - Semua state yang mungkin</li>
+                            <li class="fragment"><strong>Initial State (s₀)</strong> - Kondisi awal</li>
+                            <li class="fragment"><strong>Actions (A)</strong> - Aksi yang tersedia</li>
+                            <li class="fragment"><strong>Transition Model</strong> - Result(s, a) → s'</li>
+                            <li class="fragment"><strong>Goal Test</strong> - Apakah sudah tujuan?</li>
+                            <li class="fragment"><strong>Path Cost</strong> - Biaya total jalur</li>
+                        </ol>
+                    </div>
+                </div>
+                <p class="fragment"><small>📷 Lihat: images/p02-01-komponen-problem-pencarian.png</small></p>
+            </section>
+            
+            <!-- ======================= SLIDE 6: CONTOH - PETA ROMANIA ======================= -->
+            <section>
+                <h2>Contoh: Masalah Romania</h2>
+                <p><strong>Tujuan:</strong> Mencari rute dari Arad ke Bucharest</p>
+                <table class="fragment">
+                    <tr>
+                        <td><strong>State Space</strong></td>
+                        <td>Semua kota di Romania</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Initial State</strong></td>
+                        <td>Arad</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Actions</strong></td>
+                        <td>Pergi ke kota tetangga</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Goal Test</strong></td>
+                        <td>State = Bucharest?</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Path Cost</strong></td>
+                        <td>Jarak total (km)</td>
+                    </tr>
+                </table>
+                <p class="fragment"><small>📷 Lihat: images/p02-02-peta-romania.png</small></p>
+            </section>
+            
+            <!-- ======================= SLIDE 7: CONTOH - 8 PUZZLE ======================= -->
+            <section>
+                <h2>Contoh: 8-Puzzle</h2>
+                <div style="display: flex; justify-content: space-around;">
+                    <div class="fragment">
+                        <h4>State Awal</h4>
+                        <table style="font-size: 0.8em;">
+                            <tr><td>7</td><td>2</td><td>4</td></tr>
+                            <tr><td>5</td><td style="background: #6b7280;">⬜</td><td>6</td></tr>
+                            <tr><td>8</td><td>3</td><td>1</td></tr>
+                        </table>
+                    </div>
+                    <div class="fragment" style="font-size: 2em; align-self: center;">→ ? →</div>
+                    <div class="fragment">
+                        <h4>State Tujuan</h4>
+                        <table style="font-size: 0.8em;">
+                            <tr><td>1</td><td>2</td><td>3</td></tr>
+                            <tr><td>4</td><td>5</td><td>6</td></tr>
+                            <tr><td>7</td><td>8</td><td style="background: #6b7280;">⬜</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <p class="fragment" style="margin-top: 20px;"><strong>Actions:</strong> Geser kotak kosong (↑ ↓ ← →)</p>
+                <p class="fragment"><small>📷 Lihat: images/p02-03-8-puzzle.png</small></p>
+            </section>
+            
+            <!-- ======================= SLIDE 8: SEARCH TREE ======================= -->
+            <section>
+                <h2>Search Tree</h2>
+                <div style="background: rgba(16, 185, 129, 0.2); padding: 15px; border-radius: 10px;">
+                    <p><strong>Search Tree</strong> adalah representasi pohon dari proses pencarian</p>
+                </div>
+                <ul style="margin-top: 20px;">
+                    <li class="fragment"><strong>Root</strong> = Initial State</li>
+                    <li class="fragment"><strong>Node</strong> = State</li>
+                    <li class="fragment"><strong>Edge</strong> = Action</li>
+                    <li class="fragment"><strong>Path</strong> = Urutan aksi dari root</li>
+                </ul>
+                <p class="fragment"><small>📷 Lihat: images/p02-04-search-tree.png</small></p>
+            </section>
+            
+            <!-- ======================= SLIDE 9: TERMINOLOGI ======================= -->
+            <section>
+                <h2>Terminologi Penting</h2>
+                <table>
+                    <tr class="fragment">
+                        <td><strong>Expand</strong></td>
+                        <td>Menghasilkan semua child node dari suatu node</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Frontier</strong></td>
+                        <td>Node yang sudah di-generate tapi belum di-expand<br><em>(Open List)</em></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Explored Set</strong></td>
+                        <td>State yang sudah di-expand<br><em>(Closed List)</em></td>
+                    </tr>
+                </table>
+            </section>
+            
+            <!-- ======================= SLIDE 10: KRITERIA EVALUASI ======================= -->
+            <section>
+                <h2>4 Kriteria Evaluasi Algoritma</h2>
+                <ol>
+                    <li class="fragment"><strong>Completeness</strong><br>
+                        <small>Apakah dijamin menemukan solusi jika ada?</small></li>
+                    <li class="fragment"><strong>Optimality</strong><br>
+                        <small>Apakah dijamin menemukan solusi dengan biaya terendah?</small></li>
+                    <li class="fragment"><strong>Time Complexity</strong><br>
+                        <small>Berapa banyak node yang di-generate?</small></li>
+                    <li class="fragment"><strong>Space Complexity</strong><br>
+                        <small>Berapa banyak node maksimal di memori?</small></li>
+                </ol>
+            </section>
+            
+            <!-- ======================= SLIDE 11: PARAMETER KOMPLEKSITAS ======================= -->
+            <section>
+                <h2>Parameter Kompleksitas</h2>
+                <table>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Simbol</th>
+                        <th>Deskripsi</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Branching Factor</td>
+                        <td><strong>b</strong></td>
+                        <td>Jumlah maksimal anak per node</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Depth of Goal</td>
+                        <td><strong>d</strong></td>
+                        <td>Kedalaman goal terdekat</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Maximum Depth</td>
+                        <td><strong>m</strong></td>
+                        <td>Kedalaman maksimal pohon</td>
+                    </tr>
+                </table>
+                <p class="fragment"><small>📷 Lihat: images/p02-05-parameter-kompleksitas.png</small></p>
+            </section>
+            
+            <!-- ======================= SLIDE 12: BFS - KONSEP ======================= -->
+            <section>
+                <h2>Breadth-First Search (BFS)</h2>
+                <div style="background: rgba(37, 99, 235, 0.2); padding: 15px; border-radius: 10px;">
+                    <p>Eksplorasi semua node pada kedalaman d<br>sebelum ke kedalaman d+1</p>
+                </div>
+                <div class="fragment" style="margin-top: 20px;">
+                    <h4>Karakteristik:</h4>
+                    <ul>
+                        <li>Eksplorasi per level (melebar dulu)</li>
+                        <li>Menggunakan <strong>Queue (FIFO)</strong></li>
+                        <li>Cocok untuk mencari solusi dengan langkah minimum</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- ======================= SLIDE 13: BFS - VISUALISASI ======================= -->
+            <section>
+                <h2>BFS: Urutan Ekspansi</h2>
+                <div style="text-align: center;">
+                    <pre style="font-size: 0.7em; text-align: left; display: inline-block;">
+        [1]           ← Level 0: Ekspansi pertama
+       /   \
+     [2]   [3]        ← Level 1: Ekspansi kedua & ketiga
+     / \   / \
+   [4][5][6][7]       ← Level 2: Ekspansi 4, 5, 6, 7
+                    </pre>
+                </div>
+                <p class="fragment"><strong>Queue:</strong> [1] → [2,3] → [3,4,5] → [4,5,6,7] → ...</p>
+                <p class="fragment"><small>FIFO: Masuk Pertama, Keluar Pertama</small></p>
+                <p class="fragment"><small>📷 Lihat: images/p02-06-bfs-expansion.png</small></p>
+            </section>
+            
+            <!-- ======================= SLIDE 14: BFS - ALGORITMA ======================= -->
+            <section>
+                <h2>BFS: Pseudocode</h2>
+                <pre><code class="language-python" data-trim>
+def bfs(problem):
+    node = Node(problem.initial_state)
+    if problem.goal_test(node.state):
+        return node.path()
+    
+    frontier = Queue()  # FIFO
+    frontier.enqueue(node)
+    explored = set()
+    
+    while not frontier.is_empty():
+        node = frontier.dequeue()
+        explored.add(node.state)
+        
+        for action in problem.actions(node.state):
+            child = node.child(problem, action)
+            if child.state not in explored:
+                if problem.goal_test(child.state):
+                    return child.path()
+                frontier.enqueue(child)
+    return None
+                </code></pre>
+            </section>
+            
+            <!-- ======================= SLIDE 15: BFS - ANALISIS ======================= -->
+            <section>
+                <h2>BFS: Analisis Kompleksitas</h2>
+                <table>
+                    <tr>
+                        <td><strong>Complete?</strong></td>
+                        <td class="fragment">✅ Ya <small>(jika b terbatas)</small></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Optimal?</strong></td>
+                        <td class="fragment">✅ Ya <small>(jika step cost = 1)</small></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Time</strong></td>
+                        <td class="fragment">O(b<sup>d</sup>)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Space</strong></td>
+                        <td class="fragment">O(b<sup>d</sup>) 😰</td>
+                    </tr>
+                </table>
+                <p class="fragment" style="color: #f59e0b;">⚠️ Memori bisa sangat besar!</p>
+            </section>
+            
+            <!-- ======================= SLIDE 16: DFS - KONSEP ======================= -->
+            <section>
+                <h2>Depth-First Search (DFS)</h2>
+                <div style="background: rgba(239, 68, 68, 0.2); padding: 15px; border-radius: 10px;">
+                    <p>Selalu eksplorasi node <strong>terdalam</strong> di frontier terlebih dahulu</p>
+                </div>
+                <div class="fragment" style="margin-top: 20px;">
+                    <h4>Karakteristik:</h4>
+                    <ul>
+                        <li>Eksplorasi mendalam dulu (<em>deep before wide</em>)</li>
+                        <li>Menggunakan <strong>Stack (LIFO)</strong> atau rekursi</li>
+                        <li>Memori jauh lebih hemat dari BFS</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- ======================= SLIDE 17: DFS - VISUALISASI ======================= -->
+            <section>
+                <h2>DFS: Urutan Ekspansi</h2>
+                <div style="text-align: center;">
+                    <pre style="font-size: 0.7em; text-align: left; display: inline-block;">
+        [1]           ← Mulai dari root
+       /   \
+     [2]   [7]        ← Kiri dulu, kanan nanti
+     / \   
+   [3] [6]            ← Terus ke bawah
+   /
+ [4]                  ← Sampai buntu
+   \
+   [5] ← backtrack    ← Lalu backtrack
+                    </pre>
+                </div>
+                <p class="fragment"><strong>Stack:</strong> [1] → [2,7] → [3,6,7] → [4,6,7] → ...</p>
+                <p class="fragment"><small>LIFO: Masuk Terakhir, Keluar Pertama</small></p>
+                <p class="fragment"><small>📷 Lihat: images/p02-07-dfs-expansion.png</small></p>
+            </section>
+            
+            <!-- ======================= SLIDE 18: DFS - ANALISIS ======================= -->
+            <section>
+                <h2>DFS: Analisis Kompleksitas</h2>
+                <table>
+                    <tr>
+                        <td><strong>Complete?</strong></td>
+                        <td class="fragment">❌ Tidak <small>(bisa infinite loop)</small></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Optimal?</strong></td>
+                        <td class="fragment">❌ Tidak <small>(bisa temukan solusi lebih dalam)</small></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Time</strong></td>
+                        <td class="fragment">O(b<sup>m</sup>) 😰 <small>(bisa sangat buruk)</small></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Space</strong></td>
+                        <td class="fragment">O(bm) 😊 <small>(linear!)</small></td>
+                    </tr>
+                </table>
+                <p class="fragment" style="color: #10b981;">✅ Keunggulan utama: Space complexity!</p>
+            </section>
+            
+            <!-- ======================= SLIDE 19: DFS VS BFS SPACE ======================= -->
+            <section>
+                <h2>Perbandingan Space: BFS vs DFS</h2>
+                <p>Jika b = 10 dan d = 10:</p>
+                <table class="fragment">
+                    <tr>
+                        <th>Algoritma</th>
+                        <th>Space</th>
+                        <th>Estimasi</th>
+                    </tr>
+                    <tr>
+                        <td>BFS</td>
+                        <td>O(b<sup>d</sup>)</td>
+                        <td>10<sup>10</sup> = 10 miliar node!</td>
+                    </tr>
+                    <tr>
+                        <td>DFS</td>
+                        <td>O(bm)</td>
+                        <td>10 × 10 = 100 node</td>
+                    </tr>
+                </table>
+                <p class="fragment" style="color: #f59e0b; font-size: 1.2em;"><strong>100 juta kali lebih hemat!</strong></p>
+            </section>
+            
+            <!-- ======================= SLIDE 20: DEPTH-LIMITED SEARCH ======================= -->
+            <section>
+                <h2>Depth-Limited Search (DLS)</h2>
+                <div style="background: rgba(245, 158, 11, 0.2); padding: 15px; border-radius: 10px;">
+                    <p>DFS dengan <strong>batas kedalaman maksimal L</strong></p>
+                </div>
+                <ul class="fragment" style="margin-top: 20px;">
+                    <li>Node pada kedalaman L tidak di-expand</li>
+                    <li>Menghindari infinite path</li>
+                    <li>Masalah: bagaimana memilih L yang tepat?</li>
+                </ul>
+                <pre class="fragment"><code class="language-python" data-trim>
+def depth_limited_search(problem, limit):
+    return recursive_dls(Node(problem.initial), problem, limit)
+                </code></pre>
+            </section>
+            
+            <!-- ======================= SLIDE 21: ITERATIVE DEEPENING ======================= -->
+            <section>
+                <h2>Iterative Deepening Search (IDS)</h2>
+                <div style="background: rgba(16, 185, 129, 0.2); padding: 15px; border-radius: 10px;">
+                    <p>Jalankan DLS berulang dengan limit meningkat:<br>L=0, L=1, L=2, ...</p>
+                </div>
+                <pre class="fragment"><code class="language-python" data-trim>
+def iterative_deepening_search(problem):
+    depth = 0
+    while True:
+        result = depth_limited_search(problem, depth)
+        if result != 'cutoff':
+            return result
+        depth += 1
+                </code></pre>
+                <p class="fragment"><small>📷 Lihat: images/p02-08-iterative-deepening.png</small></p>
+            </section>
+            
+            <!-- ======================= SLIDE 22: IDS - ANALISIS ======================= -->
+            <section>
+                <h2>IDS: Kombinasi Terbaik!</h2>
+                <table>
+                    <tr>
+                        <td><strong>Complete?</strong></td>
+                        <td class="fragment">✅ Ya <small>(seperti BFS)</small></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Optimal?</strong></td>
+                        <td class="fragment">✅ Ya <small>(untuk uniform cost)</small></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Time</strong></td>
+                        <td class="fragment">O(b<sup>d</sup>) <small>(seperti BFS)</small></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Space</strong></td>
+                        <td class="fragment">O(bd) 😊 <small>(seperti DFS!)</small></td>
+                    </tr>
+                </table>
+                <p class="fragment" style="color: #10b981; font-size: 1.1em;">
+                    <strong>IDS = Keunggulan BFS + Keunggulan DFS!</strong>
+                </p>
+            </section>
+            
+            <!-- ======================= SLIDE 23: IDS - OVERHEAD ======================= -->
+            <section>
+                <h2>IDS: Apakah Ada Overhead?</h2>
+                <p>Bukankah IDS mengulang eksplorasi?</p>
+                <div class="fragment">
+                    <p>Contoh: b=3, d=3</p>
+                    <table>
+                        <tr>
+                            <th>Algoritma</th>
+                            <th>Node Generated</th>
+                        </tr>
+                        <tr>
+                            <td>BFS</td>
+                            <td>1+3+9+27 = 40</td>
+                        </tr>
+                        <tr>
+                            <td>IDS</td>
+                            <td>1+4+13+40 = 58</td>
+                        </tr>
+                    </table>
+                </div>
+                <p class="fragment">Overhead: 58/40 = <strong>1.45× saja!</strong></p>
+                <p class="fragment"><small>Sebagian besar node ada di level terdalam</small></p>
+            </section>
+            
+            <!-- ======================= SLIDE 24: UCS - KONSEP ======================= -->
+            <section>
+                <h2>Uniform-Cost Search (UCS)</h2>
+                <div style="background: rgba(37, 99, 235, 0.2); padding: 15px; border-radius: 10px;">
+                    <p>Eksplorasi node dengan <strong>path cost terendah</strong> terlebih dahulu</p>
+                </div>
+                <div class="fragment" style="margin-top: 20px;">
+                    <h4>Mengapa UCS dibutuhkan?</h4>
+                    <ul>
+                        <li>BFS optimal hanya untuk uniform step cost</li>
+                        <li>Jika step cost bervariasi, butuh UCS</li>
+                        <li>Menggunakan <strong>Priority Queue</strong></li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- ======================= SLIDE 25: UCS - CONTOH ======================= -->
+            <section>
+                <h2>UCS: Mengapa BFS Gagal?</h2>
+                <div style="text-align: center;">
+                    <pre style="font-size: 0.8em; text-align: left; display: inline-block;">
+Start -----(cost 10)----→ A -----(cost 1)----→ Goal
+  |                                              ↑
+  +-------(cost 5)------→ B ------(cost 5)------+
+                    </pre>
+                </div>
+                <div class="fragment">
+                    <p><strong>BFS path:</strong> Start → A → Goal (cost = 11)</p>
+                    <p><strong>Optimal path:</strong> Start → B → Goal (cost = 10)</p>
+                </div>
+                <p class="fragment" style="color: #ef4444;">BFS memilih berdasarkan <em>kedalaman</em>, bukan <em>biaya</em>!</p>
+                <p class="fragment"><small>📷 Lihat: images/p02-09-ucs-expansion.png</small></p>
+            </section>
+            
+            <!-- ======================= SLIDE 26: UCS - ALGORITMA ======================= -->
+            <section>
+                <h2>UCS: Pseudocode</h2>
+                <pre><code class="language-python" data-trim>
+def uniform_cost_search(problem):
+    node = Node(problem.initial_state, path_cost=0)
+    frontier = PriorityQueue()  # priority = g(n)
+    frontier.push(node, priority=node.path_cost)
+    explored = set()
+    
+    while not frontier.is_empty():
+        node = frontier.pop()  # cost terendah
+        
+        if problem.goal_test(node.state):  # test saat expand!
+            return node.path()
+        
+        explored.add(node.state)
+        for action in problem.actions(node.state):
+            child = node.child(problem, action)
+            # ... update frontier jika cost lebih rendah
+    return None
+                </code></pre>
+            </section>
+            
+            <!-- ======================= SLIDE 27: UCS - PENTING ======================= -->
+            <section>
+                <h2>UCS: Hal Penting!</h2>
+                <div style="background: rgba(239, 68, 68, 0.2); padding: 20px; border-radius: 10px;">
+                    <h3>⚠️ Goal Test dilakukan saat EXPAND</h3>
+                    <p>Bukan saat node di-generate!</p>
+                </div>
+                <p class="fragment" style="margin-top: 20px;">
+                    <strong>Alasan:</strong> Node dengan cost lebih rendah bisa muncul kemudian
+                </p>
+            </section>
+            
+            <!-- ======================= SLIDE 28: UCS - ANALISIS ======================= -->
+            <section>
+                <h2>UCS: Analisis Kompleksitas</h2>
+                <table>
+                    <tr>
+                        <td><strong>Complete?</strong></td>
+                        <td class="fragment">✅ Ya <small>(jika step cost ≥ ε > 0)</small></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Optimal?</strong></td>
+                        <td class="fragment">✅ Ya! 🎉</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Time</strong></td>
+                        <td class="fragment">O(b<sup>1+⌊C*/ε⌋</sup>)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Space</strong></td>
+                        <td class="fragment">O(b<sup>1+⌊C*/ε⌋</sup>)</td>
+                    </tr>
+                </table>
+                <p class="fragment"><small>C* = biaya solusi optimal, ε = step cost minimum</small></p>
+            </section>
+            
+            <!-- ======================= SLIDE 29: PERBANDINGAN LENGKAP ======================= -->
+            <section>
+                <h2>Perbandingan Lengkap</h2>
+                <table style="font-size: 0.7em;">
+                    <tr>
+                        <th>Kriteria</th>
+                        <th>BFS</th>
+                        <th>DFS</th>
+                        <th>IDS</th>
+                        <th>UCS</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Complete</strong></td>
+                        <td>✅</td>
+                        <td>❌</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Optimal</strong></td>
+                        <td>✅*</td>
+                        <td>❌</td>
+                        <td>✅*</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Time</strong></td>
+                        <td>O(b<sup>d</sup>)</td>
+                        <td>O(b<sup>m</sup>)</td>
+                        <td>O(b<sup>d</sup>)</td>
+                        <td>O(b<sup>C*/ε</sup>)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Space</strong></td>
+                        <td>O(b<sup>d</sup>)</td>
+                        <td>O(bm)</td>
+                        <td>O(bd)</td>
+                        <td>O(b<sup>C*/ε</sup>)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Struktur</strong></td>
+                        <td>Queue</td>
+                        <td>Stack</td>
+                        <td>Stack</td>
+                        <td>PQueue</td>
+                    </tr>
+                </table>
+                <p class="fragment"><small>* jika step cost uniform</small></p>
+            </section>
+            
+            <!-- ======================= SLIDE 30: PANDUAN PEMILIHAN ======================= -->
+            <section>
+                <h2>Panduan Pemilihan Algoritma</h2>
+                <table style="font-size: 0.8em;">
+                    <tr>
+                        <th>Situasi</th>
+                        <th>Pilih</th>
+                        <th>Alasan</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Step cost bervariasi</td>
+                        <td><strong>UCS</strong></td>
+                        <td>Menjamin optimal</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Memori terbatas</td>
+                        <td><strong>IDS</strong></td>
+                        <td>Space O(bd), complete</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Perlu solusi tercepat</td>
+                        <td><strong>BFS/IDS</strong></td>
+                        <td>Solusi terdangkal</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>State space besar/infinite</td>
+                        <td><strong>IDS</strong></td>
+                        <td>Complete, hemat memori</td>
+                    </tr>
+                </table>
+                <p class="fragment"><small>📷 Lihat: images/p02-10-flowchart-pemilihan.png</small></p>
+            </section>
+            
+            <!-- ======================= SLIDE 31: KONTEKS PERTAHANAN ======================= -->
+            <section>
+                <h2>Aplikasi: Konteks Pertahanan</h2>
+                <div style="background: rgba(16, 185, 129, 0.2); padding: 15px; border-radius: 10px;">
+                    <h4>🎯 Perencanaan Rute Operasi Militer</h4>
+                </div>
+                <ul style="margin-top: 20px;">
+                    <li class="fragment"><strong>State:</strong> Posisi unit di medan</li>
+                    <li class="fragment"><strong>Actions:</strong> Bergerak ke pos berikutnya</li>
+                    <li class="fragment"><strong>Cost:</strong> Risiko deteksi, waktu, konsumsi logistik</li>
+                    <li class="fragment"><strong>Goal:</strong> Mencapai sasaran dengan risiko minimum</li>
+                </ul>
+                <p class="fragment" style="color: #f59e0b;">→ Gunakan <strong>UCS</strong> untuk misi dengan risiko minimum!</p>
+            </section>
+            
+            <!-- ======================= SLIDE 32: QUIZ 1 ======================= -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <h3>Pertanyaan 1</h3>
+                <p>Algoritma mana yang menggunakan Queue (FIFO)?</p>
+                <ol type="A">
+                    <li>DFS</li>
+                    <li>BFS</li>
+                    <li>UCS</li>
+                    <li>IDS</li>
+                </ol>
+                <p class="fragment" style="color: #10b981; font-size: 1.2em;"><strong>Jawaban: B. BFS</strong></p>
+            </section>
+            
+            <!-- ======================= SLIDE 33: QUIZ 2 ======================= -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <h3>Pertanyaan 2</h3>
+                <p>Jika step cost bervariasi, algoritma mana yang menjamin solusi optimal?</p>
+                <ol type="A">
+                    <li>BFS</li>
+                    <li>DFS</li>
+                    <li>IDS</li>
+                    <li>UCS</li>
+                </ol>
+                <p class="fragment" style="color: #10b981; font-size: 1.2em;"><strong>Jawaban: D. UCS</strong></p>
+            </section>
+            
+            <!-- ======================= SLIDE 34: QUIZ 3 ======================= -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <h3>Pertanyaan 3</h3>
+                <p>Algoritma mana yang memiliki space complexity paling efisien?</p>
+                <ol type="A">
+                    <li>BFS - O(b<sup>d</sup>)</li>
+                    <li>DFS - O(bm)</li>
+                    <li>IDS - O(bd)</li>
+                    <li>UCS - O(b<sup>C*/ε</sup>)</li>
+                </ol>
+                <p class="fragment" style="color: #10b981; font-size: 1.2em;"><strong>Jawaban: C. IDS - O(bd)</strong></p>
+                <p class="fragment"><small>IDS memiliki keunggulan DFS (space) + keunggulan BFS (complete, optimal)</small></p>
+            </section>
+            
+            <!-- ======================= SLIDE 35: RINGKASAN ======================= -->
+            <section>
+                <h2>Ringkasan</h2>
+                <ul>
+                    <li class="fragment"><strong>Problem Pencarian:</strong> State Space, Initial, Actions, Transition, Goal, Cost</li>
+                    <li class="fragment"><strong>BFS:</strong> Queue, complete, optimal (uniform), O(b<sup>d</sup>) space</li>
+                    <li class="fragment"><strong>DFS:</strong> Stack, not complete, O(bm) space</li>
+                    <li class="fragment"><strong>IDS:</strong> DLS berulang, complete, O(bd) space</li>
+                    <li class="fragment"><strong>UCS:</strong> Priority Queue, optimal untuk semua cost</li>
+                </ul>
+            </section>
+            
+            <!-- ======================= SLIDE 36: PERTEMUAN BERIKUTNYA ======================= -->
+            <section>
+                <h2>Pertemuan Berikutnya</h2>
+                <h3>Pertemuan 03</h3>
+                <div style="background: rgba(245, 158, 11, 0.2); padding: 20px; border-radius: 10px;">
+                    <h4>Pencarian Heuristik - Informed Search</h4>
+                    <ul>
+                        <li>Konsep Heuristik</li>
+                        <li>Greedy Best-First Search</li>
+                        <li>Algoritma A*</li>
+                        <li>Admissibility dan Consistency</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- ======================= SLIDE 37: TUGAS ======================= -->
+            <section>
+                <h2>Tugas</h2>
+                <ol>
+                    <li class="fragment">Implementasikan BFS dan DFS untuk maze solver</li>
+                    <li class="fragment">Bandingkan jumlah node yang dieksplorasi</li>
+                    <li class="fragment">Implementasikan UCS untuk graf berbobot</li>
+                    <li class="fragment">Kerjakan latihan di <code>latihan.md</code></li>
+                </ol>
+                <p class="fragment" style="margin-top: 20px;">
+                    <strong>Deadline:</strong> Sebelum Pertemuan 03
+                </p>
+            </section>
+            
+            <!-- ==================== SLIDE 38: REFERENCES ==================== -->
+            <section>
+                <h2>📚 Referensi</h2>
+                <ol class="small-text">
+                    <li>Russell, S. & Norvig, P. (2020). <em>Artificial Intelligence: A Modern Approach</em> (4th Ed.). Pearson. <strong>Chapter 3.1-3.4</strong></li>
+                    <li>Poole, D.L. & Mackworth, A.K. (2023). <em>Artificial Intelligence: Foundations of Computational Agents</em> (3rd Ed.). Cambridge University Press. Chapter 3.</li>
+                    <li>CS188 Berkeley AI Materials: <a href="https://inst.eecs.berkeley.edu/~cs188/">https://inst.eecs.berkeley.edu/~cs188/</a></li>
+                </ol>
+            </section>
+            
+            <!-- ==================== SLIDE 39: CLOSING ==================== -->
+            <section class="center">
+                <h1>Terima Kasih</h1>
+                <h3>🤖 Kecerdasan Artifisial</h3>
+                <p>Pertemuan 02: Pemecahan Masalah dengan Pencarian - Uninformed Search</p>
+                <br>
+                <p class="small-text">Ada pertanyaan?</p>
+            </section>
+            
+        </div>
+    </div>
+    
+    <!-- Reveal.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/math/math.min.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            showSlideNumber: 'all',
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            pdfSeparateFragments: false,
+            plugins: [ RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+        });
+    </script>
+</body>
+</html>
