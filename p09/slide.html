@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pertemuan 09: Representasi Pengetahuan - Logika Proposisional</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/league.min.css">
+    
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css">
+    
+    <!-- Custom Theme -->
+    <link rel="stylesheet" href="unhan-theme.css">
+    
+    <style>
+        /* Fallback styles if unhan-theme.css is not available */
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+        }
+        .reveal .slides section {
+            text-align: left;
+        }
+        .reveal .slides section.center {
+            text-align: center;
+        }
+        .reveal table {
+            margin: 20px auto;
+            font-size: 0.7em;
+        }
+        .reveal table th {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px;
+        }
+        .reveal table td {
+            padding: 8px 12px;
+            border: 1px solid #444;
+        }
+        .reveal .highlight-box {
+            background-color: rgba(37, 99, 235, 0.2);
+            border-left: 4px solid #2563eb;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .definition-box {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .warning-box {
+            background-color: rgba(245, 158, 11, 0.2);
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .two-column {
+            display: flex;
+            gap: 40px;
+        }
+        .reveal .two-column > div {
+            flex: 1;
+        }
+        .reveal .emoji-large {
+            font-size: 3em;
+        }
+        .reveal .quiz-option {
+            background-color: rgba(100, 100, 100, 0.3);
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .reveal .quiz-option:hover {
+            background-color: rgba(37, 99, 235, 0.4);
+        }
+        .reveal code {
+            background-color: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .reveal pre code {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .reveal .small-text {
+            font-size: 0.6em;
+        }
+        .reveal .medium-text {
+            font-size: 0.8em;
+        }
+        .reveal img {
+            max-height: 450px;
+            border-radius: 8px;
+        }
+        .reveal .truth-table td,
+        .reveal .truth-table th {
+            text-align: center;
+            padding: 6px 14px;
+        }
+        .reveal .truth-true {
+            color: #22c55e;
+            font-weight: bold;
+        }
+        .reveal .truth-false {
+            color: #ef4444;
+            font-weight: bold;
+        }
+        .reveal .logic-formula {
+            background: rgba(212, 168, 75, 0.15);
+            border: 2px solid #d4a84b;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        .reveal .step-card {
+            background: rgba(26, 58, 110, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .reveal .inference-rule {
+            background: rgba(16, 185, 129, 0.15);
+            border: 2px solid #10b981;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- ==================== SLIDE 1: TITLE ==================== -->
+            <section class="center">
+                <h1>Kecerdasan Artifisial</h1>
+                <h3>Pertemuan 09</h3>
+                <h2>Representasi Pengetahuan &mdash; Logika Proposisional</h2>
+                <p class="small-text" style="margin-top: 50px;">
+                    Mata Kuliah: Kecerdasan Artifisial (AI401) | 3 SKS
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 2: LEARNING OUTCOMES ==================== -->
+            <section>
+                <h2>🎯 Capaian Pembelajaran</h2>
+                <p>Setelah pertemuan ini, mahasiswa mampu:</p>
+                <ol class="medium-text">
+                    <li class="fragment">Menjelaskan kebutuhan representasi pengetahuan formal dalam AI</li>
+                    <li class="fragment">Merepresentasikan pengetahuan dalam logika proposisional</li>
+                    <li class="fragment">Mengevaluasi proposisi menggunakan tabel kebenaran</li>
+                    <li class="fragment">Membuktikan entailment menggunakan aturan inferensi</li>
+                    <li class="fragment">Mengonversi proposisi ke CNF dan menerapkan resolution</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 3: AGENDA ==================== -->
+            <section>
+                <h2>📋 Agenda Hari Ini</h2>
+                <div class="two-column">
+                    <div>
+                        <h4>Bagian 1</h4>
+                        <ul class="medium-text">
+                            <li>Knowledge Base &amp; Inference</li>
+                            <li>Sintaks Logika Proposisional</li>
+                            <li>Tabel Kebenaran</li>
+                            <li>Entailment &amp; Satisfiability</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Bagian 2</h4>
+                        <ul class="medium-text">
+                            <li>Aturan Inferensi</li>
+                            <li>Ekuivalensi Logika</li>
+                            <li>Conjunctive Normal Form</li>
+                            <li>Algoritma Resolution</li>
+                            <li>Studi Kasus: Wumpus World</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 4: MOTIVATION ==================== -->
+            <section>
+                <h2>🤔 Mengapa Representasi Pengetahuan?</h2>
+                <p class="medium-text">Pada Pertemuan 1&ndash;6, agen menyelesaikan masalah dengan <strong>pencarian</strong>.</p>
+                <p class="medium-text fragment">Namun, pencarian memiliki keterbatasan:</p>
+                <div class="fragment warning-box medium-text">
+                    Agen pencarian tidak bisa <strong>menalar</strong> tentang &ldquo;mengapa&rdquo; suatu tindakan benar &mdash; agen hanya mengeksplorasi state space.
+                </div>
+                <div class="fragment definition-box medium-text">
+                    <strong>Representasi Pengetahuan</strong> memungkinkan agen menyimpan fakta, menerapkan aturan, dan menarik <strong>kesimpulan baru</strong> secara logis.
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 5: KB AND INFERENCE ENGINE ==================== -->
+            <section>
+                <h2>📚 Knowledge Base &amp; Inference Engine</h2>
+                <img src="images/p09-01-knowledge-based-agent.png" alt="Arsitektur Knowledge-Based Agent">
+                <div class="two-column medium-text fragment">
+                    <div>
+                        <p><strong>TELL</strong> &rarr; Menambahkan fakta ke KB</p>
+                    </div>
+                    <div>
+                        <p><strong>ASK</strong> &rarr; Query &amp; mendapatkan jawaban</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 6: KB EXAMPLE ==================== -->
+            <section>
+                <h2>💡 Contoh Knowledge Base</h2>
+                <p class="medium-text"><strong>Skenario:</strong> Sistem keamanan pangkalan militer</p>
+                <div class="step-card medium-text fragment">
+                    <strong>TELL(KB, </strong>&ldquo;Jika alarm aktif DAN tidak ada latihan, maka ada ancaman&rdquo;<strong>)</strong>
+                </div>
+                <div class="step-card medium-text fragment">
+                    <strong>TELL(KB, </strong>&ldquo;Alarm aktif&rdquo;<strong>)</strong>
+                </div>
+                <div class="step-card medium-text fragment">
+                    <strong>TELL(KB, </strong>&ldquo;Tidak ada latihan&rdquo;<strong>)</strong>
+                </div>
+                <div class="fragment logic-formula">
+                    <strong>ASK(KB, </strong>&ldquo;Ada ancaman?&rdquo;<strong>)</strong> &rarr; <span style="color: #22c55e;">Ya (True)</span>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 7: PROPOSITIONAL LOGIC INTRO ==================== -->
+            <section>
+                <h2>📜 Logika Proposisional</h2>
+                <div class="definition-box">
+                    <strong>Logika Proposisional</strong> adalah bahasa formal untuk merepresentasikan pernyataan yang bernilai <strong>True</strong> atau <strong>False</strong>.
+                </div>
+                <div class="two-column medium-text fragment">
+                    <div>
+                        <h4 style="color: #22c55e;">✅ Proposisi</h4>
+                        <ul>
+                            <li>&ldquo;Radar mendeteksi objek&rdquo;</li>
+                            <li>&ldquo;5 + 3 = 8&rdquo;</li>
+                            <li>&ldquo;Hujan turun hari ini&rdquo;</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #ef4444;">❌ Bukan Proposisi</h4>
+                        <ul>
+                            <li>&ldquo;Tutup pintu!&rdquo; (perintah)</li>
+                            <li>&ldquo;Siapa komandannya?&rdquo; (tanya)</li>
+                            <li>&ldquo;x + 2 = 5&rdquo; (variabel bebas)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 8: PROPOSITIONAL SYMBOLS ==================== -->
+            <section>
+                <h2>🔤 Simbol Proposisional</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Simbol</th>
+                        <th>Representasi</th>
+                        <th>Contoh Dunia Nyata</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><code>P</code></td>
+                        <td>Simbol proposisional</td>
+                        <td>&ldquo;Radar aktif&rdquo;</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><code>Q</code></td>
+                        <td>Simbol proposisional</td>
+                        <td>&ldquo;Ancaman terdeteksi&rdquo;</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><code>True</code></td>
+                        <td>Selalu bernilai benar</td>
+                        <td>Tautologi</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><code>False</code></td>
+                        <td>Selalu bernilai salah</td>
+                        <td>Kontradiksi</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 9: CONNECTIVES OVERVIEW ==================== -->
+            <section>
+                <h2>🔗 Lima Konnektif Logika</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Konnektif</th>
+                        <th>Simbol</th>
+                        <th>Nama</th>
+                        <th>Arti</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Negasi</td>
+                        <td><strong>&not;</strong></td>
+                        <td>NOT</td>
+                        <td>&ldquo;bukan&rdquo; / &ldquo;tidak&rdquo;</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Konjungsi</td>
+                        <td><strong>&and;</strong></td>
+                        <td>AND</td>
+                        <td>&ldquo;dan&rdquo;</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Disjungsi</td>
+                        <td><strong>&or;</strong></td>
+                        <td>OR</td>
+                        <td>&ldquo;atau&rdquo;</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Implikasi</td>
+                        <td><strong>&rArr;</strong></td>
+                        <td>IMPLIES</td>
+                        <td>&ldquo;jika&hellip;maka&rdquo;</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Bikonditional</td>
+                        <td><strong>&hArr;</strong></td>
+                        <td>IFF</td>
+                        <td>&ldquo;jika dan hanya jika&rdquo;</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 10: NOT AND OR ==================== -->
+            <section>
+                <h2>🔸 NOT, AND, OR</h2>
+                <div class="two-column">
+                    <div>
+                        <table class="truth-table small-text">
+                            <tr>
+                                <th>P</th>
+                                <th>&not;P</th>
+                            </tr>
+                            <tr>
+                                <td class="truth-true">T</td>
+                                <td class="truth-false">F</td>
+                            </tr>
+                            <tr>
+                                <td class="truth-false">F</td>
+                                <td class="truth-true">T</td>
+                            </tr>
+                        </table>
+                        <p class="small-text" style="text-align: center;">Negasi (NOT)</p>
+                    </div>
+                    <div>
+                        <table class="truth-table small-text">
+                            <tr>
+                                <th>P</th>
+                                <th>Q</th>
+                                <th>P &and; Q</th>
+                                <th>P &or; Q</th>
+                            </tr>
+                            <tr>
+                                <td class="truth-true">T</td>
+                                <td class="truth-true">T</td>
+                                <td class="truth-true">T</td>
+                                <td class="truth-true">T</td>
+                            </tr>
+                            <tr>
+                                <td class="truth-true">T</td>
+                                <td class="truth-false">F</td>
+                                <td class="truth-false">F</td>
+                                <td class="truth-true">T</td>
+                            </tr>
+                            <tr>
+                                <td class="truth-false">F</td>
+                                <td class="truth-true">T</td>
+                                <td class="truth-false">F</td>
+                                <td class="truth-true">T</td>
+                            </tr>
+                            <tr>
+                                <td class="truth-false">F</td>
+                                <td class="truth-false">F</td>
+                                <td class="truth-false">F</td>
+                                <td class="truth-false">F</td>
+                            </tr>
+                        </table>
+                        <p class="small-text" style="text-align: center;">AND dan OR</p>
+                    </div>
+                </div>
+                <div class="fragment highlight-box medium-text">
+                    💡 <strong>AND</strong> &rarr; true hanya jika <em>keduanya</em> true | <strong>OR</strong> &rarr; true jika <em>minimal satu</em> true
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 11: IMPLICATION ==================== -->
+            <section>
+                <h2>➡️ Implikasi (P &rArr; Q)</h2>
+                <table class="truth-table medium-text">
+                    <tr>
+                        <th>P</th>
+                        <th>Q</th>
+                        <th>P &rArr; Q</th>
+                        <th>Penjelasan</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td class="truth-true">T</td>
+                        <td class="truth-true">T</td>
+                        <td class="truth-true">T</td>
+                        <td style="font-size: 0.8em;">Janji ditepati</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td class="truth-true">T</td>
+                        <td class="truth-false">F</td>
+                        <td class="truth-false">F</td>
+                        <td style="font-size: 0.8em;">Janji dilanggar ❌</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td class="truth-false">F</td>
+                        <td class="truth-true">T</td>
+                        <td class="truth-true">T</td>
+                        <td style="font-size: 0.8em;">Premis salah &rarr; true by default</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td class="truth-false">F</td>
+                        <td class="truth-false">F</td>
+                        <td class="truth-true">T</td>
+                        <td style="font-size: 0.8em;">Premis salah &rarr; true by default</td>
+                    </tr>
+                </table>
+                <div class="fragment warning-box medium-text">
+                    ⚠️ <strong>Kunci:</strong> P &rArr; Q hanya <strong>false</strong> ketika P true tapi Q false (janji dilanggar)
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 12: IMPLICATION MILITARY EXAMPLE ==================== -->
+            <section>
+                <h2>🎖️ Contoh Implikasi: Pertahanan</h2>
+                <div class="logic-formula">
+                    <code>RadarDeteksi &rArr; AktifkanSiaga</code>
+                </div>
+                <p class="medium-text">&ldquo;Jika radar mendeteksi objek, maka aktifkan status siaga&rdquo;</p>
+                <table class="truth-table medium-text fragment">
+                    <tr>
+                        <th>RadarDeteksi</th>
+                        <th>AktifkanSiaga</th>
+                        <th>Aturan Dilanggar?</th>
+                    </tr>
+                    <tr>
+                        <td class="truth-true">T</td>
+                        <td class="truth-true">T</td>
+                        <td style="color: #22c55e;">Tidak ✅</td>
+                    </tr>
+                    <tr>
+                        <td class="truth-true">T</td>
+                        <td class="truth-false">F</td>
+                        <td style="color: #ef4444;">Ya! ❌</td>
+                    </tr>
+                    <tr>
+                        <td class="truth-false">F</td>
+                        <td class="truth-true">T</td>
+                        <td style="color: #22c55e;">Tidak ✅</td>
+                    </tr>
+                    <tr>
+                        <td class="truth-false">F</td>
+                        <td class="truth-false">F</td>
+                        <td style="color: #22c55e;">Tidak ✅</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 13: BICONDITIONAL ==================== -->
+            <section>
+                <h2>↔️ Bikonditional (P &hArr; Q)</h2>
+                <div class="definition-box medium-text">
+                    <strong>P &hArr; Q</strong> berarti P true <strong>jika dan hanya jika</strong> Q juga true. Keduanya harus memiliki nilai yang sama.
+                </div>
+                <table class="truth-table medium-text fragment">
+                    <tr>
+                        <th>P</th>
+                        <th>Q</th>
+                        <th>P &hArr; Q</th>
+                    </tr>
+                    <tr>
+                        <td class="truth-true">T</td>
+                        <td class="truth-true">T</td>
+                        <td class="truth-true">T</td>
+                    </tr>
+                    <tr>
+                        <td class="truth-true">T</td>
+                        <td class="truth-false">F</td>
+                        <td class="truth-false">F</td>
+                    </tr>
+                    <tr>
+                        <td class="truth-false">F</td>
+                        <td class="truth-true">T</td>
+                        <td class="truth-false">F</td>
+                    </tr>
+                    <tr>
+                        <td class="truth-false">F</td>
+                        <td class="truth-false">F</td>
+                        <td class="truth-true">T</td>
+                    </tr>
+                </table>
+                <p class="fragment small-text highlight-box">💡 P &hArr; Q &equiv; (P &rArr; Q) &and; (Q &rArr; P)</p>
+            </section>
+
+            <!-- ==================== SLIDE 14: OPERATOR PRECEDENCE ==================== -->
+            <section>
+                <h2>📊 Urutan Prioritas Operator</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Prioritas</th>
+                        <th>Operator</th>
+                        <th>Nama</th>
+                    </tr>
+                    <tr>
+                        <td>1 (tertinggi)</td>
+                        <td><strong>&not;</strong></td>
+                        <td>Negasi</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><strong>&and;</strong></td>
+                        <td>Konjungsi</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><strong>&or;</strong></td>
+                        <td>Disjungsi</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><strong>&rArr;</strong></td>
+                        <td>Implikasi</td>
+                    </tr>
+                    <tr>
+                        <td>5 (terendah)</td>
+                        <td><strong>&hArr;</strong></td>
+                        <td>Bikonditional</td>
+                    </tr>
+                </table>
+                <div class="fragment logic-formula">
+                    &not;P &and; Q &rArr; R &nbsp; dibaca &nbsp; ((&not;P) &and; Q) &rArr; R
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 15: MODEL AND SEMANTICS ==================== -->
+            <section>
+                <h2>🌐 Model dan Semantik</h2>
+                <div class="definition-box medium-text">
+                    <strong>Model (m)</strong> adalah penetapan nilai kebenaran (True/False) untuk setiap simbol proposisional.
+                </div>
+                <div class="fragment medium-text">
+                    <p><strong>Contoh:</strong> Dengan simbol {P, Q, R}, salah satu model:</p>
+                    <div class="logic-formula">
+                        m = {P = True, Q = False, R = True}
+                    </div>
+                </div>
+                <div class="fragment highlight-box medium-text">
+                    💡 Dengan <strong>n</strong> simbol proposisional, terdapat <strong>2<sup>n</sup></strong> model yang mungkin.
+                    <br>3 simbol &rarr; 2&sup3; = 8 model
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 16: ENTAILMENT ==================== -->
+            <section>
+                <h2>⚊️ Entailment (&models;)</h2>
+                <div class="definition-box">
+                    <strong>KB &models; &alpha;</strong> berarti: pada <strong>setiap</strong> model di mana KB bernilai true, &alpha; juga bernilai true.
+                </div>
+                <div class="fragment medium-text">
+                    <p><strong>Contoh:</strong></p>
+                    <p>KB = {P &and; Q}</p>
+                    <p>Apakah KB &models; P?</p>
+                </div>
+                <div class="fragment">
+                    <table class="truth-table small-text">
+                        <tr>
+                            <th>P</th>
+                            <th>Q</th>
+                            <th>P &and; Q (KB)</th>
+                            <th>P (&alpha;)</th>
+                            <th>Cek</th>
+                        </tr>
+                        <tr>
+                            <td class="truth-true">T</td>
+                            <td class="truth-true">T</td>
+                            <td class="truth-true">T ◄</td>
+                            <td class="truth-true">T</td>
+                            <td style="color: #22c55e;">✅</td>
+                        </tr>
+                        <tr style="opacity: 0.5;">
+                            <td>T</td><td>F</td><td>F</td><td>T</td><td>-</td>
+                        </tr>
+                        <tr style="opacity: 0.5;">
+                            <td>F</td><td>T</td><td>F</td><td>F</td><td>-</td>
+                        </tr>
+                        <tr style="opacity: 0.5;">
+                            <td>F</td><td>F</td><td>F</td><td>F</td><td>-</td>
+                        </tr>
+                    </table>
+                </div>
+                <p class="fragment highlight-box medium-text">Satu-satunya model di mana KB true &rarr; P juga true. Jadi KB &models; P ✅</p>
+            </section>
+
+            <!-- ==================== SLIDE 17: SATISFIABILITY ==================== -->
+            <section>
+                <h2>📈 Satisfiability, Validity, Unsatisfiability</h2>
+                <div class="two-column medium-text">
+                    <div>
+                        <div class="fragment definition-box">
+                            <h4 style="color: #22c55e;">Valid (Tautologi)</h4>
+                            <p>True di <strong>semua</strong> model</p>
+                            <p class="small-text">Contoh: P &or; &not;P</p>
+                        </div>
+                        <div class="fragment highlight-box">
+                            <h4 style="color: #3b82f6;">Satisfiable</h4>
+                            <p>True di <strong>beberapa</strong> model</p>
+                            <p class="small-text">Contoh: P &and; Q</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="fragment warning-box">
+                            <h4 style="color: #ef4444;">Unsatisfiable (Kontradiksi)</h4>
+                            <p>False di <strong>semua</strong> model</p>
+                            <p class="small-text">Contoh: P &and; &not;P</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="fragment logic-formula small-text">
+                    💡 Hubungan penting: KB &models; &alpha; &nbsp; &hArr; &nbsp; (KB &and; &not;&alpha;) adalah <strong>unsatisfiable</strong>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 18: INFERENCE RULES INTRO ==================== -->
+            <section>
+                <h2>⚙️ Aturan Inferensi</h2>
+                <p class="medium-text">Aturan yang menghasilkan kesimpulan baru yang <strong>valid</strong> dari premis yang diketahui.</p>
+                <div class="two-column medium-text fragment">
+                    <div>
+                        <h4>Mengapa Penting?</h4>
+                        <ul>
+                            <li>Tabel kebenaran &rarr; eksponensial: O(2<sup>n</sup>)</li>
+                            <li>Aturan inferensi &rarr; efisien</li>
+                            <li>Langkah-langkah logis yang terverifikasi</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Analogi</h4>
+                        <div class="highlight-box">
+                            Tabel kebenaran = <em>brute force</em><br>
+                            Aturan inferensi = <em>bukti elegan</em>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 19: MODUS PONENS ==================== -->
+            <section>
+                <h2>💡 Modus Ponens</h2>
+                <div class="inference-rule">
+                    <p style="font-size: 1.2em;">
+                        P &rArr; Q<br>
+                        P<br>
+                        <hr style="width: 50%; margin: 10px auto; border-color: #d4a84b;">
+                        &there4; Q
+                    </p>
+                </div>
+                <div class="fragment medium-text">
+                    <p><strong>Contoh Pertahanan:</strong></p>
+                    <div class="step-card">
+                        <p>Premis 1: &ldquo;Jika radar mendeteksi objek, maka aktifkan siaga&rdquo; (RadarDeteksi &rArr; Siaga)</p>
+                        <p>Premis 2: &ldquo;Radar mendeteksi objek&rdquo; (RadarDeteksi)</p>
+                        <p style="color: #22c55e;"><strong>Kesimpulan: &ldquo;Aktifkan siaga&rdquo; (Siaga) ✅</strong></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 20: MODUS TOLLENS ==================== -->
+            <section>
+                <h2>💡 Modus Tollens</h2>
+                <div class="inference-rule">
+                    <p style="font-size: 1.2em;">
+                        P &rArr; Q<br>
+                        &not;Q<br>
+                        <hr style="width: 50%; margin: 10px auto; border-color: #d4a84b;">
+                        &there4; &not;P
+                    </p>
+                </div>
+                <div class="fragment medium-text">
+                    <p><strong>Contoh:</strong></p>
+                    <div class="step-card">
+                        <p>Premis 1: &ldquo;Jika sistem bocor, maka alarm berbunyi&rdquo; (Bocor &rArr; Alarm)</p>
+                        <p>Premis 2: &ldquo;Alarm tidak berbunyi&rdquo; (&not;Alarm)</p>
+                        <p style="color: #22c55e;"><strong>Kesimpulan: &ldquo;Sistem tidak bocor&rdquo; (&not;Bocor) ✅</strong></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 21: MORE INFERENCE RULES ==================== -->
+            <section>
+                <h2>📋 Aturan Inferensi Lainnya</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Aturan</th>
+                        <th>Premis</th>
+                        <th>Kesimpulan</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>And-Elimination</strong></td>
+                        <td>P &and; Q</td>
+                        <td>P &nbsp;&nbsp;(atau Q)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>And-Introduction</strong></td>
+                        <td>P, &nbsp; Q</td>
+                        <td>P &and; Q</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Or-Introduction</strong></td>
+                        <td>P</td>
+                        <td>P &or; Q &nbsp;(untuk sembarang Q)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Hypothetical Syllogism</strong></td>
+                        <td>P &rArr; Q, &nbsp; Q &rArr; R</td>
+                        <td>P &rArr; R</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Resolution</strong></td>
+                        <td>P &or; Q, &nbsp; &not;P &or; R</td>
+                        <td>Q &or; R</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 22: INFERENCE CHAIN EXAMPLE ==================== -->
+            <section>
+                <h2>🔗 Contoh Rantai Inferensi</h2>
+                <p class="medium-text"><strong>KB:</strong></p>
+                <ol class="medium-text">
+                    <li class="fragment">IntrusionDetected &rArr; AlertSOC &nbsp;&nbsp;&nbsp;<em>(KB1)</em></li>
+                    <li class="fragment">AlertSOC &rArr; ActivateFirewall &nbsp;&nbsp;&nbsp;<em>(KB2)</em></li>
+                    <li class="fragment">IntrusionDetected &nbsp;&nbsp;&nbsp;<em>(KB3: fakta)</em></li>
+                </ol>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Langkah inferensi:</strong></p>
+                    <div class="step-card small-text">
+                        <strong>Step 1:</strong> Modus Ponens pada KB1 + KB3 &rarr; AlertSOC
+                    </div>
+                    <div class="step-card small-text">
+                        <strong>Step 2:</strong> Modus Ponens pada KB2 + AlertSOC &rarr; ActivateFirewall
+                    </div>
+                </div>
+                <p class="fragment logic-formula medium-text">
+                    ✅ KB &models; ActivateFirewall
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 23: LOGICAL EQUIVALENCES ==================== -->
+            <section>
+                <h2>⚖️ Ekuivalensi Logika Penting</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Nama</th>
+                        <th>Ekuivalensi</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Implication Elimination</strong></td>
+                        <td>P &rArr; Q &nbsp;&equiv;&nbsp; &not;P &or; Q</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Contrapositive</strong></td>
+                        <td>P &rArr; Q &nbsp;&equiv;&nbsp; &not;Q &rArr; &not;P</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>De Morgan 1</strong></td>
+                        <td>&not;(P &and; Q) &nbsp;&equiv;&nbsp; &not;P &or; &not;Q</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>De Morgan 2</strong></td>
+                        <td>&not;(P &or; Q) &nbsp;&equiv;&nbsp; &not;P &and; &not;Q</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Distributive (&and; over &or;)</strong></td>
+                        <td>P &and; (Q &or; R) &nbsp;&equiv;&nbsp; (P &and; Q) &or; (P &and; R)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Distributive (&or; over &and;)</strong></td>
+                        <td>P &or; (Q &and; R) &nbsp;&equiv;&nbsp; (P &or; Q) &and; (P &or; R)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Double Negation</strong></td>
+                        <td>&not;&not;P &nbsp;&equiv;&nbsp; P</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 24: CNF INTRO ==================== -->
+            <section>
+                <h2>📝 Conjunctive Normal Form (CNF)</h2>
+                <div class="definition-box medium-text">
+                    <strong>CNF</strong> adalah bentuk logika berupa konjungsi dari klausa, di mana setiap <strong>klausa</strong> adalah disjungsi dari literal.
+                </div>
+                <div class="fragment">
+                    <div class="logic-formula">
+                        (P &or; &not;Q) &and; (&not;P &or; R) &and; (Q &or; R)
+                    </div>
+                    <p class="small-text" style="text-align: center;">3 klausa, masing-masing berisi literal yang dihubungkan OR</p>
+                </div>
+                <div class="fragment warning-box medium-text">
+                    ⚠️ CNF diperlukan sebagai input untuk <strong>algoritma Resolution</strong>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 25: CNF CONVERSION STEPS ==================== -->
+            <section>
+                <h2>🛠️ 4 Langkah Konversi ke CNF</h2>
+                <div class="step-card medium-text fragment">
+                    <strong>Step 1:</strong> Eliminasi bikonditional (&hArr;)<br>
+                    <span class="small-text">P &hArr; Q &rarr; (P &rArr; Q) &and; (Q &rArr; P)</span>
+                </div>
+                <div class="step-card medium-text fragment">
+                    <strong>Step 2:</strong> Eliminasi implikasi (&rArr;)<br>
+                    <span class="small-text">P &rArr; Q &rarr; &not;P &or; Q</span>
+                </div>
+                <div class="step-card medium-text fragment">
+                    <strong>Step 3:</strong> Pindahkan NOT ke dalam (De Morgan, Double Negation)<br>
+                    <span class="small-text">&not;(P &and; Q) &rarr; &not;P &or; &not;Q</span>
+                </div>
+                <div class="step-card medium-text fragment">
+                    <strong>Step 4:</strong> Distribusi OR atas AND<br>
+                    <span class="small-text">P &or; (Q &and; R) &rarr; (P &or; Q) &and; (P &or; R)</span>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 26: CNF EXAMPLE ==================== -->
+            <section>
+                <h2>📝 Contoh Konversi CNF</h2>
+                <p class="medium-text"><strong>Konversi:</strong> (P &rArr; Q) &and; (Q &rArr; R)</p>
+                <div class="step-card small-text fragment">
+                    <strong>Step 1:</strong> Tidak ada &hArr; &rarr; tetap: (P &rArr; Q) &and; (Q &rArr; R)
+                </div>
+                <div class="step-card small-text fragment">
+                    <strong>Step 2:</strong> Eliminasi &rArr; &rarr; <strong>(&not;P &or; Q) &and; (&not;Q &or; R)</strong>
+                </div>
+                <div class="step-card small-text fragment">
+                    <strong>Step 3:</strong> NOT sudah di level literal &rarr; tidak perlu De Morgan
+                </div>
+                <div class="step-card small-text fragment">
+                    <strong>Step 4:</strong> Sudah dalam bentuk konjungsi klausa &rarr; selesai
+                </div>
+                <div class="fragment logic-formula">
+                    Hasil CNF: (&not;P &or; Q) &and; (&not;Q &or; R)
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 27: RESOLUTION RULE ==================== -->
+            <section>
+                <h2>⚖️ Aturan Resolution</h2>
+                <div class="definition-box medium-text">
+                    Resolution menggabungkan dua klausa yang mengandung literal komplementer:
+                </div>
+                <div class="inference-rule" style="margin-top: 20px;">
+                    <p style="font-size: 1.1em;">
+                        P &or; Q<br>
+                        &not;P &or; R<br>
+                        <hr style="width: 50%; margin: 10px auto; border-color: #d4a84b;">
+                        Q &or; R &nbsp;&nbsp;&nbsp;(resolvent)
+                    </p>
+                </div>
+                <div class="fragment highlight-box medium-text">
+                    💡 <strong>P</strong> dan <strong>&not;P</strong> saling mengeliminasi, sisanya digabungkan dengan OR
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 28: PROOF BY RESOLUTION ==================== -->
+            <section>
+                <h2>🔎 Proof by Resolution (Refutation)</h2>
+                <p class="medium-text">Untuk membuktikan KB &models; &alpha;:</p>
+                <ol class="medium-text">
+                    <li class="fragment">Tambahkan <strong>&not;&alpha;</strong> ke KB</li>
+                    <li class="fragment">Konversi semua ke <strong>CNF</strong></li>
+                    <li class="fragment">Terapkan <strong>resolution</strong> berulang kali</li>
+                    <li class="fragment">Jika dihasilkan <strong>klausa kosong</strong> (&empty;) &rarr; <strong>kontradiksi</strong> &rarr; KB &models; &alpha; terbukti!</li>
+                </ol>
+                <div class="fragment warning-box medium-text">
+                    ⚠️ Prinsip: jika KB &and; &not;&alpha; menghasilkan kontradiksi, maka &alpha; pasti benar.
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 29: RESOLUTION EXAMPLE ==================== -->
+            <section>
+                <h2>🔎 Contoh Resolution</h2>
+                <p class="small-text"><strong>Buktikan:</strong> {P &rArr; Q, Q &rArr; R, P} &models; R</p>
+                <div class="step-card small-text fragment">
+                    <strong>1.</strong> Tambah &not;R ke KB
+                </div>
+                <div class="step-card small-text fragment">
+                    <strong>2.</strong> Klausa CNF: C1: &not;P &or; Q &nbsp;|&nbsp; C2: &not;Q &or; R &nbsp;|&nbsp; C3: P &nbsp;|&nbsp; C4: &not;R
+                </div>
+                <div class="step-card small-text fragment">
+                    <strong>3.</strong> Resolve C1 + C3 (&not;P dan P) &rarr; C5: Q
+                </div>
+                <div class="step-card small-text fragment">
+                    <strong>4.</strong> Resolve C2 + C5 (&not;Q dan Q) &rarr; C6: R
+                </div>
+                <div class="step-card small-text fragment">
+                    <strong>5.</strong> Resolve C6 + C4 (R dan &not;R) &rarr; <strong>&empty; (klausa kosong)</strong>
+                </div>
+                <div class="fragment logic-formula">
+                    Kontradiksi ditemukan! &there4; KB &models; R &nbsp;✅
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 30: WUMPUS WORLD INTRO ==================== -->
+            <section>
+                <h2>👻 Wumpus World</h2>
+                <div class="definition-box medium-text">
+                    <strong>Wumpus World</strong> adalah lingkungan grid 4&times;4 klasik untuk mendemonstrasikan penalaran logis dalam AI.
+                </div>
+                <img src="images/p09-05-wumpus-world-grid.png" alt="Wumpus World Grid" style="max-height: 350px;">
+            </section>
+
+            <!-- ==================== SLIDE 31: WUMPUS WORLD RULES ==================== -->
+            <section>
+                <h2>👻 Aturan Wumpus World</h2>
+                <div class="two-column medium-text">
+                    <div>
+                        <h4>Elemen Dunia</h4>
+                        <ul>
+                            <li class="fragment">👻 <strong>Wumpus</strong> &mdash; monster</li>
+                            <li class="fragment">🕳️ <strong>Pit</strong> &mdash; lubang jebakan</li>
+                            <li class="fragment">🏆 <strong>Gold</strong> &mdash; emas (tujuan)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Persepsi Agen</h4>
+                        <ul>
+                            <li class="fragment">💨 <strong>Stench</strong> &rarr; Wumpus di sebelah</li>
+                            <li class="fragment">🌊 <strong>Breeze</strong> &rarr; Pit di sebelah</li>
+                            <li class="fragment">✨ <strong>Glitter</strong> &rarr; Gold di sel ini</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 32: WUMPUS WORLD LOGIC ==================== -->
+            <section>
+                <h2>👻 Penalaran di Wumpus World</h2>
+                <p class="medium-text"><strong>Simbol proposisional:</strong></p>
+                <ul class="small-text">
+                    <li class="fragment"><code>P<sub>i,j</sub></code> = ada Pit di sel (i,j)</li>
+                    <li class="fragment"><code>B<sub>i,j</sub></code> = ada Breeze di sel (i,j)</li>
+                </ul>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Aturan:</strong></p>
+                    <div class="logic-formula small-text">
+                        B<sub>1,1</sub> &hArr; (P<sub>1,2</sub> &or; P<sub>2,1</sub>)
+                    </div>
+                    <p class="small-text" style="text-align: center;">&ldquo;Breeze di (1,1) jika dan hanya jika ada Pit di (1,2) atau (2,1)&rdquo;</p>
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Jika kita tahu:</strong> &not;B<sub>1,1</sub> (tidak ada breeze di 1,1)</p>
+                    <div class="step-card small-text">
+                        &not;B<sub>1,1</sub> &rArr; &not;(P<sub>1,2</sub> &or; P<sub>2,1</sub>) &rArr; <strong>&not;P<sub>1,2</sub> &and; &not;P<sub>2,1</sub></strong>
+                    </div>
+                    <p class="small-text" style="color: #22c55e;">✅ Sel (1,2) dan (2,1) aman!</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 33: DEFENSE APPLICATION ==================== -->
+            <section>
+                <h2>🎖️ Aplikasi: KB Pertahanan</h2>
+                <p class="medium-text"><strong>Knowledge Base Sistem Keamanan Pangkalan:</strong></p>
+                <div class="step-card small-text fragment">
+                    <strong>KB1:</strong> PerimeterBreach &and; &not;Drill &rArr; RealThreat
+                </div>
+                <div class="step-card small-text fragment">
+                    <strong>KB2:</strong> RealThreat &rArr; ActivateQRF
+                </div>
+                <div class="step-card small-text fragment">
+                    <strong>KB3:</strong> RealThreat &rArr; NotifyCommandCenter
+                </div>
+                <div class="step-card small-text fragment">
+                    <strong>KB4:</strong> PerimeterBreach &nbsp;(fakta)
+                </div>
+                <div class="step-card small-text fragment">
+                    <strong>KB5:</strong> &not;Drill &nbsp;(fakta)
+                </div>
+                <div class="fragment logic-formula small-text">
+                    Inferensi: RealThreat ✅ &rarr; ActivateQRF ✅ &rarr; NotifyCommandCenter ✅
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 34: QUIZ 1 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 1:</strong></p>
+                <p class="medium-text">Kapan P &rArr; Q bernilai <strong>False</strong>?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. P = False, Q = False</div>
+                <div class="quiz-option fragment" data-fragment-index="2">B. P = False, Q = True</div>
+                <div class="quiz-option fragment" data-fragment-index="3" style="background-color: rgba(16, 185, 129, 0.4);">C. P = True, Q = False ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. P = True, Q = True</div>
+                <p class="fragment small-text highlight-box">💡 Implikasi hanya false ketika premis true tapi konsekuen false (janji dilanggar)</p>
+            </section>
+
+            <!-- ==================== SLIDE 35: QUIZ 2 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 2:</strong></p>
+                <p class="medium-text">Aturan inferensi apa yang digunakan?<br>
+                Premis: P &rArr; Q dan &not;Q &rarr; Kesimpulan: &not;P</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Modus Ponens</div>
+                <div class="quiz-option fragment" data-fragment-index="2" style="background-color: rgba(16, 185, 129, 0.4);">B. Modus Tollens ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="3">C. Hypothetical Syllogism</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Resolution</div>
+            </section>
+
+            <!-- ==================== SLIDE 36: QUIZ 3 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 3:</strong></p>
+                <p class="medium-text">Apa hasil konversi CNF dari P &rArr; Q?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. P &and; Q</div>
+                <div class="quiz-option fragment" data-fragment-index="2">B. P &or; Q</div>
+                <div class="quiz-option fragment" data-fragment-index="3" style="background-color: rgba(16, 185, 129, 0.4);">C. &not;P &or; Q ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. &not;P &and; Q</div>
+                <p class="fragment small-text highlight-box">💡 Implication Elimination: P &rArr; Q &equiv; &not;P &or; Q</p>
+            </section>
+
+            <!-- ==================== SLIDE 37: QUIZ 4 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 4:</strong></p>
+                <p class="medium-text">Dalam proof by resolution, apa yang menandakan bahwa &alpha; terbukti benar?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Semua klausa menjadi True</div>
+                <div class="quiz-option fragment" data-fragment-index="2" style="background-color: rgba(16, 185, 129, 0.4);">B. Dihasilkan klausa kosong (&empty;) ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="3">C. Tidak ada resolvent baru</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Semua literal positif</div>
+                <p class="fragment small-text highlight-box">💡 Klausa kosong = kontradiksi = KB &and; &not;&alpha; unsatisfiable = &alpha; terbukti!</p>
+            </section>
+
+            <!-- ==================== SLIDE 38: SUMMARY ==================== -->
+            <section>
+                <h2>📝 Ringkasan</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Konsep</th>
+                        <th>Poin Kunci</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Knowledge Base</strong></td>
+                        <td>Kumpulan fakta &amp; aturan; operasi TELL &amp; ASK</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Logika Proposisional</strong></td>
+                        <td>5 konnektif: &not;, &and;, &or;, &rArr;, &hArr;</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Entailment</strong></td>
+                        <td>KB &models; &alpha; jika &alpha; true di semua model di mana KB true</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Aturan Inferensi</strong></td>
+                        <td>Modus Ponens, Modus Tollens, Resolution, dll.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CNF</strong></td>
+                        <td>Konjungsi klausa; 4 langkah konversi</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Resolution</strong></td>
+                        <td>Proof by refutation: KB &and; &not;&alpha; &rarr; &empty; &rarr; terbukti</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 39: NEXT WEEK ==================== -->
+            <section>
+                <h2>📅 Pertemuan Berikutnya</h2>
+                <div class="highlight-box">
+                    <h3>Pertemuan 10: Logika Predikat (First-Order Logic)</h3>
+                    <p class="medium-text">Representasi Pengetahuan yang Lebih Ekspresif</p>
+                </div>
+                <ul class="medium-text">
+                    <li class="fragment">Keterbatasan logika proposisional</li>
+                    <li class="fragment">Sintaks FOL: konstanta, variabel, predikat, kuantor</li>
+                    <li class="fragment">Kuantor universal (&forall;) dan eksistensial (&exist;)</li>
+                    <li class="fragment">Unifikasi dan Most General Unifier</li>
+                    <li class="fragment">Forward &amp; Backward Chaining</li>
+                </ul>
+            </section>
+
+            <!-- ==================== SLIDE 40: REFERENCES ==================== -->
+            <section>
+                <h2>📚 Referensi</h2>
+                <ol class="small-text">
+                    <li>Russell, S. &amp; Norvig, P. (2020). <em>Artificial Intelligence: A Modern Approach</em> (4th Ed.). Pearson. <strong>Chapter 7</strong></li>
+                    <li>Poole, D.L. &amp; Mackworth, A.K. (2023). <em>Artificial Intelligence: Foundations of Computational Agents</em> (3rd Ed.). Cambridge University Press. Chapter 5.</li>
+                    <li>CS188 Berkeley AI Materials: <a href="https://inst.eecs.berkeley.edu/~cs188/">https://inst.eecs.berkeley.edu/~cs188/</a></li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 41: CLOSING ==================== -->
+            <section class="center">
+                <h1>Terima Kasih</h1>
+                <h3>🤖 Kecerdasan Artifisial</h3>
+                <p>Pertemuan 09: Representasi Pengetahuan &mdash; Logika Proposisional</p>
+                <br>
+                <p class="small-text">Ada pertanyaan?</p>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/math/math.min.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            showSlideNumber: 'all',
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            pdfSeparateFragments: false,
+            plugins: [ RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+        });
+    </script>
+</body>
+</html>
