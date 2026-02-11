@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pertemuan 10: Representasi Pengetahuan - Logika Predikat (First-Order Logic)</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/league.min.css">
+    
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css">
+    
+    <!-- Custom Theme -->
+    <link rel="stylesheet" href="unhan-theme.css">
+    
+    <style>
+        /* Fallback styles if unhan-theme.css is not available */
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+        }
+        .reveal .slides section {
+            text-align: left;
+        }
+        .reveal .slides section.center {
+            text-align: center;
+        }
+        .reveal table {
+            margin: 20px auto;
+            font-size: 0.7em;
+        }
+        .reveal table th {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px;
+        }
+        .reveal table td {
+            padding: 8px 12px;
+            border: 1px solid #444;
+        }
+        .reveal .highlight-box {
+            background-color: rgba(37, 99, 235, 0.2);
+            border-left: 4px solid #2563eb;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .definition-box {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .warning-box {
+            background-color: rgba(245, 158, 11, 0.2);
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .two-column {
+            display: flex;
+            gap: 40px;
+        }
+        .reveal .two-column > div {
+            flex: 1;
+        }
+        .reveal .emoji-large {
+            font-size: 3em;
+        }
+        .reveal .quiz-option {
+            background-color: rgba(100, 100, 100, 0.3);
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .reveal .quiz-option:hover {
+            background-color: rgba(37, 99, 235, 0.4);
+        }
+        .reveal code {
+            background-color: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .reveal pre code {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .reveal .small-text {
+            font-size: 0.6em;
+        }
+        .reveal .medium-text {
+            font-size: 0.8em;
+        }
+        .reveal img {
+            max-height: 450px;
+            border-radius: 8px;
+        }
+        .reveal .fol-example {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- ==================== SLIDE 1: TITLE ==================== -->
+            <section class="center">
+                <h1>Kecerdasan Artifisial</h1>
+                <h3>Pertemuan 10</h3>
+                <h2>Logika Predikat (First-Order Logic)</h2>
+                <p class="small-text" style="margin-top: 50px;">
+                    Mata Kuliah: Kecerdasan Artifisial (AI401) | 3 SKS
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 2: LEARNING OUTCOMES ==================== -->
+            <section>
+                <h2>🎯 Capaian Pembelajaran</h2>
+                <p>Setelah pertemuan ini, mahasiswa mampu:</p>
+                <ol class="medium-text">
+                    <li class="fragment">Menjelaskan keterbatasan logika proposisional</li>
+                    <li class="fragment">Memahami sintaks FOL: konstanta, variabel, predikat, fungsi, kuantor</li>
+                    <li class="fragment">Merepresentasikan pengetahuan dalam logika predikat</li>
+                    <li class="fragment">Menerapkan kuantor universal (∀) dan eksistensial (∃)</li>
+                    <li class="fragment">Melakukan proses unifikasi dan menemukan MGU</li>
+                    <li class="fragment">Menerapkan forward chaining dan backward chaining</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 3: AGENDA ==================== -->
+            <section>
+                <h2>📋 Agenda Hari Ini</h2>
+                <div class="two-column">
+                    <div>
+                        <h4>Bagian 1</h4>
+                        <ul class="medium-text">
+                            <li>Keterbatasan Logika Proposisional</li>
+                            <li>Sintaks FOL</li>
+                            <li>Kuantor (∀ dan ∃)</li>
+                            <li>Representasi Pengetahuan</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Bagian 2</h4>
+                        <ul class="medium-text">
+                            <li>Unifikasi dan MGU</li>
+                            <li>Forward Chaining</li>
+                            <li>Backward Chaining</li>
+                            <li>Aplikasi: Expert Systems</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 4: RECAP PROPOSITIONAL LOGIC ==================== -->
+            <section>
+                <h2>🔙 Recap: Logika Proposisional</h2>
+                <p class="medium-text">Pada Pertemuan 9, kita mempelajari:</p>
+                <ul class="medium-text">
+                    <li class="fragment">Proposisi sebagai unit dasar (P, Q, R)</li>
+                    <li class="fragment">Konnektif logika: ¬, ∧, ∨, ⇒, ⇔</li>
+                    <li class="fragment">Inferensi: Modus Ponens, Resolution</li>
+                    <li class="fragment">CNF dan pembuktian</li>
+                </ul>
+                <div class="fragment warning-box">
+                    <p class="medium-text">⚠️ <strong>Tapi... logika proposisional punya keterbatasan besar!</strong></p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 5: LIMITATIONS ==================== -->
+            <section>
+                <h2>⚠️ Keterbatasan Logika Proposisional</h2>
+                <p class="medium-text"><strong>Masalah:</strong> "Semua tentara harus berani"</p>
+                <div class="two-column medium-text">
+                    <div class="fragment">
+                        <div class="warning-box">
+                            <h4>Logika Proposisional</h4>
+                            <p>P₁ ⇒ Q₁ (Adi berani)</p>
+                            <p>P₂ ⇒ Q₂ (Budi berani)</p>
+                            <p>P₃ ⇒ Q₃ (Citra berani)</p>
+                            <p>... ∞ proposisi!</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>Logika Predikat ⭐</h4>
+                            <p>∀x [Tentara(x) ⇒ Berani(x)]</p>
+                            <p><br><em>Satu kalimat untuk semua!</em></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 6: THREE LIMITATIONS ==================== -->
+            <section>
+                <h2>Tiga Keterbatasan Utama</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Keterbatasan</th>
+                        <th>Penjelasan</th>
+                        <th>Solusi FOL</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Tidak ada objek</strong></td>
+                        <td>Tidak bisa merujuk pada "Drone Alpha-7"</td>
+                        <td>Konstanta, variabel</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Tidak ada relasi</strong></td>
+                        <td>Tidak bisa menyatakan "X lebih cepat dari Y"</td>
+                        <td>Predikat n-ary</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Tidak ada kuantifikasi</strong></td>
+                        <td>Tidak bisa menyatakan "semua" atau "ada"</td>
+                        <td>Kuantor ∀, ∃</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 7: FOL DEFINITION ==================== -->
+            <section>
+                <h2>📐 First-Order Logic (FOL)</h2>
+                <div class="definition-box">
+                    <strong>Logika Predikat (FOL)</strong> adalah perluasan logika proposisional yang menambahkan kemampuan merepresentasikan objek, properti, relasi, dan kuantifikasi.
+                </div>
+                <div class="fragment">
+                    <p class="medium-text">Disebut juga:</p>
+                    <ul class="medium-text">
+                        <li>First-Order Logic (FOL)</li>
+                        <li>First-Order Predicate Calculus</li>
+                        <li>Predicate Logic</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 8: FOL SYNTAX ELEMENTS ==================== -->
+            <section>
+                <h2>🧱 Elemen Sintaks FOL</h2>
+                <img src="images/p10-01-fol-syntax-elements.png" alt="Elemen Sintaks FOL">
+                <p class="small-text">Gambar 2.1: Elemen-elemen sintaks First-Order Logic</p>
+            </section>
+
+            <!-- ==================== SLIDE 9: CONSTANTS AND VARIABLES ==================== -->
+            <section>
+                <h2>Konstanta dan Variabel</h2>
+                <div class="two-column">
+                    <div class="fragment">
+                        <div class="highlight-box">
+                            <h4>📌 Konstanta</h4>
+                            <p class="medium-text">Merujuk pada objek <em>spesifik</em></p>
+                            <ul class="small-text">
+                                <li><code>Adi</code>, <code>Budi</code></li>
+                                <li><code>DroneAlpha7</code></li>
+                                <li><code>Jakarta</code></li>
+                                <li><code>Skuadron11</code></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="highlight-box">
+                            <h4>❓ Variabel</h4>
+                            <p class="medium-text">Placeholder untuk objek <em>belum ditentukan</em></p>
+                            <ul class="small-text">
+                                <li><code>x</code>, <code>y</code>, <code>z</code></li>
+                                <li>Digunakan dengan kuantor</li>
+                                <li>Dapat di-substitusi</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 10: PREDICATES ==================== -->
+            <section>
+                <h2>Predikat (Predicates)</h2>
+                <div class="definition-box">
+                    <strong>Predikat</strong> menyatakan properti atau relasi antar objek.
+                </div>
+                <table class="medium-text fragment">
+                    <tr>
+                        <th>Jenis</th>
+                        <th>Contoh</th>
+                        <th>Arti</th>
+                    </tr>
+                    <tr>
+                        <td>Unary (1 argumen)</td>
+                        <td><code>Pilot(Adi)</code></td>
+                        <td>Adi adalah pilot</td>
+                    </tr>
+                    <tr>
+                        <td>Binary (2 argumen)</td>
+                        <td><code>LebihCepat(x, y)</code></td>
+                        <td>x lebih cepat dari y</td>
+                    </tr>
+                    <tr>
+                        <td>Ternary (3 argumen)</td>
+                        <td><code>Dikirim(x, y, z)</code></td>
+                        <td>x dikirim dari y ke z</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 11: FUNCTIONS ==================== -->
+            <section>
+                <h2>Fungsi (Functions)</h2>
+                <div class="definition-box">
+                    <strong>Fungsi</strong> memetakan objek ke objek lain. Hasilnya adalah <em>term</em>, bukan nilai kebenaran.
+                </div>
+                <div class="fragment">
+                    <table class="medium-text">
+                        <tr>
+                            <th>Fungsi</th>
+                            <th>Contoh</th>
+                            <th>Hasil</th>
+                        </tr>
+                        <tr>
+                            <td><code>komandanDari(x)</code></td>
+                            <td><code>komandanDari(Adi)</code></td>
+                            <td>objek (orang)</td>
+                        </tr>
+                        <tr>
+                            <td><code>markasSkuadron(s)</code></td>
+                            <td><code>markasSkuadron(Skuadron11)</code></td>
+                            <td>objek (lokasi)</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="fragment warning-box">
+                    <p class="small-text">⚠️ <strong>Predikat vs Fungsi:</strong> Predikat → nilai kebenaran (true/false). Fungsi → objek.</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 12: TERMS ==================== -->
+            <section>
+                <h2>Term</h2>
+                <div class="definition-box">
+                    <strong>Term</strong> adalah ekspresi yang merujuk pada objek.
+                </div>
+                <p class="medium-text fragment">Definisi rekursif:</p>
+                <ol class="medium-text">
+                    <li class="fragment">Setiap <strong>konstanta</strong> adalah term → <code>Adi</code></li>
+                    <li class="fragment">Setiap <strong>variabel</strong> adalah term → <code>x</code></li>
+                    <li class="fragment"><strong>Fungsi</strong> diterapkan pada term → <code>komandanDari(Adi)</code></li>
+                    <li class="fragment">Fungsi <strong>bersarang</strong> → <code>markasSkuadron(komandanDari(x))</code></li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 13: ATOMIC SENTENCES ==================== -->
+            <section>
+                <h2>Kalimat Atomik dan Kompleks</h2>
+                <div class="two-column medium-text">
+                    <div class="fragment">
+                        <div class="highlight-box">
+                            <h4>Kalimat Atomik</h4>
+                            <ul>
+                                <li><code>Pilot(Adi)</code></li>
+                                <li><code>Menembak(DroneA, TargetB)</code></li>
+                                <li><code>komandanDari(Adi) = Budi</code></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="highlight-box">
+                            <h4>Kalimat Kompleks</h4>
+                            <ul>
+                                <li><code>Pilot(Adi) ∧ Berani(Adi)</code></li>
+                                <li><code>¬Musuh(X, Y)</code></li>
+                                <li><code>Pilot(x) ⇒ Terlatih(x)</code></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <p class="fragment small-text highlight-box">💡 Konnektif (¬, ∧, ∨, ⇒, ⇔) sama seperti logika proposisional!</p>
+            </section>
+
+            <!-- ==================== SLIDE 14: UNIVERSAL QUANTIFIER ==================== -->
+            <section>
+                <h2>∀ Kuantor Universal</h2>
+                <div class="definition-box">
+                    <strong>∀x P(x)</strong> — "Untuk <em>semua</em> x, P(x) berlaku"
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Contoh:</strong></p>
+                    <ul class="medium-text">
+                        <li><code>∀x [Tentara(x) ⇒ Berani(x)]</code><br><span class="small-text">"Semua tentara berani"</span></li>
+                        <li><code>∀x [Drone(x) ⇒ PunyaSensor(x)]</code><br><span class="small-text">"Semua drone punya sensor"</span></li>
+                    </ul>
+                </div>
+                <div class="fragment highlight-box">
+                    <p class="medium-text">📌 <strong>Pola umum:</strong> ∀x [Kategori(x) ⇒ Properti(x)]</p>
+                    <p class="small-text">Gunakan <strong>implikasi (⇒)</strong>, bukan konjungsi (∧)!</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 15: UNIVERSAL QUANTIFIER TRAP ==================== -->
+            <section>
+                <h2>⚠️ Kesalahan Umum: ∀ dengan ∧</h2>
+                <div class="two-column">
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>✅ Benar</h4>
+                            <p class="medium-text"><code>∀x [Tentara(x) ⇒ Berani(x)]</code></p>
+                            <p class="small-text">"Jika x tentara, maka x berani"</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="warning-box">
+                            <h4>❌ Salah</h4>
+                            <p class="medium-text"><code>∀x [Tentara(x) ∧ Berani(x)]</code></p>
+                            <p class="small-text">"Semua objek di dunia adalah tentara DAN berani" — termasuk meja, kucing, dll!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 16: EXISTENTIAL QUANTIFIER ==================== -->
+            <section>
+                <h2>∃ Kuantor Eksistensial</h2>
+                <div class="definition-box">
+                    <strong>∃x P(x)</strong> — "Ada <em>setidaknya satu</em> x sedemikian sehingga P(x)"
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Contoh:</strong></p>
+                    <ul class="medium-text">
+                        <li><code>∃x [KapalSelam(x) ∧ DiPerairan(x, Natuna)]</code><br><span class="small-text">"Ada kapal selam di perairan Natuna"</span></li>
+                    </ul>
+                </div>
+                <div class="fragment highlight-box">
+                    <p class="medium-text">📌 <strong>Pola umum:</strong> ∃x [Kategori(x) ∧ Properti(x)]</p>
+                    <p class="small-text">Gunakan <strong>konjungsi (∧)</strong>, bukan implikasi (⇒)!</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 17: EXISTENTIAL QUANTIFIER TRAP ==================== -->
+            <section>
+                <h2>⚠️ Kesalahan Umum: ∃ dengan ⇒</h2>
+                <div class="two-column">
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>✅ Benar</h4>
+                            <p class="medium-text"><code>∃x [KapalSelam(x) ∧ DiNatuna(x)]</code></p>
+                            <p class="small-text">"Ada objek yang kapal selam DAN di Natuna"</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="warning-box">
+                            <h4>❌ Misleading</h4>
+                            <p class="medium-text"><code>∃x [KapalSelam(x) ⇒ DiNatuna(x)]</code></p>
+                            <p class="small-text">Terpenuhi oleh <em>apapun</em> yang bukan kapal selam!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 18: NESTED QUANTIFIERS ==================== -->
+            <section>
+                <h2>🔄 Kuantor Bersarang</h2>
+                <p class="medium-text"><strong>Urutan kuantor sangat penting!</strong></p>
+                <table class="small-text">
+                    <tr>
+                        <th>FOL</th>
+                        <th>Arti</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><code>∀x ∃y Suka(x,y)</code></td>
+                        <td>Setiap orang menyukai <em>setidaknya satu</em> orang</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><code>∃x ∀y Suka(x,y)</code></td>
+                        <td>Ada <em>satu orang</em> yang menyukai <em>semua</em> orang</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><code>∀x ∀y Suka(x,y)</code></td>
+                        <td>Semua orang menyukai semua orang</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><code>∃x ∃y Suka(x,y)</code></td>
+                        <td>Ada seseorang yang menyukai seseorang</td>
+                    </tr>
+                </table>
+                <p class="fragment small-text warning-box">⚠️ ∀x ∃y ≠ ∃y ∀x — pada ∀x ∃y, y bisa berbeda untuk setiap x!</p>
+            </section>
+
+            <!-- ==================== SLIDE 19: QUANTIFIER EQUIVALENCES ==================== -->
+            <section>
+                <h2>🔗 Hubungan Antar Kuantor</h2>
+                <p class="medium-text">Kuantor saling terhubung melalui negasi:</p>
+                <div class="formula-box fragment">
+                    <p><code>∀x P(x) ≡ ¬∃x ¬P(x)</code></p>
+                </div>
+                <div class="formula-box fragment">
+                    <p><code>∃x P(x) ≡ ¬∀x ¬P(x)</code></p>
+                </div>
+                <table class="small-text fragment">
+                    <tr>
+                        <th>Kalimat</th>
+                        <th>Ekuivalen</th>
+                    </tr>
+                    <tr>
+                        <td>¬∀x Lulus(x)</td>
+                        <td>∃x ¬Lulus(x) — "Ada yang tidak lulus"</td>
+                    </tr>
+                    <tr>
+                        <td>¬∃x Sempurna(x)</td>
+                        <td>∀x ¬Sempurna(x) — "Semua tidak sempurna"</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 20: REPRESENTATION PATTERNS ==================== -->
+            <section>
+                <h2>📝 Pola Representasi Umum</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Kalimat Natural</th>
+                        <th>Pola FOL</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Semua X adalah Y</td>
+                        <td><code>∀x [X(x) ⇒ Y(x)]</code></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Ada X yang Y</td>
+                        <td><code>∃x [X(x) ∧ Y(x)]</code></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Tidak ada X yang Y</td>
+                        <td><code>∀x [X(x) ⇒ ¬Y(x)]</code></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Hanya X yang Y</td>
+                        <td><code>∀x [Y(x) ⇒ X(x)]</code></td>
+                    </tr>
+                </table>
+                <p class="fragment small-text highlight-box">💡 "Hanya X yang Y" → implikasi <em>dibalik</em>: Y ⇒ X</p>
+            </section>
+
+            <!-- ==================== SLIDE 21: FOL EXAMPLE - MILITARY ==================== -->
+            <section>
+                <h2>🎖️ Contoh: Domain Militer</h2>
+                <p class="medium-text"><strong>Knowledge Base:</strong></p>
+                <pre><code class="language-plaintext">1. Pilot(Adi)
+2. Perwira(Adi)
+3. Pangkat(Adi, Kapten)
+4. DiSkuadron(Adi, Skuadron11)
+5. ∀x [Pilot(x) ⇒ Terlatih(x)]
+6. ∀x [Perwira(x) ⇒ ∃y [Memimpin(x, y)]]</code></pre>
+                <p class="fragment small-text">Dengan KB ini, kita bisa menyimpulkan: <strong>Terlatih(Adi)</strong> ✅</p>
+            </section>
+
+            <!-- ==================== SLIDE 22: UNIFICATION INTRO ==================== -->
+            <section>
+                <h2>🔗 Unifikasi (Unification)</h2>
+                <div class="definition-box">
+                    <strong>Unifikasi</strong> adalah proses menemukan <em>substitusi variabel</em> yang membuat dua ekspresi logika menjadi <strong>identik</strong>.
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Substitusi θ:</strong> pemetaan variabel ke term</p>
+                    <ul class="medium-text">
+                        <li><code>θ = {x/Adi}</code> berarti "ganti x dengan Adi"</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 23: UNIFICATION EXAMPLES ==================== -->
+            <section>
+                <h2>Contoh Unifikasi</h2>
+                <img src="images/p10-02-unification-process.png" alt="Proses Unifikasi" style="max-height: 350px;">
+                <table class="small-text fragment">
+                    <tr>
+                        <th>Ekspresi 1</th>
+                        <th>Ekspresi 2</th>
+                        <th>Hasil</th>
+                    </tr>
+                    <tr>
+                        <td><code>Pilot(x)</code></td>
+                        <td><code>Pilot(Adi)</code></td>
+                        <td>θ = {x/Adi} ✅</td>
+                    </tr>
+                    <tr>
+                        <td><code>Suka(x, y)</code></td>
+                        <td><code>Suka(Adi, Budi)</code></td>
+                        <td>θ = {x/Adi, y/Budi} ✅</td>
+                    </tr>
+                    <tr>
+                        <td><code>Pilot(Adi)</code></td>
+                        <td><code>Pilot(Budi)</code></td>
+                        <td>GAGAL ❌</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 24: UNIFICATION RULES ==================== -->
+            <section>
+                <h2>Aturan Unifikasi</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Kondisi</th>
+                        <th>Hasil</th>
+                        <th>Contoh</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Variabel + term</td>
+                        <td>Berhasil</td>
+                        <td><code>Unify(x, Adi) = {x/Adi}</code></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Konstanta = konstanta</td>
+                        <td>Berhasil</td>
+                        <td><code>Unify(Adi, Adi) = {}</code></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Konstanta ≠ konstanta</td>
+                        <td>Gagal</td>
+                        <td><code>Unify(Adi, Budi) = FAIL</code></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Fungsi sama, arg cocok</td>
+                        <td>Berhasil</td>
+                        <td><code>Unify(f(x), f(Adi)) = {x/Adi}</code></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Occur check gagal</td>
+                        <td>Gagal</td>
+                        <td><code>Unify(x, f(x)) = FAIL</code></td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 25: MGU ==================== -->
+            <section>
+                <h2>MGU (Most General Unifier)</h2>
+                <div class="definition-box">
+                    <strong>MGU</strong> adalah substitusi <em>paling umum</em> yang membuat dua ekspresi identik — seminimal mungkin.
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Contoh:</strong> Unifikasi <code>Suka(x, y)</code> dengan <code>Suka(Adi, z)</code></p>
+                    <ul class="medium-text">
+                        <li>θ₁ = {x/Adi, y/z} → <strong>MGU ✅</strong> (paling umum)</li>
+                        <li>θ₂ = {x/Adi, y/Budi, z/Budi} → valid tapi <strong>bukan MGU</strong></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 26: UNIFICATION EXERCISE ==================== -->
+            <section>
+                <h2>📝 Latihan Unifikasi</h2>
+                <p class="medium-text">Temukan MGU atau tentukan GAGAL:</p>
+                <table class="small-text">
+                    <tr>
+                        <th>#</th>
+                        <th>Ekspresi 1</th>
+                        <th>Ekspresi 2</th>
+                        <th class="fragment" data-fragment-index="1">MGU</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td><code>P(x, f(y))</code></td>
+                        <td><code>P(g(z), f(z))</code></td>
+                        <td class="fragment" data-fragment-index="1">{x/g(z), y/z} ✅</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><code>Q(x, x)</code></td>
+                        <td><code>Q(Adi, Budi)</code></td>
+                        <td class="fragment" data-fragment-index="1">GAGAL ❌</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><code>R(x, f(x))</code></td>
+                        <td><code>R(y, y)</code></td>
+                        <td class="fragment" data-fragment-index="1">GAGAL (occur check) ❌</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 27: FORWARD CHAINING INTRO ==================== -->
+            <section>
+                <h2>⏩ Forward Chaining</h2>
+                <div class="definition-box">
+                    <strong>Forward Chaining</strong> (data-driven) dimulai dari <em>fakta yang diketahui</em> dan menerapkan aturan berulang kali untuk menghasilkan fakta baru.
+                </div>
+                <img src="images/p10-03-forward-chaining.png" alt="Forward Chaining" style="max-height: 300px;">
+                <p class="small-text">Gambar 7.1: Proses forward chaining dari fakta ke kesimpulan</p>
+            </section>
+
+            <!-- ==================== SLIDE 28: FORWARD CHAINING EXAMPLE ==================== -->
+            <section>
+                <h2>Contoh Forward Chaining</h2>
+                <p class="small-text"><strong>KB:</strong> Pilot(Adi), Perwira(Adi), Berpengalaman(Adi)</p>
+                <p class="small-text"><strong>Aturan:</strong></p>
+                <pre><code class="language-plaintext small-text">R4: ∀x [Pilot(x) ⇒ Terlatih(x)]
+R5: ∀x [(Perwira(x) ∧ Terlatih(x)) ⇒ BolehMemimpin(x)]
+R6: ∀x [(BolehMemimpin(x) ∧ Berpengalaman(x)) ⇒ KandidatKomandan(x)]</code></pre>
+                <p class="small-text"><strong>Query:</strong> KandidatKomandan(Adi)?</p>
+                <table class="small-text fragment">
+                    <tr>
+                        <th>Langkah</th>
+                        <th>Aturan</th>
+                        <th>Fakta Baru</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>1</td>
+                        <td>R4 {x/Adi}</td>
+                        <td>Terlatih(Adi)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>2</td>
+                        <td>R5 {x/Adi}</td>
+                        <td>BolehMemimpin(Adi)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>3</td>
+                        <td>R6 {x/Adi}</td>
+                        <td style="background-color: rgba(16, 185, 129, 0.3);"><strong>KandidatKomandan(Adi) ✅</strong></td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 29: BACKWARD CHAINING INTRO ==================== -->
+            <section>
+                <h2>⏪ Backward Chaining</h2>
+                <div class="definition-box">
+                    <strong>Backward Chaining</strong> (goal-driven) dimulai dari <em>query (goal)</em> dan bekerja mundur mencari fakta dan aturan yang membuktikan query.
+                </div>
+                <img src="images/p10-04-backward-chaining.png" alt="Backward Chaining" style="max-height: 300px;">
+                <p class="small-text">Gambar 8.1: Proses backward chaining dari goal ke fakta</p>
+            </section>
+
+            <!-- ==================== SLIDE 30: BACKWARD CHAINING EXAMPLE ==================== -->
+            <section>
+                <h2>Contoh Backward Chaining</h2>
+                <p class="small-text"><strong>Goal:</strong> KandidatKomandan(Adi)?</p>
+                <pre><code class="language-plaintext small-text">KandidatKomandan(Adi)          ← Goal
+├── R6: BolehMemimpin(Adi)?    ← Sub-goal 1
+│   ├── R5: Perwira(Adi)?      ✅ Fakta di KB
+│   └── R5: Terlatih(Adi)?     ← Sub-goal 1b
+│       └── R4: Pilot(Adi)?    ✅ Fakta di KB
+│       → Terlatih(Adi) ✅
+│   → BolehMemimpin(Adi) ✅
+├── R6: Berpengalaman(Adi)?    ✅ Fakta di KB
+→ KandidatKomandan(Adi) ✅ TERBUKTI</code></pre>
+            </section>
+
+            <!-- ==================== SLIDE 31: COMPARISON FC vs BC ==================== -->
+            <section>
+                <h2>⚖️ Forward vs Backward Chaining</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Aspek</th>
+                        <th>Forward Chaining</th>
+                        <th>Backward Chaining</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Arah</strong></td>
+                        <td>Fakta → Kesimpulan</td>
+                        <td>Goal → Fakta</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Nama lain</strong></td>
+                        <td>Data-driven</td>
+                        <td>Goal-driven</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Strategi</strong></td>
+                        <td>Bottom-up</td>
+                        <td>Top-down</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Cocok untuk</strong></td>
+                        <td>Banyak query, KB kecil</td>
+                        <td>Satu query spesifik</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Analogi</strong></td>
+                        <td>"Apa yang bisa disimpulkan?"</td>
+                        <td>"Bagaimana membuktikan X?"</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 32: FORWARD CHAINING - CYBER EXAMPLE ==================== -->
+            <section>
+                <h2>🛡️ Contoh: Analisis Keamanan Siber</h2>
+                <p class="small-text"><strong>KB:</strong> ServerWeb(S1), TerhubungInternet(S1), VersiLama(S1), ServerDB(S2), TerhubungKe(S1,S2)</p>
+                <pre><code class="language-plaintext small-text">R7: ServerWeb(x) ∧ TerhubungInternet(x) ⇒ DapatDiserang(x)
+R8: DapatDiserang(x) ∧ VersiLama(x) ⇒ Rentan(x)
+R9: Rentan(x) ∧ TerhubungKe(x,y) ⇒ TerancamLateral(y)
+R10: TerancamLateral(x) ∧ ServerDB(x) ⇒ DataTerancam(x)</code></pre>
+                <table class="small-text fragment">
+                    <tr>
+                        <th>Langkah</th>
+                        <th>Fakta Baru</th>
+                    </tr>
+                    <tr><td>1</td><td>DapatDiserang(S1)</td></tr>
+                    <tr><td>2</td><td>Rentan(S1)</td></tr>
+                    <tr><td>3</td><td>TerancamLateral(S2)</td></tr>
+                    <tr><td>4</td><td style="background-color: rgba(239, 68, 68, 0.3);"><strong>DataTerancam(S2) ⚠️</strong></td></tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 33: GENERALIZED MODUS PONENS ==================== -->
+            <section>
+                <h2>📐 Generalized Modus Ponens</h2>
+                <div class="definition-box">
+                    Menggabungkan <strong>Modus Ponens</strong> dengan <strong>unifikasi</strong> untuk logika predikat.
+                </div>
+                <div class="fragment formula-box">
+                    <p class="medium-text">Dari p₁', p₂', ..., pₙ' dan (p₁ ∧ p₂ ∧ ... ∧ pₙ ⇒ q)</p>
+                    <p class="medium-text">Simpulkan: <strong>qθ</strong></p>
+                    <p class="small-text">dimana θ meng-unifikasi setiap pᵢ' dengan pᵢ</p>
+                </div>
+                <div class="fragment">
+                    <p class="small-text"><strong>Contoh:</strong></p>
+                    <p class="small-text">Pilot(Adi) + DiWilayah(Adi, Timur) + [Pilot(x) ∧ DiWilayah(x,w) ⇒ BisaTerbang(x,w)]</p>
+                    <p class="small-text">θ = {x/Adi, w/Timur} → <strong>BisaTerbang(Adi, Timur)</strong></p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 34: SKOLEMIZATION INTRO ==================== -->
+            <section>
+                <h2>🔧 Skolemisasi</h2>
+                <div class="definition-box">
+                    <strong>Skolemisasi</strong> adalah proses mengganti kuantor eksistensial (∃) dengan fungsi Skolem untuk konversi ke CNF.
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Aturan:</strong></p>
+                    <ul class="medium-text">
+                        <li>∃x tanpa ∀ di luar → ganti x dengan <strong>konstanta Skolem</strong></li>
+                        <li>∃y di dalam ∀x → ganti y dengan <strong>fungsi Skolem f(x)</strong></li>
+                    </ul>
+                </div>
+                <div class="fragment">
+                    <p class="small-text"><strong>Contoh:</strong></p>
+                    <p class="small-text"><code>∀x [Tentara(x) ⇒ ∃y [Senjata(y) ∧ Membawa(x,y)]]</code></p>
+                    <p class="small-text">→ <code>∀x [Tentara(x) ⇒ Senjata(f(x)) ∧ Membawa(x, f(x))]</code></p>
+                    <p class="small-text">f(x) = "senjata yang dibawa tentara x"</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 35: APPLICATIONS - EXPERT SYSTEMS ==================== -->
+            <section>
+                <h2>💻 Aplikasi: Expert Systems</h2>
+                <div class="definition-box">
+                    <strong>Expert System</strong> = Knowledge Base + Inference Engine
+                </div>
+                <table class="medium-text fragment">
+                    <tr>
+                        <th>Komponen</th>
+                        <th>Fungsi</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Knowledge Base</strong></td>
+                        <td>Fakta dan aturan dalam FOL</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Inference Engine</strong></td>
+                        <td>Forward/backward chaining</td>
+                    </tr>
+                    <tr>
+                        <td><strong>User Interface</strong></td>
+                        <td>Input/output dengan pengguna</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Explanation</strong></td>
+                        <td>Menjelaskan proses reasoning</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 36: KNOWLEDGE GRAPHS ==================== -->
+            <section>
+                <h2>🕸️ Aplikasi: Knowledge Graphs</h2>
+                <p class="medium-text">Triple (subjek, predikat, objek) ≈ kalimat atomik FOL</p>
+                <table class="medium-text fragment">
+                    <tr>
+                        <th>Knowledge Graph Triple</th>
+                        <th>FOL Equivalent</th>
+                    </tr>
+                    <tr>
+                        <td>(Adi, tipePesawat, F16)</td>
+                        <td><code>TipePesawat(Adi, F16)</code></td>
+                    </tr>
+                    <tr>
+                        <td>(F16, buatanNegara, AS)</td>
+                        <td><code>BuatanNegara(F16, AS)</code></td>
+                    </tr>
+                    <tr>
+                        <td>(KapalSelam, subClassOf, KapalPerang)</td>
+                        <td><code>∀x [KapalSelam(x) ⇒ KapalPerang(x)]</code></td>
+                    </tr>
+                </table>
+                <p class="fragment small-text highlight-box">💡 Contoh: Google Knowledge Graph, Wikidata, Knowledge graph intelijen</p>
+            </section>
+
+            <!-- ==================== SLIDE 37: QUIZ 1 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 1:</strong></p>
+                <p class="medium-text">Pola FOL yang benar untuk "Semua pilot terlatih" adalah:</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. ∀x [Pilot(x) ∧ Terlatih(x)]</div>
+                <div class="quiz-option fragment" data-fragment-index="2">B. ∃x [Pilot(x) ⇒ Terlatih(x)]</div>
+                <div class="quiz-option fragment" data-fragment-index="3" style="background-color: rgba(16, 185, 129, 0.4);">C. ∀x [Pilot(x) ⇒ Terlatih(x)] ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. ∃x [Pilot(x) ∧ Terlatih(x)]</div>
+                <p class="fragment small-text highlight-box">💡 ∀ + ⇒ untuk "semua X adalah Y"</p>
+            </section>
+
+            <!-- ==================== SLIDE 38: QUIZ 2 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 2:</strong></p>
+                <p class="medium-text">Apa hasil unifikasi <code>P(x, f(x))</code> dengan <code>P(Adi, y)</code>?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. GAGAL — occur check</div>
+                <div class="quiz-option fragment" data-fragment-index="2" style="background-color: rgba(16, 185, 129, 0.4);">B. θ = {x/Adi, y/f(Adi)} ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="3">C. θ = {x/Adi, y/x}</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. θ = {x/y, f(x)/Adi}</div>
+                <p class="fragment small-text highlight-box">💡 Unifikasi argumen 1: x=Adi, lalu argumen 2: f(Adi) dengan y → y=f(Adi)</p>
+            </section>
+
+            <!-- ==================== SLIDE 39: QUIZ 3 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 3:</strong></p>
+                <p class="medium-text">Metode inferensi yang dimulai dari goal dan bekerja mundur ke fakta disebut:</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Forward Chaining</div>
+                <div class="quiz-option fragment" data-fragment-index="2" style="background-color: rgba(16, 185, 129, 0.4);">B. Backward Chaining ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="3">C. Resolution</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Unifikasi</div>
+            </section>
+
+            <!-- ==================== SLIDE 40: SUMMARY ==================== -->
+            <section>
+                <h2>📝 Ringkasan</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Konsep</th>
+                        <th>Poin Kunci</th>
+                    </tr>
+                    <tr>
+                        <td><strong>FOL</strong></td>
+                        <td>Perluasan logika proposisional + objek, relasi, kuantor</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Elemen</strong></td>
+                        <td>Konstanta, variabel, predikat, fungsi, kuantor</td>
+                    </tr>
+                    <tr>
+                        <td><strong>∀ (Universal)</strong></td>
+                        <td>"Untuk semua" — gunakan dengan ⇒</td>
+                    </tr>
+                    <tr>
+                        <td><strong>∃ (Eksistensial)</strong></td>
+                        <td>"Ada" — gunakan dengan ∧</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Unifikasi</strong></td>
+                        <td>Substitusi agar dua ekspresi identik</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Forward Chaining</strong></td>
+                        <td>Fakta → aturan → fakta baru (data-driven)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Backward Chaining</strong></td>
+                        <td>Goal → sub-goals → fakta (goal-driven)</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 41: NEXT WEEK ==================== -->
+            <section>
+                <h2>📅 Pertemuan Berikutnya</h2>
+                <div class="highlight-box">
+                    <h3>Pertemuan 11: Penalaran dengan Ketidakpastian - Probabilitas</h3>
+                    <p class="medium-text">Probabilitas Bersyarat dan Teorema Bayes</p>
+                </div>
+                <ul class="medium-text">
+                    <li class="fragment">Sumber ketidakpastian dalam AI</li>
+                    <li class="fragment">Probabilitas bersyarat</li>
+                    <li class="fragment">Teorema Bayes</li>
+                    <li class="fragment">Naive Bayes classifier</li>
+                </ul>
+            </section>
+
+            <!-- ==================== SLIDE 42: REFERENCES ==================== -->
+            <section>
+                <h2>📚 Referensi</h2>
+                <ol class="small-text">
+                    <li>Russell, S. & Norvig, P. (2020). <em>Artificial Intelligence: A Modern Approach</em> (4th Ed.). Pearson. <strong>Chapter 8-9</strong></li>
+                    <li>Poole, D.L. & Mackworth, A.K. (2023). <em>Artificial Intelligence: Foundations of Computational Agents</em> (3rd Ed.). Cambridge University Press. <strong>Chapter 5</strong>.</li>
+                    <li>CS188 Berkeley AI Materials: <a href="https://inst.eecs.berkeley.edu/~cs188/">https://inst.eecs.berkeley.edu/~cs188/</a></li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 43: CLOSING ==================== -->
+            <section class="center">
+                <h1>Terima Kasih</h1>
+                <h3>🤖 Kecerdasan Artifisial</h3>
+                <p>Pertemuan 10: Logika Predikat (First-Order Logic)</p>
+                <br>
+                <p class="small-text">Ada pertanyaan?</p>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/math/math.min.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            showSlideNumber: 'all',
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            pdfSeparateFragments: false,
+            plugins: [ RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+        });
+    </script>
+</body>
+</html>
