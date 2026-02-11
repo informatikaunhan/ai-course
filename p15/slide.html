@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pertemuan 15: Etika AI, Keamanan, dan Review Komprehensif</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/league.min.css">
+    
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css">
+    
+    <!-- Custom Theme -->
+    <link rel="stylesheet" href="unhan-theme.css">
+    
+    <style>
+        /* Fallback styles if unhan-theme.css is not available */
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+        }
+        .reveal .slides section {
+            text-align: left;
+        }
+        .reveal .slides section.center {
+            text-align: center;
+        }
+        .reveal table {
+            margin: 20px auto;
+            font-size: 0.7em;
+        }
+        .reveal table th {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px;
+        }
+        .reveal table td {
+            padding: 8px 12px;
+            border: 1px solid #444;
+        }
+        .reveal .highlight-box {
+            background-color: rgba(37, 99, 235, 0.2);
+            border-left: 4px solid #2563eb;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .definition-box {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .warning-box {
+            background-color: rgba(245, 158, 11, 0.2);
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .danger-box {
+            background-color: rgba(239, 68, 68, 0.2);
+            border-left: 4px solid #ef4444;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .two-column {
+            display: flex;
+            gap: 40px;
+        }
+        .reveal .two-column > div {
+            flex: 1;
+        }
+        .reveal .emoji-large {
+            font-size: 3em;
+        }
+        .reveal .quiz-option {
+            background-color: rgba(100, 100, 100, 0.3);
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .reveal .quiz-option:hover {
+            background-color: rgba(37, 99, 235, 0.4);
+        }
+        .reveal code {
+            background-color: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .reveal pre code {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .reveal .small-text {
+            font-size: 0.6em;
+        }
+        .reveal .medium-text {
+            font-size: 0.8em;
+        }
+        .reveal img {
+            max-height: 450px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- ==================== SLIDE 1: TITLE ==================== -->
+            <section class="center">
+                <h1>Kecerdasan Artifisial</h1>
+                <h3>Pertemuan 15</h3>
+                <h2>Etika AI, Keamanan, dan Review Komprehensif</h2>
+                <p class="small-text" style="margin-top: 50px;">
+                    Mata Kuliah: Kecerdasan Artifisial (AI401) | 3 SKS
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 2: LEARNING OUTCOMES ==================== -->
+            <section>
+                <h2>🎯 Capaian Pembelajaran</h2>
+                <p>Setelah pertemuan ini, mahasiswa mampu:</p>
+                <ol class="medium-text">
+                    <li class="fragment">Mengidentifikasi isu etika utama dalam AI: bias, fairness, transparency</li>
+                    <li class="fragment">Menjelaskan konsep AI safety dan alignment problem</li>
+                    <li class="fragment">Menganalisis implikasi privasi dan surveillance AI</li>
+                    <li class="fragment">Mengevaluasi penggunaan AI dalam konteks pertahanan</li>
+                    <li class="fragment">Menjelaskan kerangka regulasi AI global dan nasional</li>
+                    <li class="fragment">Mengintegrasikan seluruh konsep Pertemuan 1-14 untuk persiapan UAS</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 3: AGENDA ==================== -->
+            <section>
+                <h2>📋 Agenda Hari Ini</h2>
+                <div class="two-column">
+                    <div>
+                        <h4>Bagian 1: Etika & Keamanan</h4>
+                        <ul class="medium-text">
+                            <li>Bias Algoritmik & Fairness</li>
+                            <li>AI Safety & Alignment</li>
+                            <li>Privasi & Surveillance</li>
+                            <li>AI dalam Pertahanan</li>
+                            <li>Regulasi AI</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Bagian 2: Review & UAS</h4>
+                        <ul class="medium-text">
+                            <li>Masa Depan AI</li>
+                            <li>Peta Konsep Keseluruhan</li>
+                            <li>Review Pertemuan 1-14</li>
+                            <li>Latihan Soal UAS</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 4: WHY AI ETHICS ==================== -->
+            <section>
+                <h2>⚖️ Mengapa Etika AI Penting?</h2>
+                <div class="definition-box">
+                    <strong>Etika AI</strong> adalah cabang etika terapan yang mempelajari implikasi moral dari desain, pengembangan, dan penggunaan sistem kecerdasan artifisial.
+                </div>
+                <table class="medium-text fragment">
+                    <tr>
+                        <th>Faktor</th>
+                        <th>Penjelasan</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Skala dampak</strong></td>
+                        <td>Satu model AI mempengaruhi jutaan keputusan</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Opaqueness</strong></td>
+                        <td>Model "black box" sulit dipahami prosesnya</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Feedback loop</strong></td>
+                        <td>Bias dalam data diperkuat oleh sistem AI</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Irreversibilitas</strong></td>
+                        <td>Beberapa keputusan AI sulit dibatalkan</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 5: ALGORITHMIC BIAS ==================== -->
+            <section>
+                <h2>🔍 Bias Algoritmik</h2>
+                <div class="definition-box">
+                    <strong>Bias algoritmik</strong> adalah kecenderungan sistematis yang menghasilkan hasil tidak adil atau diskriminatif terhadap kelompok tertentu.
+                </div>
+                <img src="images/p15-01-sources-of-bias-ai.png" alt="Sumber Bias AI">
+                <p class="small-text">Gambar 1.1: Sumber-sumber bias dalam siklus pengembangan AI</p>
+            </section>
+
+            <!-- ==================== SLIDE 6: SOURCES OF BIAS ==================== -->
+            <section>
+                <h2>Sumber-Sumber Bias</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Sumber</th>
+                        <th>Contoh</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Data historis</strong></td>
+                        <td>Data perekrutan yang didominasi pria → AI merekomendasikan pria</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Sampling bias</strong></td>
+                        <td>Dataset wajah mayoritas kulit putih → akurasi rendah untuk kulit gelap</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Label bias</strong></td>
+                        <td>Annotator memiliki implicit bias dalam pelabelan</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Feature selection</strong></td>
+                        <td>Kode pos sebagai proxy untuk ras/etnis</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Feedback loop</strong></td>
+                        <td>Filter bubble di media sosial memperkuat polarisasi</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 7: FAIRNESS DEFINITIONS ==================== -->
+            <section>
+                <h2>⚖️ Definisi Fairness</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Definisi</th>
+                        <th>Syarat</th>
+                        <th>Intuisi</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Demographic Parity</strong></td>
+                        <td>P(Ŷ=1|A=0) = P(Ŷ=1|A=1)</td>
+                        <td>Proporsi prediksi positif sama untuk semua grup</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Equalized Odds</strong></td>
+                        <td>TPR dan FPR sama antar grup</td>
+                        <td>Error rate sama untuk semua grup</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Predictive Parity</strong></td>
+                        <td>Precision sama antar grup</td>
+                        <td>Prediksi positif sama akuratnya</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Individual Fairness</strong></td>
+                        <td>Individu serupa → hasil serupa</td>
+                        <td>Tidak ada diskriminasi individual</td>
+                    </tr>
+                </table>
+                <p class="fragment warning-box medium-text">
+                    ⚠️ <strong>Impossibility Theorem:</strong> Tidak mungkin memenuhi semua definisi fairness secara simultan!
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 8: TRANSPARENCY & XAI ==================== -->
+            <section>
+                <h2>🔎 Transparency & Explainability</h2>
+                <div class="two-column medium-text">
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>Transparency</h4>
+                            <p>Memahami <em>bagaimana</em> dan <em>mengapa</em> AI membuat keputusan</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="highlight-box">
+                            <h4>Explainable AI (XAI)</h4>
+                            <p>Teknik untuk membuat model AI dapat dijelaskan</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Spektrum Interpretabilitas:</strong></p>
+                    <table class="small-text">
+                        <tr>
+                            <th>Tingkat</th>
+                            <th>Model</th>
+                            <th>Interpretabilitas</th>
+                        </tr>
+                        <tr>
+                            <td>Tinggi</td>
+                            <td>Decision Tree, Regresi Linear</td>
+                            <td>Dapat langsung dibaca manusia</td>
+                        </tr>
+                        <tr>
+                            <td>Sedang</td>
+                            <td>Random Forest, SVM</td>
+                            <td>Perlu teknik tambahan (LIME, SHAP)</td>
+                        </tr>
+                        <tr>
+                            <td>Rendah</td>
+                            <td>Deep Neural Network</td>
+                            <td>"Black box" — sulit dijelaskan</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 9: ACCOUNTABILITY ==================== -->
+            <section>
+                <h2>📝 Accountability</h2>
+                <div class="definition-box">
+                    <strong>Accountability</strong> dalam AI mengacu pada kejelasan siapa yang bertanggung jawab ketika sistem AI menyebabkan kerugian.
+                </div>
+                <p class="fragment medium-text"><strong>Accountability Gap:</strong></p>
+                <ul class="medium-text">
+                    <li class="fragment">Pengembang: "Saya hanya membuat tool"</li>
+                    <li class="fragment">Operator: "AI yang memutuskan"</li>
+                    <li class="fragment">AI: Tidak memiliki status hukum</li>
+                </ul>
+                <p class="fragment danger-box medium-text">
+                    🚨 Tanpa kejelasan tanggung jawab → tidak ada pihak yang bertanggung jawab atas kesalahan AI
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 10: AI SAFETY ==================== -->
+            <section>
+                <h2>🛡️ AI Safety</h2>
+                <div class="definition-box">
+                    <strong>Alignment Problem</strong> adalah tantangan memastikan bahwa tujuan dan perilaku sistem AI selaras dengan nilai-nilai dan keinginan manusia.
+                </div>
+                <p class="fragment medium-text"><strong>Tiga aspek alignment problem:</strong></p>
+                <ul class="medium-text">
+                    <li class="fragment"><strong>Specification Problem:</strong> Kesulitan mendeskripsikan tujuan dengan tepat</li>
+                    <li class="fragment"><strong>Reward Hacking:</strong> AI menemukan cara mencapai reward yang tidak diinginkan</li>
+                    <li class="fragment"><strong>Goal Misgeneralization:</strong> AI belajar tujuan yang salah dari data training</li>
+                </ul>
+            </section>
+
+            <!-- ==================== SLIDE 11: REWARD HACKING EXAMPLE ==================== -->
+            <section>
+                <h2>🎮 Contoh Reward Hacking</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Tujuan yang Diberikan</th>
+                        <th>Perilaku AI</th>
+                        <th>Masalah</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Maksimalkan skor game</td>
+                        <td>Menemukan bug untuk skor tak terhingga</td>
+                        <td>Tidak benar-benar "bermain"</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Bersihkan sampah</td>
+                        <td>Menyembunyikan sampah dari sensor</td>
+                        <td>Optimisasi metrik, bukan tujuan</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Minimalisasi keluhan pasien</td>
+                        <td>Tidak merespons keluhan</td>
+                        <td>Memenuhi huruf, bukan semangat</td>
+                    </tr>
+                </table>
+                <p class="fragment highlight-box medium-text">
+                    💡 <strong>Goodhart's Law:</strong> "Ketika sebuah ukuran menjadi target, ia berhenti menjadi ukuran yang baik"
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 12: EXISTENTIAL RISK ==================== -->
+            <section>
+                <h2>⚠️ Existential Risk</h2>
+                <div class="two-column medium-text">
+                    <div class="fragment">
+                        <div class="warning-box">
+                            <h4>Orthogonality Thesis</h4>
+                            <p>Kecerdasan tinggi tidak menjamin tujuan yang baik</p>
+                            <p class="small-text">— Nick Bostrom</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="danger-box">
+                            <h4>Instrumental Convergence</h4>
+                            <p>AI super-cerdas akan cenderung mencari: self-preservation, resource acquisition, goal preservation</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="fragment highlight-box medium-text">
+                    <p><strong>Perspektif seimbang:</strong> Risiko existential masih debatable, tetapi pencegahan dini lebih bijak daripada menunggu bukti bahaya</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 13: AI SECURITY ==================== -->
+            <section>
+                <h2>🔒 Keamanan Sistem AI</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Serangan</th>
+                        <th>Mekanisme</th>
+                        <th>Dampak</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Adversarial Attack</strong></td>
+                        <td>Perubahan kecil pada input</td>
+                        <td>Klasifikasi salah (stop sign → speed limit)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Data Poisoning</strong></td>
+                        <td>Menyisipkan data palsu ke training</td>
+                        <td>Model belajar pola yang salah</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Model Extraction</strong></td>
+                        <td>Query berulang untuk mencuri model</td>
+                        <td>Pencurian intellectual property</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Backdoor Attack</strong></td>
+                        <td>Menyisipkan trigger tersembunyi</td>
+                        <td>Model berperilaku normal kecuali ada trigger</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 14: PRIVACY & SURVEILLANCE ==================== -->
+            <section>
+                <h2>👁️ Privasi dan Surveillance</h2>
+                <div class="two-column medium-text">
+                    <div class="fragment">
+                        <div class="warning-box">
+                            <h4>Kemampuan Inferensi AI</h4>
+                            <ul class="small-text">
+                                <li>Like Facebook → orientasi politik</li>
+                                <li>Pola pembelian → kondisi kesehatan</li>
+                                <li>Metadata → jaringan sosial</li>
+                                <li>Lokasi + waktu → kebiasaan</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="danger-box">
+                            <h4>Sistem Surveillance</h4>
+                            <ul class="small-text">
+                                <li>Pengenalan wajah massal</li>
+                                <li>Monitoring komunikasi</li>
+                                <li>Social scoring</li>
+                                <li>Predictive policing</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <p class="fragment highlight-box medium-text">
+                    ⚖️ <strong>Dilema:</strong> Keamanan nasional vs. Hak asasi manusia — keseimbangan yang sulit dicapai
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 15: AUTONOMOUS WEAPONS ==================== -->
+            <section>
+                <h2>🎖️ Autonomous Weapons Systems</h2>
+                <div class="definition-box">
+                    <strong>AWS</strong> adalah sistem senjata yang dapat memilih dan menyerang target tanpa intervensi manusia.
+                </div>
+                <img src="images/p15-02-autonomy-levels-weapons.png" alt="Tingkat Otonomi Senjata">
+                <p class="small-text">Gambar 4.1: Spektrum tingkat otonomi dalam sistem senjata</p>
+            </section>
+
+            <!-- ==================== SLIDE 16: AUTONOMY LEVELS ==================== -->
+            <section>
+                <h2>Tingkat Otonomi Senjata</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Tingkat</th>
+                        <th>Peran Manusia</th>
+                        <th>Contoh</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Human-in-the-loop</strong></td>
+                        <td>Manusia membuat semua keputusan</td>
+                        <td>Drone yang dikendalikan operator</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Human-on-the-loop</strong></td>
+                        <td>AI merekomendasikan, manusia menyetujui</td>
+                        <td>Sistem pertahanan udara dengan konfirmasi</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Human-out-of-the-loop</strong></td>
+                        <td>AI memutuskan secara otonom</td>
+                        <td>Senjata sepenuhnya otonom</td>
+                    </tr>
+                </table>
+                <p class="fragment definition-box medium-text">
+                    ✅ <strong>Meaningful Human Control:</strong> Manusia harus tetap memiliki kontrol bermakna dalam keputusan lethal
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 17: PRO & CONTRA AWS ==================== -->
+            <section>
+                <h2>Pro dan Kontra LAWS</h2>
+                <div class="two-column medium-text">
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>✅ Pro</h4>
+                            <ul class="small-text">
+                                <li>Kecepatan respons tinggi</li>
+                                <li>Mengurangi risiko personel</li>
+                                <li>Konsistensi (tanpa emosi)</li>
+                                <li>Potensi presisi lebih tinggi</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="danger-box">
+                            <h4>❌ Kontra</h4>
+                            <ul class="small-text">
+                                <li>Accountability gap</li>
+                                <li>Dehumanisasi perang</li>
+                                <li>Risiko malfunction/hacking</li>
+                                <li>Pelanggaran hukum humaniter</li>
+                                <li>Memicu arms race</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 18: AI DEFENSE INDONESIA ==================== -->
+            <section>
+                <h2>🇮🇩 Aplikasi AI Pertahanan Indonesia</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Domain</th>
+                        <th>Aplikasi</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>C6ISR</strong></td>
+                        <td>Fusi data intelijen, threat assessment otomatis</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Pertahanan Udara</strong></td>
+                        <td>Identifikasi ancaman, tracking objek</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Maritim</strong></td>
+                        <td>AUV patroli perbatasan, deteksi anomali</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Cyber Defense</strong></td>
+                        <td>Deteksi intrusi, analisis malware</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Logistik</strong></td>
+                        <td>Predictive maintenance, optimisasi suplai</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 19: AI REGULATION ==================== -->
+            <section>
+                <h2>📜 Regulasi AI Global</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Regulasi</th>
+                        <th>Pendekatan</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>EU AI Act</strong></td>
+                        <td>Risk-based: Unacceptable → High → Limited → Minimal risk</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>UNESCO Recommendation</strong></td>
+                        <td>Principles-based: Fairness, transparency, accountability</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>OECD AI Principles</strong></td>
+                        <td>Inclusive growth, human-centered values, transparency</td>
+                    </tr>
+                </table>
+                <div class="fragment warning-box medium-text">
+                    <p><strong>EU AI Act — Kategori Risiko:</strong></p>
+                    <p class="small-text">
+                        🔴 <strong>Unacceptable:</strong> Social scoring, manipulasi subliminal<br>
+                        🟠 <strong>High:</strong> Rekrutmen AI, kredit scoring, biometrik<br>
+                        🟡 <strong>Limited:</strong> Chatbot (wajib disclose AI)<br>
+                        🟢 <strong>Minimal:</strong> Spam filter, game AI
+                    </p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 20: FUTURE OF AI ==================== -->
+            <section>
+                <h2>🔮 Masa Depan AI</h2>
+                <div class="two-column medium-text">
+                    <div class="fragment">
+                        <div class="highlight-box">
+                            <h4>ANI (Artificial Narrow Intelligence)</h4>
+                            <p>AI saat ini: unggul di satu tugas spesifik</p>
+                            <p class="small-text">Contoh: AlphaGo, ChatGPT, image recognition</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="warning-box">
+                            <h4>AGI (Artificial General Intelligence)</h4>
+                            <p>AI yang belum ada: kecerdasan setara manusia di semua tugas</p>
+                            <p class="small-text">Prediksi: masih debatable, 2040-2100+</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Dampak sosial-ekonomi:</strong></p>
+                    <ul class="small-text">
+                        <li>Technological unemployment vs. penciptaan pekerjaan baru</li>
+                        <li>Kesenjangan digital antar negara</li>
+                        <li>Transformasi cara kerja militer modern</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 21: QUIZ 1 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 1:</strong></p>
+                <p>Impossibility Theorem (Chouldechova) menyatakan bahwa:</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. AI tidak mungkin mencapai akurasi 100%</div>
+                <div class="quiz-option fragment" data-fragment-index="2">B. Bias tidak mungkin dihilangkan sepenuhnya</div>
+                <div class="quiz-option fragment" data-fragment-index="3" style="background-color: rgba(16, 185, 129, 0.4);">C. Tidak mungkin memenuhi semua definisi fairness secara simultan ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. AI tidak mungkin memahami etika manusia</div>
+            </section>
+
+            <!-- ==================== SLIDE 22: QUIZ 2 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 2:</strong></p>
+                <p>Pendekatan "Meaningful Human Control" pada sistem senjata otonom mensyaratkan minimal:</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Human-out-of-the-loop</div>
+                <div class="quiz-option fragment" data-fragment-index="2" style="background-color: rgba(16, 185, 129, 0.4);">B. Human-on-the-loop ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="3">C. Human-in-the-loop selalu</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Tidak perlu kontrol manusia</div>
+                <p class="fragment small-text highlight-box">💡 Human-on-the-loop: AI merekomendasikan, manusia menyetujui — keseimbangan antara kecepatan dan kontrol</p>
+            </section>
+
+            <!-- ==================== SLIDE 23: TRANSITION TO REVIEW ==================== -->
+            <section class="center">
+                <h1>📚</h1>
+                <h2>Review Komprehensif</h2>
+                <h3>Pertemuan 1-14</h3>
+                <p class="medium-text">Persiapan Ujian Akhir Semester</p>
+            </section>
+
+            <!-- ==================== SLIDE 24: CONCEPT MAP ==================== -->
+            <section>
+                <h2>🗺️ Peta Konsep Keseluruhan</h2>
+                <img src="images/p15-03-ai-concept-map.png" alt="Peta Konsep AI">
+                <p class="small-text">Gambar 7.1: Peta konsep keseluruhan mata kuliah Kecerdasan Artifisial</p>
+            </section>
+
+            <!-- ==================== SLIDE 25: REVIEW - AGENTS ==================== -->
+            <section>
+                <h2>Review: Agen Cerdas (P1)</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Konsep</th>
+                        <th>Poin Kunci</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Agen</strong></td>
+                        <td>Sensor → Agent Function → Aktuator</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5 Jenis Agen</strong></td>
+                        <td>Simple Reflex → Model-Based → Goal-Based → Utility-Based → Learning</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PEAS</strong></td>
+                        <td>Performance, Environment, Actuators, Sensors</td>
+                    </tr>
+                    <tr>
+                        <td><strong>6 Karakteristik</strong></td>
+                        <td>Observable, Deterministic, Episodic, Static, Discrete, Single/Multi</td>
+                    </tr>
+                </table>
+                <p class="fragment highlight-box small-text">
+                    💡 <strong>Kunci UAS:</strong> Analisis PEAS dan karakteristik lingkungan → tentukan jenis agen minimum
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 26: REVIEW - SEARCH ==================== -->
+            <section>
+                <h2>Review: Pencarian (P2-P4)</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Algoritma</th>
+                        <th>f(n)</th>
+                        <th>Complete?</th>
+                        <th>Optimal?</th>
+                    </tr>
+                    <tr>
+                        <td>BFS</td>
+                        <td>—</td>
+                        <td>✅</td>
+                        <td>✅ (unit cost)</td>
+                    </tr>
+                    <tr>
+                        <td>DFS</td>
+                        <td>—</td>
+                        <td>❌ (infinite)</td>
+                        <td>❌</td>
+                    </tr>
+                    <tr>
+                        <td>UCS</td>
+                        <td>g(n)</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>Greedy</td>
+                        <td>h(n)</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                    </tr>
+                    <tr>
+                        <td>A*</td>
+                        <td>g(n)+h(n)</td>
+                        <td>✅</td>
+                        <td>✅ (h admissible)</td>
+                    </tr>
+                </table>
+                <p class="fragment warning-box small-text">
+                    ⚠️ <strong>Admissible:</strong> h(n) ≤ h*(n) — tidak pernah overestimate |
+                    <strong>Consistent:</strong> h(n) ≤ c(n,a,n') + h(n')
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 27: REVIEW - LOCAL SEARCH ==================== -->
+            <section>
+                <h2>Review: Pencarian Lokal (P4)</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Algoritma</th>
+                        <th>Karakteristik</th>
+                        <th>Kelemahan</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Hill Climbing</strong></td>
+                        <td>Greedy, selalu naik</td>
+                        <td>Terjebak local maxima</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Simulated Annealing</strong></td>
+                        <td>Probabilistic escape</td>
+                        <td>Tergantung jadwal pendinginan</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Algoritma Genetika</strong></td>
+                        <td>Populasi, crossover, mutasi</td>
+                        <td>Banyak parameter, slow convergence</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 28: REVIEW - GAME & CSP ==================== -->
+            <section>
+                <h2>Review: Game & CSP (P5-P6)</h2>
+                <div class="two-column medium-text">
+                    <div>
+                        <h4>Pencarian Adversarial</h4>
+                        <table class="small-text">
+                            <tr>
+                                <td><strong>Minimax</strong></td>
+                                <td>O(b<sup>m</sup>), optimal</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Alpha-Beta</strong></td>
+                                <td>O(b<sup>m/2</sup>), pruning</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <h4>CSP</h4>
+                        <table class="small-text">
+                            <tr>
+                                <td><strong>Komponen</strong></td>
+                                <td>Variables, Domains, Constraints</td>
+                            </tr>
+                            <tr>
+                                <td><strong>AC-3</strong></td>
+                                <td>Arc consistency</td>
+                            </tr>
+                            <tr>
+                                <td><strong>MRV</strong></td>
+                                <td>Variabel domain terkecil</td>
+                            </tr>
+                            <tr>
+                                <td><strong>LCV</strong></td>
+                                <td>Nilai least constraining</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 29: REVIEW - LOGIC ==================== -->
+            <section>
+                <h2>Review: Logika (P9-P10)</h2>
+                <div class="two-column medium-text">
+                    <div>
+                        <h4>Logika Proposisional</h4>
+                        <ul class="small-text">
+                            <li>Konnektif: ¬, ∧, ∨, →, ↔</li>
+                            <li>Entailment: KB ⊨ α</li>
+                            <li>Resolution via CNF</li>
+                            <li>Modus Ponens, Modus Tollens</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Logika Predikat (FOL)</h4>
+                        <ul class="small-text">
+                            <li>Kuantor: ∀ (universal), ∃ (eksistensial)</li>
+                            <li>Unifikasi (MGU)</li>
+                            <li>Forward chaining (data-driven)</li>
+                            <li>Backward chaining (goal-driven)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 30: REVIEW - PROBABILITY ==================== -->
+            <section>
+                <h2>Review: Probabilitas & Bayes Net (P11-P12)</h2>
+                <div class="highlight-box medium-text">
+                    <p><strong>Teorema Bayes:</strong> P(H|E) = P(E|H) × P(H) / P(E)</p>
+                </div>
+                <table class="small-text fragment">
+                    <tr>
+                        <th>Konsep</th>
+                        <th>Poin Kunci</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Conditional Independence</strong></td>
+                        <td>P(X|Y,Z) = P(X|Z)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bayesian Network</strong></td>
+                        <td>DAG + CPT, representasi compact joint distribution</td>
+                    </tr>
+                    <tr>
+                        <td><strong>d-separation</strong></td>
+                        <td>Conditional independence dari struktur graf</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Variable Elimination</strong></td>
+                        <td>Algoritma inferensi eksak</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 31: REVIEW - ML ==================== -->
+            <section>
+                <h2>Review: Machine Learning (P13-P14)</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Paradigma</th>
+                        <th>Metode</th>
+                        <th>Poin Kunci</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Supervised</strong></td>
+                        <td>Decision Tree, Naive Bayes</td>
+                        <td>Information gain, entropy, labeled data</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Unsupervised</strong></td>
+                        <td>K-Means Clustering</td>
+                        <td>Elbow method, silhouette score</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reinforcement</strong></td>
+                        <td>Q-Learning</td>
+                        <td>Agent-environment, MDP, reward</td>
+                    </tr>
+                </table>
+                <div class="fragment highlight-box small-text">
+                    <p><strong>Evaluasi Model:</strong> Accuracy, Precision, Recall, F1-Score | <strong>Validasi:</strong> K-Fold Cross-Validation</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 32: UAS STRATEGY ==================== -->
+            <section>
+                <h2>📝 Strategi Menghadapi UAS</h2>
+                <div class="two-column medium-text">
+                    <div>
+                        <h4>Format Soal UAS</h4>
+                        <ul class="small-text">
+                            <li class="fragment">Cakupan: Pertemuan 1-15 (penekanan P9-P15)</li>
+                            <li class="fragment">Bobot: 30% dari nilai akhir</li>
+                            <li class="fragment">Waktu: 150 menit</li>
+                            <li class="fragment">Soal integratif lintas topik</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Tips Persiapan</h4>
+                        <ul class="small-text">
+                            <li class="fragment">Pahami konsep, bukan hafalan</li>
+                            <li class="fragment">Latihan soal step-by-step</li>
+                            <li class="fragment">Hubungkan antar topik</li>
+                            <li class="fragment">Perhatikan konteks pertahanan</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 33: INTEGRATIVE EXAMPLE ==================== -->
+            <section>
+                <h2>🔗 Contoh Soal Integratif</h2>
+                <p class="medium-text"><strong>Skenario:</strong> Sistem pertahanan siber menggunakan berbagai teknik AI</p>
+                <table class="small-text fragment">
+                    <tr>
+                        <th>Komponen Sistem</th>
+                        <th>Topik AI Terkait</th>
+                    </tr>
+                    <tr>
+                        <td>Deteksi anomali jaringan</td>
+                        <td>Unsupervised Learning (K-Means, clustering)</td>
+                    </tr>
+                    <tr>
+                        <td>Klasifikasi jenis malware</td>
+                        <td>Supervised Learning (Decision Tree, Naive Bayes)</td>
+                    </tr>
+                    <tr>
+                        <td>Perencanaan respons insiden</td>
+                        <td>Goal-Based Agent, Search (A*)</td>
+                    </tr>
+                    <tr>
+                        <td>Prediksi sumber serangan</td>
+                        <td>Jaringan Bayesian, Teorema Bayes</td>
+                    </tr>
+                    <tr>
+                        <td>Aturan firewall otomatis</td>
+                        <td>Logika Proposisional (IF-THEN rules)</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 34: QUIZ 3 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 3:</strong></p>
+                <p>Untuk memprediksi sumber serangan siber berdasarkan evidence yang tersedia, teknik AI mana yang paling sesuai?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Hill Climbing</div>
+                <div class="quiz-option fragment" data-fragment-index="2">B. Decision Tree</div>
+                <div class="quiz-option fragment" data-fragment-index="3" style="background-color: rgba(16, 185, 129, 0.4);">C. Jaringan Bayesian ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. K-Means Clustering</div>
+                <p class="fragment small-text highlight-box">💡 Jaringan Bayesian menangani ketidakpastian dan melakukan inferensi probabilistik berdasarkan evidence — cocok untuk prediksi sumber serangan</p>
+            </section>
+
+            <!-- ==================== SLIDE 35: SUMMARY ==================== -->
+            <section>
+                <h2>📝 Ringkasan</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Topik</th>
+                        <th>Poin Kunci</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Bias & Fairness</strong></td>
+                        <td>Bias dari data/algoritma, definisi fairness saling bertentangan</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AI Safety</strong></td>
+                        <td>Alignment problem, reward hacking, existential risk</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Privasi</strong></td>
+                        <td>Kemampuan inferensi AI, surveillance vs. HAM</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AI Pertahanan</strong></td>
+                        <td>AWS spectrum, meaningful human control, C6ISR</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Regulasi</strong></td>
+                        <td>EU AI Act (risk-based), UNESCO, OECD</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Review</strong></td>
+                        <td>Agents → Search → Logic → Probability → ML → Ethics</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 36: UAS PREVIEW ==================== -->
+            <section>
+                <h2>📅 Pertemuan Berikutnya</h2>
+                <div class="danger-box">
+                    <h3>Pertemuan 16: Ujian Akhir Semester (UAS)</h3>
+                    <p class="medium-text">Cakupan: Seluruh materi (Pertemuan 1-15), penekanan P9-P15</p>
+                </div>
+                <ul class="medium-text">
+                    <li class="fragment">Waktu: 150 menit</li>
+                    <li class="fragment">Bobot: 30% dari nilai akhir</li>
+                    <li class="fragment">Format: Ujian tertulis</li>
+                    <li class="fragment">Persiapkan: Modul, latihan, dan catatan kuliah</li>
+                </ul>
+            </section>
+
+            <!-- ==================== SLIDE 37: REFERENCES ==================== -->
+            <section>
+                <h2>📚 Referensi</h2>
+                <ol class="small-text">
+                    <li>Russell, S. & Norvig, P. (2020). <em>Artificial Intelligence: A Modern Approach</em> (4th Ed.). Pearson. <strong>Chapter 27-28</strong></li>
+                    <li>Bostrom, N. (2014). <em>Superintelligence: Paths, Dangers, Strategies</em>. Oxford University Press.</li>
+                    <li>European Commission (2024). <em>EU Artificial Intelligence Act</em>.</li>
+                    <li>UNESCO (2021). <em>Recommendation on the Ethics of Artificial Intelligence</em>.</li>
+                    <li>Chouldechova, A. (2017). "Fair prediction with disparate impact." <em>Big Data</em>, 5(2).</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 38: CLOSING ==================== -->
+            <section class="center">
+                <h1>Terima Kasih</h1>
+                <h3>🤖 Kecerdasan Artifisial</h3>
+                <p>Pertemuan 15: Etika AI, Keamanan, dan Review Komprehensif</p>
+                <br>
+                <p class="small-text">Ada pertanyaan?</p>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/math/math.min.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            showSlideNumber: 'all',
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            pdfSeparateFragments: false,
+            plugins: [ RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+        });
+    </script>
+</body>
+</html>
