@@ -142,31 +142,6 @@ Russell dan Norvig mengidentifikasi empat pendekatan utama dalam mendefinisikan 
 
 *Gambar 1.1: Empat pendekatan dalam Kecerdasan Artifisial*
 
-**[GEMINI IMAGE PROMPT]**
-<prompt>
-SUBJECT: Empat pendekatan dalam Kecerdasan Artifisial ditampilkan dalam matriks 2x2
-STYLE: Clean flat vector illustration, educational computer science diagram, textbook quality, minimal design
-LAYOUT: 2x2 grid with clear quadrant separation
-COLORS: 
-- Primary: #2563eb (blue) for main elements and borders
-- Secondary: #10b981 (green) for human-related quadrants
-- Accent: #f59e0b (orange) for rationality-related quadrants
-- Neutral: #6b7280 (gray) for labels
-- Background: #ffffff (white)
-ELEMENTS:
-1. Kuadran kiri-atas: Ikon otak dengan gelembung pikiran, label "Berpikir seperti Manusia"
-2. Kuadran kanan-atas: Ikon logika/roda gigi, label "Berpikir Rasional"
-3. Kuadran kiri-bawah: Siluet manusia dengan robot, label "Bertindak seperti Manusia"
-4. Kuadran kanan-bawah: Ikon target/tujuan dengan tanda centang, label "Bertindak Rasional"
-5. Header kolom: "Mirip Manusia" (kiri), "Ideal/Rasional" (kanan)
-6. Header baris: "Berpikir/Proses" (atas), "Bertindak/Perilaku" (bawah)
-ARROWS/CONNECTIONS: Garis vertikal antara kolom, garis horizontal antara baris
-LABELS: "Berpikir seperti Manusia", "Berpikir Rasional", "Bertindak seperti Manusia", "Bertindak Rasional", "Mirip Manusia", "Ideal/Rasional", "Berpikir", "Bertindak"
-SIZE: 800x600 pixels
-FORMAT: PNG, white background
-NEGATIVE: No gradients, no 3D effects, no photorealistic elements, no complex textures
-</prompt>
-
 #### 1.3.1 Thinking Humanly (Cognitive Modeling Approach)
 
 Pendekatan ini berusaha membuat mesin yang berpikir seperti manusia:
@@ -238,31 +213,7 @@ Pendekatan ini paling banyak diadopsi dalam AI modern:
 
 ![Konsep Agen dan Lingkungan](images/p01-02-agent-environment-interaction.png)
 
-*Gambar 2.1: Interaksi agen dengan lingkungan*
-
-**[GEMINI IMAGE PROMPT]**
-<prompt>
-SUBJECT: Siklus interaksi agen-lingkungan menunjukkan sensor dan aktuator
-STYLE: Clean flat vector illustration, educational computer science diagram, textbook quality, minimal design
-LAYOUT: Horizontal arrangement with circular feedback loop
-COLORS: 
-- Primary: #2563eb (blue) for agent box
-- Secondary: #10b981 (green) for environment
-- Accent: #f59e0b (orange) for arrows and data flow
-- Neutral: #6b7280 (gray) for labels
-- Background: #ffffff (white)
-ELEMENTS:
-1. Tengah: Persegi panjang rounded berlabel "AGEN" berisi kotak lebih kecil "Fungsi Agen/Program"
-2. Sisi kanan: Bentuk tidak beraturan berlabel "LINGKUNGAN"
-3. Panah atas: Dari lingkungan ke agen berlabel "Persepsi" dengan ikon mata/sensor
-4. Panah bawah: Dari agen ke lingkungan berlabel "Aksi" dengan ikon tangan/aktuator
-5. Ikon kecil: Kamera/sensor dekat panah persepsi, lengan robot dekat panah aksi
-ARROWS/CONNECTIONS: Panah melengkung membentuk siklus antara agen dan lingkungan
-LABELS: "Agen", "Lingkungan", "Persepsi", "Aksi", "Sensor", "Aktuator"
-SIZE: 800x500 pixels
-FORMAT: PNG, white background
-NEGATIVE: No gradients, no 3D effects, no photorealistic elements, no complex textures
-</prompt>
+*Gambar 1.2: Interaksi agen dengan lingkungan*
 
 #### Komponen Agen:
 
@@ -401,33 +352,7 @@ $$P_{high} = 0.5 \times 0.95 = 0.475$$
 
 ![Simple Reflex Agent](images/p01-03-simple-reflex-agent.png)
 
-*Gambar 3.1: Arsitektur Simple Reflex Agent*
-
-**[GEMINI IMAGE PROMPT]**
-<prompt>
-SUBJECT: Diagram arsitektur Simple Reflex Agent menunjukkan aturan kondisi-aksi
-STYLE: Clean flat vector illustration, educational computer science diagram, textbook quality, minimal design
-LAYOUT: Vertical flow diagram with agent box in center
-COLORS: 
-- Primary: #2563eb (blue) for agent components
-- Secondary: #10b981 (green) for sensors/percepts
-- Accent: #f59e0b (orange) for condition-action rules
-- Warning: #ef4444 (red) for actions/actuators
-- Neutral: #6b7280 (gray) for environment
-- Background: #ffffff (white)
-ELEMENTS:
-1. Atas: Persegi panjang "Lingkungan" dalam warna abu-abu
-2. Panah kiri ke bawah: "Persepsi" dengan ikon sensor
-3. Kotak tengah "AGEN" berisi: kotak "Aturan Kondisi-Aksi"
-4. Di dalam agen: Ikon kecil menunjukkan aturan IF-THEN
-5. Panah kanan ke bawah: "Aksi" dengan ikon aktuator
-6. Tidak ada komponen state atau memori (tekankan kesederhanaan)
-ARROWS/CONNECTIONS: Aliran melingkar dari lingkungan melalui agen kembali ke lingkungan
-LABELS: "Lingkungan", "Sensor", "Persepsi", "Aturan Kondisi-Aksi", "aksi apa yang harus saya lakukan sekarang", "Aktuator", "Aksi"
-SIZE: 600x700 pixels
-FORMAT: PNG, white background
-NEGATIVE: No gradients, no 3D effects, no photorealistic elements, no complex textures
-</prompt>
+*Gambar 1.3: Arsitektur Simple Reflex Agent*
 
 **Karakteristik:**
 - Menggunakan **condition-action rules** (if-then rules)
@@ -485,35 +410,7 @@ Rule 4: IF ambient_bright
 
 ![Model-Based Reflex Agent](images/p01-04-model-based-reflex-agent.png)
 
-*Gambar 3.2: Arsitektur Model-Based Reflex Agent*
-
-**[GEMINI IMAGE PROMPT]**
-<prompt>
-SUBJECT: Diagram arsitektur Model-Based Reflex Agent menunjukkan state internal dan model dunia
-STYLE: Clean flat vector illustration, educational computer science diagram, textbook quality, minimal design
-LAYOUT: Vertical flow diagram with expanded agent box showing internal components
-COLORS: 
-- Primary: #2563eb (blue) for agent components
-- Secondary: #10b981 (green) for sensors/percepts and state
-- Accent: #f59e0b (orange) for condition-action rules
-- Warning: #ef4444 (red) for actions/actuators
-- Neutral: #6b7280 (gray) for environment
-- Background: #ffffff (white)
-ELEMENTS:
-1. Atas: Persegi panjang "Lingkungan" dalam warna abu-abu
-2. Panah kiri: "Persepsi" dari lingkungan ke agen
-3. Kotak besar tengah "AGEN" berisi:
-   - Kotak "State" (bagaimana dunia berevolusi, apa yang dilakukan aksi saya)
-   - Panah dari persepsi ke state: "perbarui state"
-   - Kotak "Aturan Kondisi-Aksi"
-   - Panah dari state ke aturan
-4. Panah kanan: "Aksi" dari agen ke lingkungan
-ARROWS/CONNECTIONS: Menunjukkan aliran: persepsi → pembaruan state → pencocokan aturan → aksi
-LABELS: "Lingkungan", "Sensor", "State", "bagaimana dunia berevolusi", "apa yang dilakukan aksi saya", "Aturan Kondisi-Aksi", "aksi apa yang harus saya lakukan sekarang", "Aktuator"
-SIZE: 700x750 pixels
-FORMAT: PNG, white background
-NEGATIVE: No gradients, no 3D effects, no photorealistic elements, no complex textures
-</prompt>
+*Gambar 1.4: Arsitektur Model-Based Reflex Agent*
 
 **Komponen tambahan:**
 1. **Transition model**: Bagaimana state berubah berdasarkan aksi
@@ -568,35 +465,7 @@ Model-based agent dapat menyimpan:
 
 ![Goal-Based Agent](images/p01-05-goal-based-agent.png)
 
-*Gambar 3.3: Arsitektur Goal-Based Agent*
-
-**[GEMINI IMAGE PROMPT]**
-<prompt>
-SUBJECT: Diagram arsitektur Goal-Based Agent menunjukkan tujuan dan komponen perencanaan
-STYLE: Clean flat vector illustration, educational computer science diagram, textbook quality, minimal design
-LAYOUT: Vertical flow diagram with expanded agent box showing goals
-COLORS: 
-- Primary: #2563eb (blue) for agent components
-- Secondary: #10b981 (green) for sensors/percepts and state
-- Accent: #f59e0b (orange) for goals (highlighted)
-- Warning: #ef4444 (red) for actions/actuators
-- Neutral: #6b7280 (gray) for environment
-- Background: #ffffff (white)
-ELEMENTS:
-1. Atas: Persegi panjang "Lingkungan"
-2. Panah kiri: "Persepsi" ke agen
-3. Kotak besar "AGEN" berisi:
-   - Kotak "State" dengan model dunia
-   - Kotak "Tujuan" (disorot oranye) dengan ikon target/bendera
-   - Komponen "Perencanaan/Pencarian" menghubungkan state ke tujuan
-   - Gelembung pikiran "bagaimana jika saya melakukan aksi A"
-4. Panah kanan: "Aksi" ke lingkungan
-ARROWS/CONNECTIONS: Persepsi → State → Perencanaan (mempertimbangkan tujuan) → Aksi
-LABELS: "Lingkungan", "Sensor", "State", "Tujuan", "seperti apa jadinya jika saya melakukan aksi A", "aksi apa yang harus saya lakukan sekarang", "Aktuator"
-SIZE: 700x800 pixels
-FORMAT: PNG, white background
-NEGATIVE: No gradients, no 3D effects, no photorealistic elements, no complex textures
-</prompt>
+*Gambar 1.5: Arsitektur Goal-Based Agent*
 
 **Karakteristik:**
 - Memiliki representasi **goal state** yang ingin dicapai
@@ -662,35 +531,7 @@ Planning: search for path from pharmacy to room 305
 
 ![Utility-Based Agent](images/p01-06-utility-based-agent.png)
 
-*Gambar 3.4: Arsitektur Utility-Based Agent*
-
-**[GEMINI IMAGE PROMPT]**
-<prompt>
-SUBJECT: Diagram arsitektur Utility-Based Agent menunjukkan fungsi utilitas untuk pengambilan keputusan
-STYLE: Clean flat vector illustration, educational computer science diagram, textbook quality, minimal design
-LAYOUT: Vertical flow diagram with utility computation highlighted
-COLORS: 
-- Primary: #2563eb (blue) for agent components
-- Secondary: #10b981 (green) for sensors/state
-- Accent: #f59e0b (orange) for utility function (highlighted)
-- Warning: #ef4444 (red) for actions
-- Neutral: #6b7280 (gray) for environment
-- Background: #ffffff (white)
-ELEMENTS:
-1. Atas: Persegi panjang "Lingkungan"
-2. Kiri: Panah "Persepsi" ke agen
-3. Kotak besar "AGEN" berisi:
-   - Kotak "State"
-   - Kotak "Fungsi Utilitas" (oranye, dengan ikon grafik/skala)
-   - Label "seberapa bahagia saya dalam state ini"
-   - Perbandingan kecil menunjukkan beberapa opsi dengan nilai utilitas berbeda
-4. Kanan: Panah "Aksi" ke lingkungan
-ARROWS/CONNECTIONS: Persepsi → State → Evaluasi utilitas → Pemilihan aksi (maksimalkan utilitas)
-LABELS: "Lingkungan", "Sensor", "State", "Utilitas", "seberapa bahagia saya", "Aktuator"
-SIZE: 700x800 pixels
-FORMAT: PNG, white background
-NEGATIVE: No gradients, no 3D effects, no photorealistic elements, no complex textures
-</prompt>
+*Gambar 1.6: Arsitektur Utility-Based Agent*
 
 **Keunggulan dibanding Goal-Based:**
 1. Dapat membandingkan **multiple goals** yang saling berkonflik
@@ -759,36 +600,7 @@ $$U(C) = 100 \times 0.50 - 30 = 50 - 30 = 20$$
 
 ![Learning Agent](images/p01-07-learning-agent.png)
 
-*Gambar 3.5: Arsitektur Learning Agent*
-
-**[GEMINI IMAGE PROMPT]**
-<prompt>
-SUBJECT: Diagram arsitektur Learning Agent menunjukkan empat komponen utama
-STYLE: Clean flat vector illustration, educational computer science diagram, textbook quality, minimal design
-LAYOUT: Complex diagram with four interconnected components inside agent
-COLORS: 
-- Primary: #2563eb (blue) for performance element
-- Secondary: #10b981 (green) for learning element
-- Accent: #f59e0b (orange) for critic
-- Warning: #ef4444 (red) for problem generator
-- Neutral: #6b7280 (gray) for environment
-- Background: #ffffff (white)
-ELEMENTS:
-1. Atas: Persegi panjang "Lingkungan"
-2. Kotak besar "AGEN" berisi empat komponen:
-   - "Elemen Kinerja" (biru): memilih aksi
-   - "Elemen Pembelajaran" (hijau): melakukan perbaikan
-   - "Kritik" (oranye): memberikan umpan balik berdasarkan standar kinerja
-   - "Generator Masalah" (merah): menyarankan aksi eksplorasi
-3. Eksternal: "Standar Kinerja" masuk ke Kritik
-4. Panah menunjukkan: Persepsi → Elemen Kinerja → Aksi
-5. Loop umpan balik: Kritik mengevaluasi → Elemen Pembelajaran memperbaiki Elemen Kinerja
-ARROWS/CONNECTIONS: Interaksi kompleks antara keempat komponen
-LABELS: "Lingkungan", "Sensor", "Persepsi", "Elemen Kinerja", "Elemen Pembelajaran", "Kritik", "Generator Masalah", "Standar Kinerja", "umpan balik", "perubahan", "pengetahuan", "tujuan pembelajaran", "Aktuator", "Aksi"
-SIZE: 900x700 pixels
-FORMAT: PNG, white background
-NEGATIVE: No gradients, no 3D effects, no photorealistic elements, no complex textures
-</prompt>
+*Gambar 1.7: Arsitektur Learning Agent*
 
 **Empat komponen Learning Agent:**
 
@@ -1121,36 +933,7 @@ Multi-agent dapat bersifat:
 
 ![Dimensi Karakteristik Lingkungan](images/p01-08-environment-characteristics.png)
 
-*Gambar 4.1: Enam dimensi karakteristik lingkungan tugas*
-
-**[GEMINI IMAGE PROMPT]**
-<prompt>
-SUBJECT: Enam dimensi karakteristik lingkungan tugas ditampilkan sebagai skala spektrum
-STYLE: Clean flat vector illustration, educational computer science diagram, textbook quality, minimal design
-LAYOUT: Six horizontal scale bars stacked vertically
-COLORS: 
-- Primary: #2563eb (blue) for scale bars
-- Secondary: #10b981 (green) for "easier" end
-- Accent: #f59e0b (orange) for "harder" end
-- Neutral: #6b7280 (gray) for labels
-- Background: #ffffff (white)
-ELEMENTS:
-1. Enam slider/skala horizontal:
-   - "Observable: Sepenuhnya ←→ Sebagian" dengan slider
-   - "Determinisme: Deterministik ←→ Stokastik" dengan slider
-   - "Episode: Episodik ←→ Sekuensial" dengan slider
-   - "Dinamika: Statis ←→ Dinamis" dengan slider
-   - "State/Aksi: Diskret ←→ Kontinu" dengan slider
-   - "Agen: Tunggal ←→ Multi-Agen" dengan slider
-2. Sisi kiri (hijau): umumnya lebih mudah untuk desain agen
-3. Sisi kanan (oranye): umumnya lebih sulit untuk desain agen
-4. Panah di bawah: "Kompleksitas Meningkat →"
-ARROWS/CONNECTIONS: Panah kecil menunjukkan kompleksitas meningkat dari kiri ke kanan
-LABELS: Semua nama dimensi dan dua ekstremnya
-SIZE: 800x600 pixels
-FORMAT: PNG, white background
-NEGATIVE: No gradients, no 3D effects, no photorealistic elements, no complex textures
-</prompt>
+*Gambar 1.8: Enam dimensi karakteristik lingkungan tugas*
 
 ---
 
