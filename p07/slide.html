@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pertemuan 07: Review dan Latihan Komprehensif (Persiapan UTS)</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/league.min.css">
+    
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css">
+    
+    <!-- Custom Theme -->
+    <link rel="stylesheet" href="unhan-theme.css">
+    
+    <style>
+        /* Fallback styles if unhan-theme.css is not available */
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+        }
+        .reveal .slides section {
+            text-align: left;
+        }
+        .reveal .slides section.center {
+            text-align: center;
+        }
+        .reveal table {
+            margin: 20px auto;
+            font-size: 0.7em;
+        }
+        .reveal table th {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px;
+        }
+        .reveal table td {
+            padding: 8px 12px;
+            border: 1px solid #444;
+        }
+        .reveal .highlight-box {
+            background-color: rgba(37, 99, 235, 0.2);
+            border-left: 4px solid #2563eb;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .definition-box {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .warning-box {
+            background-color: rgba(245, 158, 11, 0.2);
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .two-column {
+            display: flex;
+            gap: 40px;
+        }
+        .reveal .two-column > div {
+            flex: 1;
+        }
+        .reveal .emoji-large {
+            font-size: 3em;
+        }
+        .reveal .quiz-option {
+            background-color: rgba(100, 100, 100, 0.3);
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .reveal .quiz-option:hover {
+            background-color: rgba(37, 99, 235, 0.4);
+        }
+        .reveal code {
+            background-color: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .reveal pre code {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .reveal .small-text {
+            font-size: 0.6em;
+        }
+        .reveal .medium-text {
+            font-size: 0.8em;
+        }
+        .reveal img {
+            max-height: 450px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- ==================== SLIDE 1: TITLE ==================== -->
+            <section class="center">
+                <h1>Kecerdasan Artifisial</h1>
+                <h3>Pertemuan 07</h3>
+                <h2>Review dan Latihan Komprehensif</h2>
+                <p class="small-text" style="margin-top: 50px;">
+                    Mata Kuliah: Kecerdasan Artifisial (AI401) | 3 SKS<br>
+                    Persiapan Ujian Tengah Semester (UTS)
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 2: AGENDA ==================== -->
+            <section>
+                <h2>📋 Agenda Review</h2>
+                <div class="two-columns">
+                    <div>
+                        <h4>Bagian 1: Konsep</h4>
+                        <ul class="small-text">
+                            <li class="fragment">P1: Agen Cerdas & PEAS</li>
+                            <li class="fragment">P2: Uninformed Search</li>
+                            <li class="fragment">P3: Informed Search</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Bagian 2: Lanjutan</h4>
+                        <ul class="small-text">
+                            <li class="fragment">P4: Local Search</li>
+                            <li class="fragment">P5: Game Playing</li>
+                            <li class="fragment">P6: CSP</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="fragment box-info small" style="margin-top: 20px;">
+                    🎯 Fokus: Integrasi konsep dan latihan soal komprehensif
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 3: CONCEPT MAP ==================== -->
+            <section>
+                <h2>🗺️ Peta Konsep Materi UTS</h2>
+                <img src="images/p07-01-peta-konsep-uts.png" alt="Peta Konsep UTS" style="max-height: 450px;">
+                <p class="small-text">Gambar 1: Hubungan antar topik dalam materi UTS</p>
+            </section>
+
+            <!-- ==================== SLIDE 4: P1 REVIEW - AI APPROACHES ==================== -->
+            <section>
+                <h2>📚 P1: Empat Pendekatan AI</h2>
+                <table class="small-text">
+                    <tr>
+                        <th></th>
+                        <th>Human-like</th>
+                        <th>Ideal/Rational</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Thinking</strong></td>
+                        <td class="fragment">Cognitive Science</td>
+                        <td class="fragment">Logic & Mathematics</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Acting</strong></td>
+                        <td class="fragment">Turing Test</td>
+                        <td class="fragment highlight" style="background: rgba(16, 185, 129, 0.3);">Rational Agent ⭐</td>
+                    </tr>
+                </table>
+                <p class="fragment box-definition small">
+                    <strong>Acting Rationally</strong> adalah pendekatan dominan dalam AI modern - fokus pada tindakan optimal, bukan meniru manusia.
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 5: P1 REVIEW - AGENT TYPES ==================== -->
+            <section>
+                <h2>🤖 P1: Lima Jenis Agen</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Jenis Agen</th>
+                        <th>State</th>
+                        <th>Goal</th>
+                        <th>Utility</th>
+                        <th>Learn</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Simple Reflex</td>
+                        <td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Model-Based Reflex</td>
+                        <td>✅</td><td>❌</td><td>❌</td><td>❌</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Goal-Based</td>
+                        <td>✅</td><td>✅</td><td>❌</td><td>❌</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Utility-Based</td>
+                        <td>✅</td><td>✅</td><td>✅</td><td>❌</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Learning</td>
+                        <td>✅</td><td>✅</td><td>✅</td><td>✅</td>
+                    </tr>
+                </table>
+                <p class="fragment small text-center">→ Kompleksitas meningkat dari atas ke bawah →</p>
+            </section>
+
+            <!-- ==================== SLIDE 6: P1 REVIEW - PEAS ==================== -->
+            <section>
+                <h2>📋 P1: Kerangka PEAS</h2>
+                <div class="box-definition">
+                    <p><strong>P</strong>erformance - Bagaimana mengukur kesuksesan?</p>
+                    <p><strong>E</strong>nvironment - Apa saja di lingkungan?</p>
+                    <p><strong>A</strong>ctuators - Apa yang dapat dilakukan?</p>
+                    <p><strong>S</strong>ensors - Apa yang dapat dipersepsi?</p>
+                </div>
+                <div class="fragment box-info small">
+                    <strong>Contoh Drone Pengintai:</strong>
+                    <ul>
+                        <li>P: Detection rate, coverage, survival</li>
+                        <li>E: Airspace, target, ancaman, cuaca</li>
+                        <li>A: Flight controls, camera, transmitter</li>
+                        <li>S: Kamera, radar, GPS, altimeter</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 7: P1 REVIEW - ENVIRONMENT ==================== -->
+            <section>
+                <h2>🌍 P1: 6 Karakteristik Lingkungan</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Dimensi</th>
+                        <th>Spektrum</th>
+                        <th>Contoh</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Observable</td>
+                        <td>Fully ↔ Partially</td>
+                        <td>Catur vs Poker</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Deterministic</td>
+                        <td>Deterministic ↔ Stochastic</td>
+                        <td>Catur vs Backgammon</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Episodic</td>
+                        <td>Episodic ↔ Sequential</td>
+                        <td>Klasifikasi vs Game</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Static</td>
+                        <td>Static ↔ Dynamic</td>
+                        <td>Puzzle vs Real-time</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Discrete</td>
+                        <td>Discrete ↔ Continuous</td>
+                        <td>Board game vs Navigasi</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Agents</td>
+                        <td>Single ↔ Multi</td>
+                        <td>Sudoku vs Sepak bola</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 8: QUIZ P1 ==================== -->
+            <section>
+                <h2>🧠 Quiz: Agen & Lingkungan</h2>
+                <p><strong>Pertanyaan:</strong> Robot vacuum yang mengingat posisi furniture dan area yang sudah dibersihkan memerlukan jenis agen minimal?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Simple Reflex Agent</div>
+                <div class="quiz-option fragment" data-fragment-index="2" style="background-color: rgba(16, 185, 129, 0.4);">B. Model-Based Reflex Agent ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="3">C. Goal-Based Agent</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Learning Agent</div>
+                <p class="fragment small box-info">
+                    💡 Memerlukan internal state untuk "mengingat", tapi tidak perlu goal eksplisit.
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 9: P2 REVIEW - SEARCH FORMULATION ==================== -->
+            <section>
+                <h2>🔍 P2: Formulasi Masalah Pencarian</h2>
+                <div class="box-definition small">
+                    <ul>
+                        <li><strong>State Space:</strong> Semua state yang mungkin</li>
+                        <li><strong>Initial State:</strong> State awal</li>
+                        <li><strong>Actions:</strong> Tindakan yang tersedia</li>
+                        <li><strong>Transition Model:</strong> Hasil dari action</li>
+                        <li><strong>Goal Test:</strong> Apakah sudah goal?</li>
+                        <li><strong>Path Cost:</strong> Biaya akumulatif</li>
+                    </ul>
+                </div>
+                <p class="fragment small">
+                    <strong>Contoh 8-Puzzle:</strong>
+                    State = konfigurasi tile, Action = geser tile, Goal = konfigurasi target
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 10: P2 REVIEW - UNINFORMED COMPARISON ==================== -->
+            <section>
+                <h2>📊 P2: Perbandingan Uninformed Search</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Kriteria</th>
+                        <th>BFS</th>
+                        <th>DFS</th>
+                        <th>UCS</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Complete?</td>
+                        <td class="success">Ya</td>
+                        <td class="warning">Tidak*</td>
+                        <td class="success">Ya</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Optimal?</td>
+                        <td class="warning">Ya (unit)</td>
+                        <td class="warning">Tidak</td>
+                        <td class="success">Ya</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Time</td>
+                        <td>O(b<sup>d</sup>)</td>
+                        <td>O(b<sup>m</sup>)</td>
+                        <td>O(b<sup>1+⌊C*/ε⌋</sup>)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Space</td>
+                        <td class="warning">O(b<sup>d</sup>)</td>
+                        <td class="success">O(bm)</td>
+                        <td class="warning">O(b<sup>1+⌊C*/ε⌋</sup>)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Struktur Data</td>
+                        <td>Queue</td>
+                        <td>Stack</td>
+                        <td>Priority Q</td>
+                    </tr>
+                </table>
+                <p class="fragment small">b = branching factor, d = depth solusi, m = max depth</p>
+            </section>
+
+            <!-- ==================== SLIDE 11: P2 REVIEW - BFS vs DFS ==================== -->
+            <section>
+                <h2>🔄 P2: BFS vs DFS Traversal</h2>
+                <img src="images/p07-02-bfs-dfs-comparison.png" alt="BFS vs DFS" style="max-height: 400px;">
+                <p class="small-text">BFS: Level-by-level (Queue) | DFS: Depth-first (Stack)</p>
+            </section>
+
+            <!-- ==================== SLIDE 12: P2 EXAMPLE - UCS ==================== -->
+            <section>
+                <h2>💰 P2: Contoh UCS</h2>
+                <div class="two-columns">
+                    <div>
+                        <pre><code class="small-text">Graph:
+S --2-- A --3-- G
+|       |
+4       1
+|       |
+B --2-- C</code></pre>
+                    </div>
+                    <div class="small-text">
+                        <p><strong>Ekspansi UCS:</strong></p>
+                        <ol class="fragment">
+                            <li>S (g=0) → A(2), B(4)</li>
+                            <li>A (g=2) → C(3), G(5)</li>
+                            <li>C (g=3) → B(5)</li>
+                            <li>B (g=4) → skip</li>
+                            <li>G (g=5) → <span class="success">GOAL!</span></li>
+                        </ol>
+                    </div>
+                </div>
+                <p class="fragment box-success small">Jalur optimal: S → A → G dengan cost 5</p>
+            </section>
+
+            <!-- ==================== SLIDE 13: P3 REVIEW - HEURISTIC ==================== -->
+            <section>
+                <h2>🎯 P3: Konsep Heuristik</h2>
+                <div class="box-definition">
+                    <strong>Heuristik h(n)</strong> = estimasi biaya dari node n ke goal
+                </div>
+                <div class="two-columns fragment">
+                    <div class="box-info small">
+                        <h4>Admissible</h4>
+                        <p>h(n) ≤ h*(n)</p>
+                        <p>Tidak pernah overestimate</p>
+                        <p>→ A* optimal</p>
+                    </div>
+                    <div class="box-warning small">
+                        <h4>Consistent</h4>
+                        <p>h(n) ≤ c(n,a,n') + h(n')</p>
+                        <p>Triangle inequality</p>
+                        <p>→ A* lebih efisien</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 14: P3 REVIEW - A* ==================== -->
+            <section>
+                <h2>⭐ P3: Algoritma A*</h2>
+                <div class="formula-box">
+                    <p style="font-size: 1.3em;"><strong>f(n) = g(n) + h(n)</strong></p>
+                </div>
+                <div class="two-columns small fragment">
+                    <div>
+                        <p><strong>g(n)</strong> = biaya aktual dari start ke n</p>
+                    </div>
+                    <div>
+                        <p><strong>h(n)</strong> = estimasi biaya dari n ke goal</p>
+                    </div>
+                </div>
+                <table class="small fragment">
+                    <tr>
+                        <th>Algoritma</th>
+                        <th>Evaluasi</th>
+                        <th>Optimal?</th>
+                    </tr>
+                    <tr>
+                        <td>Greedy Best-First</td>
+                        <td>f(n) = h(n)</td>
+                        <td class="warning">Tidak</td>
+                    </tr>
+                    <tr>
+                        <td>UCS</td>
+                        <td>f(n) = g(n)</td>
+                        <td class="success">Ya</td>
+                    </tr>
+                    <tr>
+                        <td>A*</td>
+                        <td>f(n) = g(n) + h(n)</td>
+                        <td class="success">Ya*</td>
+                    </tr>
+                </table>
+                <p class="fragment small">*Jika h admissible</p>
+            </section>
+
+            <!-- ==================== SLIDE 15: P3 REVIEW - HEURISTIC EXAMPLES ==================== -->
+            <section>
+                <h2>🧩 P3: Heuristik untuk 8-Puzzle</h2>
+                <div class="two-columns">
+                    <div class="fragment">
+                        <div class="box-info small">
+                            <h4>h₁: Misplaced Tiles</h4>
+                            <p>Jumlah tile yang salah posisi</p>
+                            <p>Admissible: ✅</p>
+                            <p>Setiap tile minimal 1 move</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="box-success small">
+                            <h4>h₂: Manhattan Distance</h4>
+                            <p>Σ |x<sub>i</sub>-x<sub>goal</sub>| + |y<sub>i</sub>-y<sub>goal</sub>|</p>
+                            <p>Admissible: ✅</p>
+                            <p>Lebih informatif (h₂ ≥ h₁)</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="fragment box-definition small">
+                    💡 Heuristik yang lebih informatif → A* eksplorasi lebih sedikit node
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 16: QUIZ P2-P3 ==================== -->
+            <section>
+                <h2>🧠 Quiz: Pencarian</h2>
+                <p><strong>Pertanyaan:</strong> Jika h(n) = 2 × Manhattan distance, apakah A* dijamin menemukan solusi optimal?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Ya, karena Manhattan admissible</div>
+                <div class="quiz-option fragment" data-fragment-index="2" style="background-color: rgba(239, 68, 68, 0.4);">B. Tidak, karena h bisa overestimate ❌</div>
+                <div class="quiz-option fragment" data-fragment-index="3">C. Ya, jika graph tidak ada cycle</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Tergantung branching factor</div>
+                <p class="fragment small box-warning">
+                    ⚠️ h = 2 × Manhattan TIDAK admissible! Dapat overestimate actual cost.
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 17: P4 REVIEW - LOCAL SEARCH ==================== -->
+            <section>
+                <h2>🏔️ P4: Pencarian Lokal</h2>
+                <div class="box-definition small">
+                    <strong>Local Search:</strong> Hanya menyimpan state saat ini, bergerak ke neighbor yang lebih baik. Path tidak penting, hanya solusi.
+                </div>
+                <div class="two-columns fragment">
+                    <div class="box-info small">
+                        <h4>Hill Climbing</h4>
+                        <ul>
+                            <li>Selalu ke neighbor terbaik</li>
+                            <li>Cepat dan sederhana</li>
+                            <li>❌ Stuck di local optima</li>
+                        </ul>
+                    </div>
+                    <div class="box-success small">
+                        <h4>Simulated Annealing</h4>
+                        <ul>
+                            <li>Terima move buruk dengan P</li>
+                            <li>P = e<sup>ΔE/T</sup></li>
+                            <li>✅ Dapat escape local optima</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 18: P4 REVIEW - SA FORMULA ==================== -->
+            <section>
+                <h2>🌡️ P4: Simulated Annealing</h2>
+                <div class="formula-box">
+                    <p>Probabilitas terima move buruk:</p>
+                    <p style="font-size: 1.3em;"><strong>P = e<sup>ΔE/T</sup></strong></p>
+                </div>
+                <div class="small fragment">
+                    <p><strong>ΔE</strong> = f(next) - f(current) (negatif jika lebih buruk)</p>
+                    <p><strong>T</strong> = temperature (tinggi → eksplorasi, rendah → eksploitasi)</p>
+                </div>
+                <div class="fragment box-info small">
+                    <strong>Contoh:</strong> ΔE = -7, T = 10<br>
+                    P = e<sup>-7/10</sup> = e<sup>-0.7</sup> ≈ 0.497 (49.7% diterima)
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 19: P5 REVIEW - MINIMAX ==================== -->
+            <section>
+                <h2>🎮 P5: Algoritma Minimax</h2>
+                <div class="box-definition small">
+                    <strong>Minimax:</strong> Algoritma untuk game adversarial two-player zero-sum. MAX memaksimalkan, MIN meminimalkan.
+                </div>
+                <pre class="fragment"><code class="small-text">function MINIMAX(node, isMaxPlayer):
+    if terminal(node): return utility(node)
+    
+    if isMaxPlayer:
+        return MAX(MINIMAX(child) for child in children)
+    else:
+        return MIN(MINIMAX(child) for child in children)</code></pre>
+                <p class="fragment small">Kompleksitas: O(b<sup>m</sup>) - sangat mahal!</p>
+            </section>
+
+            <!-- ==================== SLIDE 20: P5 REVIEW - MINIMAX EXAMPLE ==================== -->
+            <section>
+                <h2>🌳 P5: Contoh Minimax</h2>
+                <pre><code class="small-text">        MAX(?)
+       /      \
+    MIN(?)   MIN(?)
+    /   \    /   \
+   3     5  2     9</code></pre>
+                <div class="fragment">
+                    <p class="small-text"><strong>Evaluasi bottom-up:</strong></p>
+                    <ul class="small-text">
+                        <li>MIN kiri: min(3, 5) = <span class="highlight">3</span></li>
+                        <li>MIN kanan: min(2, 9) = <span class="highlight">2</span></li>
+                        <li>MAX: max(3, 2) = <span class="success">3</span></li>
+                    </ul>
+                </div>
+                <p class="fragment box-success small">Nilai minimax = 3, MAX pilih cabang kiri</p>
+            </section>
+
+            <!-- ==================== SLIDE 21: P5 REVIEW - ALPHA-BETA ==================== -->
+            <section>
+                <h2>✂️ P5: Alpha-Beta Pruning</h2>
+                <div class="two-columns small">
+                    <div class="box-info">
+                        <h4>α (Alpha)</h4>
+                        <p>Nilai terbaik MAX</p>
+                        <p>di sepanjang path</p>
+                    </div>
+                    <div class="box-warning">
+                        <h4>β (Beta)</h4>
+                        <p>Nilai terbaik MIN</p>
+                        <p>di sepanjang path</p>
+                    </div>
+                </div>
+                <div class="fragment box-danger small" style="margin-top: 20px;">
+                    <strong>Pruning Condition:</strong> Jika α ≥ β, potong sisa cabang!
+                </div>
+                <p class="fragment small">
+                    Efisiensi: O(b<sup>m</sup>) → O(b<sup>m/2</sup>) dengan perfect ordering
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 22: P5 REVIEW - ALPHA-BETA VISUAL ==================== -->
+            <section>
+                <h2>🔍 P5: Alpha-Beta Ilustrasi</h2>
+                <img src="images/p07-03-alpha-beta-pruning.png" alt="Alpha-Beta Pruning" style="max-height: 420px;">
+                <p class="small-text">Node dengan X tidak perlu dievaluasi (pruned)</p>
+            </section>
+
+            <!-- ==================== SLIDE 23: QUIZ P4-P5 ==================== -->
+            <section>
+                <h2>🧠 Quiz: Game & Optimisasi</h2>
+                <p><strong>Pertanyaan:</strong> Alpha-beta pruning dengan perfect ordering pada game tree b=10, d=4. Berapa evaluasi yang dihemat?</p>
+                <div class="fragment small">
+                    <p><strong>Tanpa pruning:</strong> 10<sup>4</sup> = 10,000 evaluations</p>
+                    <p><strong>Dengan pruning:</strong> ≈ 2 × 10<sup>2</sup> = 200 evaluations</p>
+                </div>
+                <p class="fragment box-success">Penghematan: ~98%! (9,800 evaluations)</p>
+            </section>
+
+            <!-- ==================== SLIDE 24: P6 REVIEW - CSP ==================== -->
+            <section>
+                <h2>🧩 P6: Constraint Satisfaction Problems</h2>
+                <div class="box-definition small">
+                    <strong>CSP</strong> didefinisikan oleh:
+                    <ul>
+                        <li><strong>Variables:</strong> X = {X₁, X₂, ..., Xₙ}</li>
+                        <li><strong>Domains:</strong> D = {D₁, D₂, ..., Dₙ}</li>
+                        <li><strong>Constraints:</strong> Batasan antar variabel</li>
+                    </ul>
+                </div>
+                <div class="fragment box-info small">
+                    <strong>Contoh Map Coloring:</strong>
+                    <ul>
+                        <li>Variables: {WA, NT, Q, SA, NSW, V, T}</li>
+                        <li>Domains: {Red, Green, Blue}</li>
+                        <li>Constraints: Adjacent ≠ same color</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 25: P6 REVIEW - AC-3 ==================== -->
+            <section>
+                <h2>🔗 P6: Arc Consistency (AC-3)</h2>
+                <div class="box-definition small">
+                    <strong>Arc Consistent:</strong> Untuk setiap nilai di D<sub>i</sub>, ada nilai di D<sub>j</sub> yang memenuhi constraint (i,j)
+                </div>
+                <pre class="fragment small"><code>function AC-3(csp):
+    queue = all arcs in csp
+    while queue not empty:
+        (Xi, Xj) = queue.pop()
+        if REVISE(Xi, Xj):
+            if Di empty: return false
+            add (Xk, Xi) to queue for all k ≠ j
+    return true</code></pre>
+                <p class="fragment small box-info">AC-3 mereduksi domain sebelum atau selama search</p>
+            </section>
+
+            <!-- ==================== SLIDE 26: P6 REVIEW - BACKTRACKING ==================== -->
+            <section>
+                <h2>↩️ P6: Backtracking + Heuristics</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Teknik</th>
+                        <th>Strategi</th>
+                        <th>Manfaat</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>MRV</strong></td>
+                        <td>Pilih variabel dengan domain terkecil</td>
+                        <td>Fail-fast detection</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>LCV</strong></td>
+                        <td>Pilih nilai yang least constraining</td>
+                        <td>Maximize flexibility</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Forward Checking</strong></td>
+                        <td>Hapus nilai inkonsisten setelah assign</td>
+                        <td>Early pruning</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 27: P6 EXAMPLE ==================== -->
+            <section>
+                <h2>📝 P6: Contoh AC-3</h2>
+                <div class="two-columns small">
+                    <div>
+                        <p><strong>CSP:</strong></p>
+                        <ul>
+                            <li>X: {1, 2, 3}</li>
+                            <li>Y: {1, 2}</li>
+                            <li>Constraint: X > Y</li>
+                        </ul>
+                    </div>
+                    <div class="fragment">
+                        <p><strong>AC-3:</strong></p>
+                        <ul>
+                            <li>Arc (X,Y): X=1 → no support!</li>
+                            <li>Remove 1 from D(X)</li>
+                            <li>D(X) = {2, 3} ✓</li>
+                            <li>D(Y) = {1, 2} ✓</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="fragment box-success small">Domain X berkurang dari {1,2,3} menjadi {2,3}</p>
+            </section>
+
+            <!-- ==================== SLIDE 28: QUIZ P6 ==================== -->
+            <section>
+                <h2>🧠 Quiz: CSP</h2>
+                <p><strong>Pertanyaan:</strong> Dalam backtracking dengan MRV, variabel mana yang dipilih pertama?</p>
+                <pre class="small-text"><code>D(A) = {1, 2, 3, 4}
+D(B) = {1, 2}
+D(C) = {1, 2, 3}
+D(D) = {5}</code></pre>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Variable A (domain terbesar)</div>
+                <div class="quiz-option fragment" data-fragment-index="2">B. Variable B</div>
+                <div class="quiz-option fragment" data-fragment-index="3">C. Variable C</div>
+                <div class="quiz-option fragment" data-fragment-index="4" style="background-color: rgba(16, 185, 129, 0.4);">D. Variable D (domain terkecil) ✅</div>
+                <p class="fragment small box-info">MRV = Minimum Remaining Values → pilih domain terkecil</p>
+            </section>
+
+            <!-- ==================== SLIDE 29: ALGORITHM SELECTION ==================== -->
+            <section>
+                <h2>🎯 Panduan Pemilihan Algoritma</h2>
+                <img src="images/p07-04-algorithm-selection-flowchart.png" alt="Algorithm Selection" style="max-height: 450px;">
+            </section>
+
+            <!-- ==================== SLIDE 30: ALGORITHM DECISION TABLE ==================== -->
+            <section>
+                <h2>📋 Tabel Keputusan Algoritma</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Karakteristik Masalah</th>
+                        <th>Algoritma</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Adversarial, zero-sum game</td>
+                        <td><span class="highlight">Minimax, Alpha-Beta</span></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Constraint satisfaction</td>
+                        <td><span class="highlight">CSP + Backtracking</span></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Optimisasi (path tidak penting)</td>
+                        <td><span class="highlight">Hill Climbing, SA, GA</span></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Path finding + heuristik</td>
+                        <td><span class="highlight">A*</span></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Path finding, perlu optimal</td>
+                        <td><span class="highlight">UCS</span></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Memori terbatas</td>
+                        <td><span class="highlight">DFS, IDDFS</span></td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 31: COMPLEXITY SUMMARY ==================== -->
+            <section>
+                <h2>📊 Ringkasan Kompleksitas</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Algoritma</th>
+                        <th>Time</th>
+                        <th>Space</th>
+                        <th>Complete</th>
+                        <th>Optimal</th>
+                    </tr>
+                    <tr>
+                        <td>BFS</td>
+                        <td>O(b<sup>d</sup>)</td>
+                        <td>O(b<sup>d</sup>)</td>
+                        <td>✅</td>
+                        <td>✅*</td>
+                    </tr>
+                    <tr>
+                        <td>DFS</td>
+                        <td>O(b<sup>m</sup>)</td>
+                        <td>O(bm)</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                    </tr>
+                    <tr>
+                        <td>UCS</td>
+                        <td>O(b<sup>1+⌊C*/ε⌋</sup>)</td>
+                        <td>O(b<sup>1+⌊C*/ε⌋</sup>)</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>A*</td>
+                        <td>O(b<sup>d</sup>)</td>
+                        <td>O(b<sup>d</sup>)</td>
+                        <td>✅</td>
+                        <td>✅**</td>
+                    </tr>
+                    <tr>
+                        <td>Minimax</td>
+                        <td>O(b<sup>m</sup>)</td>
+                        <td>O(bm)</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>Alpha-Beta</td>
+                        <td>O(b<sup>m/2</sup>)</td>
+                        <td>O(bm)</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                </table>
+                <p class="small-text">*unit cost, **h admissible</p>
+            </section>
+
+            <!-- ==================== SLIDE 32: COMMON MISTAKES ==================== -->
+            <section>
+                <h2>⚠️ Kesalahan Umum</h2>
+                <ol class="small-text">
+                    <li class="fragment"><strong>Lupa update visited</strong> pada BFS/DFS</li>
+                    <li class="fragment"><strong>A* pakai h(n) saja</strong> - seharusnya f(n) = g(n) + h(n)</li>
+                    <li class="fragment"><strong>Urutan salah</strong> pada alpha-beta (kiri ke kanan!)</li>
+                    <li class="fragment"><strong>Arah arc salah</strong> pada AC-3</li>
+                    <li class="fragment"><strong>Manhattan distance:</strong> lupa absolute value</li>
+                    <li class="fragment"><strong>Tidak propagate</strong> perubahan di CSP</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 33: UTS FORMAT ==================== -->
+            <section>
+                <h2>📝 Format UTS</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Topik</th>
+                        <th>Perkiraan Bobot</th>
+                        <th>Tipe Soal</th>
+                    </tr>
+                    <tr>
+                        <td>Agen & PEAS (P1)</td>
+                        <td>15-20%</td>
+                        <td>Analisis, identifikasi</td>
+                    </tr>
+                    <tr>
+                        <td>Uninformed Search (P2)</td>
+                        <td>15-20%</td>
+                        <td>Tracing algoritma</td>
+                    </tr>
+                    <tr>
+                        <td>Informed Search (P3)</td>
+                        <td>20-25%</td>
+                        <td>A*, desain heuristik</td>
+                    </tr>
+                    <tr>
+                        <td>Local Search (P4)</td>
+                        <td>10-15%</td>
+                        <td>Konseptual, iterasi</td>
+                    </tr>
+                    <tr>
+                        <td>Game Playing (P5)</td>
+                        <td>15-20%</td>
+                        <td>Minimax, alpha-beta</td>
+                    </tr>
+                    <tr>
+                        <td>CSP (P6)</td>
+                        <td>15-20%</td>
+                        <td>Formulasi, AC-3</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 34: PRACTICE PROBLEM 1 ==================== -->
+            <section>
+                <h2>🏋️ Latihan: A* Tracing</h2>
+                <div class="small-text">
+                    <p><strong>Soal:</strong> Gunakan A* dari S ke G dengan h yang ditunjukkan</p>
+                    <pre><code>S --1-- A --2-- G
+|       |
+3       1
+|       |
+B --1-- C
+
+h(S)=4, h(A)=2, h(B)=3, h(C)=1, h(G)=0</code></pre>
+                </div>
+                <div class="fragment small">
+                    <table>
+                        <tr><th>Node</th><th>g</th><th>h</th><th>f</th></tr>
+                        <tr><td>S</td><td>0</td><td>4</td><td>4</td></tr>
+                        <tr><td>A</td><td>1</td><td>2</td><td>3 ✓</td></tr>
+                        <tr><td>C</td><td>2</td><td>1</td><td>3 ✓</td></tr>
+                        <tr><td>G</td><td>3</td><td>0</td><td>3 ✓</td></tr>
+                    </table>
+                </div>
+                <p class="fragment box-success small">Path: S→A→C→G atau S→A→G (cost 3)</p>
+            </section>
+
+            <!-- ==================== SLIDE 35: PRACTICE PROBLEM 2 ==================== -->
+            <section>
+                <h2>🏋️ Latihan: Minimax</h2>
+                <pre class="small-text"><code>          MAX
+       /        \
+     MIN        MIN
+    / | \      / | \
+   5  3  8    2  7  4</code></pre>
+                <div class="fragment">
+                    <p class="small-text"><strong>Solusi:</strong></p>
+                    <ul class="small-text">
+                        <li>MIN kiri: min(5, 3, 8) = <span class="highlight">3</span></li>
+                        <li>MIN kanan: min(2, 7, 4) = <span class="highlight">2</span></li>
+                        <li>MAX: max(3, 2) = <span class="success">3</span></li>
+                    </ul>
+                </div>
+                <p class="fragment box-success small">Nilai minimax = 3, MAX pilih cabang kiri</p>
+            </section>
+
+            <!-- ==================== SLIDE 36: PRACTICE PROBLEM 3 ==================== -->
+            <section>
+                <h2>🏋️ Latihan: CSP Formulasi</h2>
+                <p class="small-text"><strong>Soal:</strong> Formulasikan Sudoku 4×4 sebagai CSP!</p>
+                <div class="fragment small">
+                    <p><strong>Variables:</strong> 16 cell (X<sub>ij</sub> untuk baris i, kolom j)</p>
+                    <p><strong>Domains:</strong> {1, 2, 3, 4}</p>
+                    <p><strong>Constraints:</strong></p>
+                    <ul>
+                        <li>AllDiff per baris (4 constraints)</li>
+                        <li>AllDiff per kolom (4 constraints)</li>
+                        <li>AllDiff per kotak 2×2 (4 constraints)</li>
+                        <li>Given values (unary constraints)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 37: FINAL QUIZ ==================== -->
+            <section>
+                <h2>🧠 Quiz Komprehensif</h2>
+                <p class="small-text"><strong>Skenario:</strong> Robot penjinak bom harus menavigasi maze untuk mencapai bom sebelum meledak (time limit). Algoritma mana yang paling sesuai?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. DFS (hemat memori)</div>
+                <div class="quiz-option fragment" data-fragment-index="2">B. BFS (complete)</div>
+                <div class="quiz-option fragment" data-fragment-index="3" style="background-color: rgba(16, 185, 129, 0.4);">C. A* dengan heuristik jarak ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Hill Climbing</div>
+                <p class="fragment small box-info">
+                    A* optimal dan efisien untuk path finding dengan heuristik. Time-critical memerlukan solusi cepat dan optimal.
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 38: KEY FORMULAS ==================== -->
+            <section>
+                <h2>📐 Formula Penting</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Konsep</th>
+                        <th>Formula</th>
+                    </tr>
+                    <tr>
+                        <td>A* Evaluation</td>
+                        <td><strong>f(n) = g(n) + h(n)</strong></td>
+                    </tr>
+                    <tr>
+                        <td>SA Acceptance</td>
+                        <td><strong>P = e<sup>ΔE/T</sup></strong></td>
+                    </tr>
+                    <tr>
+                        <td>Manhattan Distance</td>
+                        <td><strong>h = Σ|x<sub>i</sub>-x<sub>g</sub>| + |y<sub>i</sub>-y<sub>g</sub>|</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Admissible</td>
+                        <td><strong>h(n) ≤ h*(n)</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Alpha-Beta Prune</td>
+                        <td><strong>α ≥ β</strong></td>
+                    </tr>
+                    <tr>
+                        <td>BFS/DFS Complexity</td>
+                        <td><strong>O(b<sup>d</sup>)</strong></td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 39: SUMMARY ==================== -->
+            <section>
+                <h2>📝 Ringkasan</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Pertemuan</th>
+                        <th>Topik</th>
+                        <th>Konsep Kunci</th>
+                    </tr>
+                    <tr>
+                        <td>P1</td>
+                        <td>Agen Cerdas</td>
+                        <td>PEAS, 5 jenis agen, 6 karakteristik</td>
+                    </tr>
+                    <tr>
+                        <td>P2</td>
+                        <td>Uninformed Search</td>
+                        <td>BFS, DFS, UCS</td>
+                    </tr>
+                    <tr>
+                        <td>P3</td>
+                        <td>Informed Search</td>
+                        <td>Heuristik, A*, admissibility</td>
+                    </tr>
+                    <tr>
+                        <td>P4</td>
+                        <td>Local Search</td>
+                        <td>Hill Climbing, SA, local optima</td>
+                    </tr>
+                    <tr>
+                        <td>P5</td>
+                        <td>Game Playing</td>
+                        <td>Minimax, Alpha-Beta Pruning</td>
+                    </tr>
+                    <tr>
+                        <td>P6</td>
+                        <td>CSP</td>
+                        <td>AC-3, Backtracking, MRV</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 40: NEXT WEEK ==================== -->
+            <section>
+                <h2>📅 Pertemuan 8</h2>
+                <div class="box-danger">
+                    <h3>UJIAN TENGAH SEMESTER (UTS)</h3>
+                    <p>Cakupan: Pertemuan 1-6</p>
+                </div>
+                <div class="fragment box-info small" style="margin-top: 20px;">
+                    <h4>Persiapan:</h4>
+                    <ul>
+                        <li>✅ Review semua modul</li>
+                        <li>✅ Latihan tracing algoritma</li>
+                        <li>✅ Pahami kapan pakai algoritma apa</li>
+                        <li>✅ Hafalkan formula penting</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 41: REFERENCES ==================== -->
+            <section>
+                <h2>📚 Referensi</h2>
+                <ol class="small-text">
+                    <li>Russell, S. & Norvig, P. (2020). <em>Artificial Intelligence: A Modern Approach</em> (4th Ed.). Pearson. <strong>Chapter 1-6</strong></li>
+                    <li>Poole, D.L. & Mackworth, A.K. (2023). <em>Artificial Intelligence: Foundations of Computational Agents</em> (3rd Ed.). Cambridge University Press.</li>
+                    <li>CS188 Berkeley AI Materials</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 42: CLOSING ==================== -->
+            <section class="center">
+                <h1>Terima Kasih</h1>
+                <h3>🤖 Kecerdasan Artifisial</h3>
+                <p>Pertemuan 07: Review dan Latihan Komprehensif - Persiapan UTS</p>
+                <br>
+                <p class="small-text">Selamat belajar dan sukses UTS!</p>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/math/math.min.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            showSlideNumber: 'all',
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            pdfSeparateFragments: false,
+            plugins: [ RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+        });
+    </script>
+</body>
+</html>
