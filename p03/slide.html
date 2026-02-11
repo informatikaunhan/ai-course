@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pertemuan 03: Pencarian Heuristik (Informed Search)</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/league.min.css">
+    
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css">
+    
+    <!-- Custom Theme -->
+    <link rel="stylesheet" href="unhan-theme.css">
+    
+    <style>
+        /* Fallback styles if unhan-theme.css is not available */
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+        }
+        .reveal .slides section {
+            text-align: left;
+        }
+        .reveal .slides section.center {
+            text-align: center;
+        }
+        .reveal table {
+            margin: 20px auto;
+            font-size: 0.7em;
+        }
+        .reveal table th {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px;
+        }
+        .reveal table td {
+            padding: 8px 12px;
+            border: 1px solid #444;
+        }
+        .reveal .highlight-box {
+            background-color: rgba(37, 99, 235, 0.2);
+            border-left: 4px solid #2563eb;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .definition-box {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .warning-box {
+            background-color: rgba(245, 158, 11, 0.2);
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .two-column {
+            display: flex;
+            gap: 40px;
+        }
+        .reveal .two-column > div {
+            flex: 1;
+        }
+        .reveal .emoji-large {
+            font-size: 3em;
+        }
+        .reveal .quiz-option {
+            background-color: rgba(100, 100, 100, 0.3);
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .reveal .quiz-option:hover {
+            background-color: rgba(37, 99, 235, 0.4);
+        }
+        .reveal code {
+            background-color: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .reveal pre code {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .reveal .small-text {
+            font-size: 0.6em;
+        }
+        .reveal .medium-text {
+            font-size: 0.8em;
+        }
+        .reveal img {
+            max-height: 450px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- ==================== SLIDE 1: TITLE ==================== -->
+            <section class="center">
+                <h1>Kecerdasan Artifisial</h1>
+                <h3>Pertemuan 03</h3>
+                <h2>Pencarian Heuristik<br><em>Informed Search</em></h2>
+                <p class="small-text" style="margin-top: 50px;">
+                    Mata Kuliah: Kecerdasan Artifisial (AI401) | 3 SKS
+                </p>
+            </section>
+            
+            <!-- ==================== SLIDE 2: LEARNING OUTCOMES ==================== -->
+            <section>
+                <h2>🎯 Capaian Pembelajaran</h2>
+                <p>Setelah pertemuan ini, mahasiswa mampu:</p>
+                <ol class="medium-text">
+                    <li class="fragment">Menjelaskan konsep heuristik sebagai estimasi biaya</li>
+                    <li class="fragment">Mengimplementasikan Greedy Best-First Search</li>
+                    <li class="fragment">Mengimplementasikan algoritma A*</li>
+                    <li class="fragment">Menjelaskan properti admissibility dan consistency</li>
+                    <li class="fragment">Merancang fungsi heuristik yang baik</li>
+                    <li class="fragment">Menganalisis optimalitas dan kompleksitas A*</li>
+                </ol>
+            </section>
+            
+            <!-- ==================== SLIDE 3: REVIEW ==================== -->
+            <section>
+                <h2>📝 Review: Uninformed Search</h2>
+                <p>Pertemuan sebelumnya kita belajar:</p>
+                <ul>
+                    <li class="fragment"><strong>BFS</strong> - Eksplorasi per level</li>
+                    <li class="fragment"><strong>DFS</strong> - Eksplorasi sedalam mungkin</li>
+                    <li class="fragment"><strong>UCS</strong> - Eksplorasi berdasarkan g(n)</li>
+                </ul>
+                <p class="fragment highlight-red">Masalah: Tidak tahu arah goal!</p>
+            </section>
+            
+            <!-- ==================== SLIDE 4: MASALAH UNINFORMED ==================== -->
+            <section>
+                <h2>🔍 Masalah Uninformed Search</h2>
+                <img src="images/p03-01-peta-romania-pencarian.png" alt="Peta Romania" class="stretch">
+                <p class="fragment">BFS/UCS mengeksplorasi ke <em>semua arah</em> termasuk yang menjauh dari goal!</p>
+            </section>
+            
+            <!-- ==================== SLIDE 5: SOLUSI ==================== -->
+            <section data-background-color="#1e3a5f">
+                <h2>💡 Solusi: Informed Search</h2>
+                <blockquote class="fragment">
+                    "Gunakan pengetahuan tentang domain masalah untuk mengarahkan pencarian!"
+                </blockquote>
+                <p class="fragment">Pengetahuan ini disebut <strong class="highlight">HEURISTIK</strong></p>
+            </section>
+            
+            <!-- ==================== SLIDE 6: DEFINISI HEURISTIK ==================== -->
+            <section>
+                <h2>📚 Apa itu Heuristik?</h2>
+                <div class="definition-box fragment">
+                    <p><strong>Heuristik h(n)</strong> adalah fungsi yang memberikan <em>estimasi biaya</em> dari node n ke goal terdekat.</p>
+                </div>
+                <ul>
+                    <li class="fragment">h(n) ≥ 0 untuk semua node n</li>
+                    <li class="fragment">h(goal) = 0</li>
+                    <li class="fragment">Semakin kecil h(n), semakin dekat ke goal</li>
+                </ul>
+            </section>
+            
+            <!-- ==================== SLIDE 7: CONTOH HEURISTIK SLD ==================== -->
+            <section>
+                <h2>📏 Contoh: Straight-Line Distance</h2>
+                <p>Untuk pencarian rute: jarak garis lurus ke goal</p>
+                <table class="small-table">
+                    <tr><th>Kota</th><th>h<sub>SLD</sub> ke Bucharest</th></tr>
+                    <tr class="fragment"><td>Arad</td><td>366 km</td></tr>
+                    <tr class="fragment"><td>Sibiu</td><td>253 km</td></tr>
+                    <tr class="fragment"><td>Fagaras</td><td>176 km</td></tr>
+                    <tr class="fragment"><td>Pitesti</td><td>100 km</td></tr>
+                    <tr class="fragment"><td>Bucharest</td><td>0 km</td></tr>
+                </table>
+            </section>
+            
+            <!-- ==================== SLIDE 8: MANHATTAN DISTANCE ==================== -->
+            <section>
+                <h2>📐 Contoh: Manhattan Distance</h2>
+                <p>Untuk grid-based problems (8-puzzle, pathfinding):</p>
+                <div class="formula fragment">
+                    h<sub>Manhattan</sub>(n) = Σ |x<sub>i</sub> - x<sub>goal</sub>| + |y<sub>i</sub> - y<sub>goal</sub>|
+                </div>
+                <p class="fragment">Jumlah jarak horizontal + vertikal setiap tile ke posisi goalnya</p>
+            </section>
+            
+            <!-- ==================== SLIDE 9: CONTOH MANHATTAN ==================== -->
+            <section>
+                <h2>🧩 Contoh Manhattan: 8-Puzzle</h2>
+                <div class="two-column">
+                    <div>
+                        <p><strong>Current:</strong></p>
+                        <pre>
+┌───┬───┬───┐
+│ 2 │ 8 │ 3 │
+├───┼───┼───┤
+│ 1 │ 6 │ 4 │
+├───┼───┼───┤
+│ 7 │   │ 5 │
+└───┴───┴───┘</pre>
+                    </div>
+                    <div>
+                        <p><strong>Goal:</strong></p>
+                        <pre>
+┌───┬───┬───┐
+│ 1 │ 2 │ 3 │
+├───┼───┼───┤
+│ 4 │ 5 │ 6 │
+├───┼───┼───┤
+│ 7 │ 8 │   │
+└───┴───┴───┘</pre>
+                    </div>
+                </div>
+                <p class="fragment">h<sub>Manhattan</sub> = 1+1+0+2+2+1+0+2 = <strong>9</strong></p>
+            </section>
+            
+            <!-- ==================== SLIDE 10: GREEDY BFS INTRO ==================== -->
+            <section data-background-color="#2d4a22">
+                <h2>🏃 Greedy Best-First Search</h2>
+                <blockquote>
+                    Selalu ekspansi node dengan h(n) <strong>terkecil</strong>
+                </blockquote>
+                <ul>
+                    <li class="fragment">Hanya menggunakan h(n)</li>
+                    <li class="fragment">Mengabaikan biaya yang sudah ditempuh g(n)</li>
+                    <li class="fragment">"Greedy" = serakah, pilih yang terlihat terbaik</li>
+                </ul>
+            </section>
+            
+            <!-- ==================== SLIDE 11: GREEDY BFS ALGORITMA ==================== -->
+            <section>
+                <h2>📝 Algoritma Greedy BFS</h2>
+                <pre><code class="language-python" data-trim>
+def greedy_best_first_search(problem, h):
+    frontier = PriorityQueue()  # ordered by h(n)
+    frontier.push(initial_state)
+    explored = set()
+    
+    while not frontier.empty():
+        node = frontier.pop()  # h(n) terkecil
+        
+        if goal_test(node):
+            return solution(node)
+        
+        explored.add(node)
+        for successor in expand(node):
+            if successor not in explored:
+                frontier.push(successor)
+    
+    return failure
+                </code></pre>
+            </section>
+            
+            <!-- ==================== SLIDE 12: GREEDY BFS TRACE ==================== -->
+            <section>
+                <h2>🔄 Trace Greedy BFS</h2>
+                <p>Arad → Bucharest:</p>
+                <img src="images/p03-02-greedy-bfs-visualization.png" alt="Greedy BFS Visualization" class="stretch">
+            </section>
+            
+            <!-- ==================== SLIDE 13: GREEDY BFS STEPS ==================== -->
+            <section>
+                <h2>📊 Greedy BFS: Step by Step</h2>
+                <ol>
+                    <li class="fragment">Start: <strong>Arad</strong> (h=366)</li>
+                    <li class="fragment">Neighbors: Zerind(374), <span class="highlight-green">Sibiu(253)</span>, Timisoara(329)</li>
+                    <li class="fragment">Pilih Sibiu → Neighbors: <span class="highlight-green">Fagaras(176)</span>, RV(193)</li>
+                    <li class="fragment">Pilih Fagaras → Neighbor: <span class="highlight-green">Bucharest(0)</span></li>
+                    <li class="fragment">Goal! Path: Arad→Sibiu→Fagaras→Bucharest</li>
+                </ol>
+                <p class="fragment">Hanya <strong>4 node</strong> diekspansi!</p>
+            </section>
+            
+            <!-- ==================== SLIDE 14: GREEDY BFS MASALAH ==================== -->
+            <section data-background-color="#5a1a1a">
+                <h2>⚠️ Masalah Greedy BFS</h2>
+                <div class="two-column">
+                    <div>
+                        <h3>❌ Tidak Optimal</h3>
+                        <p class="fragment">Bisa menemukan path yang lebih panjang</p>
+                    </div>
+                    <div>
+                        <h3>❌ Tidak Complete</h3>
+                        <p class="fragment">Bisa terjebak di infinite loop</p>
+                    </div>
+                </div>
+                <p class="fragment">Path Greedy: 450 km vs Optimal: 418 km</p>
+            </section>
+            
+            <!-- ==================== SLIDE 15: A* INTRO ==================== -->
+            <section data-background-color="#1a3a5a">
+                <h2>⭐ Algoritma A*</h2>
+                <blockquote>
+                    "Kombinasi terbaik dari UCS dan Greedy!"
+                </blockquote>
+                <div class="formula fragment" style="font-size: 1.5em;">
+                    f(n) = g(n) + h(n)
+                </div>
+                <ul>
+                    <li class="fragment"><strong>g(n)</strong> = biaya aktual dari start ke n</li>
+                    <li class="fragment"><strong>h(n)</strong> = estimasi biaya dari n ke goal</li>
+                    <li class="fragment"><strong>f(n)</strong> = estimasi total cost melalui n</li>
+                </ul>
+            </section>
+            
+            <!-- ==================== SLIDE 16: PERBANDINGAN ALGORITMA ==================== -->
+            <section>
+                <h2>📊 Perbandingan Algoritma</h2>
+                <img src="images/p03-03-perbandingan-algoritma-search.png" alt="Perbandingan Algoritma" class="stretch">
+            </section>
+            
+            <!-- ==================== SLIDE 17: PERBANDINGAN TABEL ==================== -->
+            <section>
+                <h2>📋 Tabel Perbandingan</h2>
+                <table>
+                    <tr>
+                        <th>Algoritma</th>
+                        <th>f(n)</th>
+                        <th>Optimal?</th>
+                        <th>Informed?</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>BFS</td>
+                        <td>depth</td>
+                        <td>✓ (unit cost)</td>
+                        <td>❌</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>UCS</td>
+                        <td>g(n)</td>
+                        <td>✓</td>
+                        <td>❌</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Greedy</td>
+                        <td>h(n)</td>
+                        <td>❌</td>
+                        <td>✓</td>
+                    </tr>
+                    <tr class="fragment highlight-row">
+                        <td><strong>A*</strong></td>
+                        <td><strong>g(n)+h(n)</strong></td>
+                        <td><strong>✓</strong></td>
+                        <td><strong>✓</strong></td>
+                    </tr>
+                </table>
+            </section>
+            
+            <!-- ==================== SLIDE 18: A* ALGORITMA ==================== -->
+            <section>
+                <h2>📝 Algoritma A*</h2>
+                <pre><code class="language-python" data-trim data-line-numbers="1-5|7-9|11-18">
+def a_star_search(problem, h):
+    frontier = PriorityQueue()  # ordered by f(n)
+    start = Node(initial_state, g=0)
+    start.f = start.g + h(start.state)
+    frontier.push(start)
+    
+    while not frontier.empty():
+        node = frontier.pop()  # f(n) terkecil
+        
+        if goal_test(node):
+            return solution(node)
+        
+        for successor in expand(node):
+            successor.g = node.g + cost(node, successor)
+            successor.f = successor.g + h(successor.state)
+            
+            if successor not in explored:
+                frontier.push(successor)
+                </code></pre>
+            </section>
+            
+            <!-- ==================== SLIDE 19: A* TRACE ==================== -->
+            <section>
+                <h2>🔄 Trace A*: Arad → Bucharest</h2>
+                <table class="small-table">
+                    <tr><th>Step</th><th>Node</th><th>g</th><th>h</th><th>f</th></tr>
+                    <tr class="fragment"><td>1</td><td>Arad</td><td>0</td><td>366</td><td>366</td></tr>
+                    <tr class="fragment"><td>2</td><td>Sibiu</td><td>140</td><td>253</td><td>393</td></tr>
+                    <tr class="fragment"><td>3</td><td>RimnicuV</td><td>220</td><td>193</td><td>413</td></tr>
+                    <tr class="fragment"><td>4</td><td>Fagaras</td><td>239</td><td>176</td><td>415</td></tr>
+                    <tr class="fragment"><td>5</td><td>Pitesti</td><td>317</td><td>100</td><td>417</td></tr>
+                    <tr class="fragment highlight-row"><td>6</td><td>Bucharest</td><td>418</td><td>0</td><td>418</td></tr>
+                </table>
+                <p class="fragment">Path: Arad→Sibiu→RV→Pitesti→Bucharest = <strong>418 km</strong> ✓</p>
+            </section>
+            
+            <!-- ==================== SLIDE 20: A* VS UCS ==================== -->
+            <section>
+                <h2>📈 A* vs UCS: Efisiensi</h2>
+                <div class="two-column">
+                    <div>
+                        <h3>UCS</h3>
+                        <p class="fragment">~11 nodes expanded</p>
+                        <p class="fragment">Eksplorasi tanpa arah</p>
+                    </div>
+                    <div>
+                        <h3>A*</h3>
+                        <p class="fragment"><strong>6 nodes</strong> expanded</p>
+                        <p class="fragment">Terarah ke goal!</p>
+                    </div>
+                </div>
+                <p class="fragment">Kedua menemukan path optimal 418 km</p>
+            </section>
+            
+            <!-- ==================== SLIDE 21: ADMISSIBILITY ==================== -->
+            <section data-background-color="#1a4a3a">
+                <h2>✅ Admissibility</h2>
+                <div class="definition-box">
+                    <p>Heuristik <strong>admissible</strong> jika tidak pernah <em>overestimate</em> biaya sebenarnya:</p>
+                    <div class="formula">h(n) ≤ h*(n)</div>
+                    <p>untuk semua n, dimana h*(n) = biaya sebenarnya</p>
+                </div>
+                <p class="fragment">Contoh: Straight-line distance selalu ≤ jarak jalan</p>
+            </section>
+            
+            <!-- ==================== SLIDE 22: TEOREMA OPTIMALITAS ==================== -->
+            <section>
+                <h2>🏆 Teorema Optimalitas A*</h2>
+                <div class="theorem-box fragment">
+                    <p><strong>Teorema:</strong> Jika h(n) admissible, maka A* adalah <strong>OPTIMAL</strong></p>
+                </div>
+                <p class="fragment">A* akan menemukan solusi dengan biaya minimum!</p>
+            </section>
+            
+            <!-- ==================== SLIDE 23: CONSISTENCY ==================== -->
+            <section>
+                <h2>🔗 Consistency (Monotonicity)</h2>
+                <img src="images/p03-04-consistency-heuristic.png" alt="Consistency" class="r-stretch">
+                <div class="formula fragment">
+                    h(n) ≤ c(n, a, n') + h(n')
+                </div>
+                <p class="fragment">Ketidaksamaan segitiga!</p>
+            </section>
+            
+            <!-- ==================== SLIDE 24: CONSISTENCY IMPLIKASI ==================== -->
+            <section>
+                <h2>📌 Implikasi Consistency</h2>
+                <ul>
+                    <li class="fragment">Setiap consistent heuristic adalah admissible</li>
+                    <li class="fragment">f(n) tidak pernah berkurang sepanjang path</li>
+                    <li class="fragment">Node yang sudah diekspansi tidak perlu diekspansi lagi</li>
+                    <li class="fragment">Graph search dengan consistent h → optimal!</li>
+                </ul>
+            </section>
+            
+            <!-- ==================== SLIDE 25: DOMINANCE ==================== -->
+            <section>
+                <h2>👑 Dominance</h2>
+                <div class="definition-box">
+                    <p>h₂ <strong>mendominasi</strong> h₁ jika:</p>
+                    <div class="formula">h₂(n) ≥ h₁(n) untuk semua n</div>
+                    <p>dan keduanya admissible</p>
+                </div>
+                <p class="fragment">Heuristik yang mendominasi → A* lebih efisien!</p>
+                <p class="fragment">Contoh: Manhattan > Misplaced Tiles</p>
+            </section>
+            
+            <!-- ==================== SLIDE 26: QUIZ 1 ==================== -->
+            <section data-background-color="#4a1a4a">
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Soal 1:</strong> Jika h(n) = 0 untuk semua n, algoritma apa yang dihasilkan A*?</p>
+                <ol type="A">
+                    <li class="fragment">BFS</li>
+                    <li class="fragment">DFS</li>
+                    <li class="fragment highlight-green">UCS ✓</li>
+                    <li class="fragment">Greedy BFS</li>
+                </ol>
+                <p class="fragment"><em>Penjelasan: f(n) = g(n) + 0 = g(n)</em></p>
+            </section>
+            
+            <!-- ==================== SLIDE 27: QUIZ 2 ==================== -->
+            <section data-background-color="#4a1a4a">
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Soal 2:</strong> Mana yang BUKAN properti heuristik admissible?</p>
+                <ol type="A">
+                    <li class="fragment">h(n) ≤ h*(n)</li>
+                    <li class="fragment">h(goal) = 0</li>
+                    <li class="fragment highlight-green">h(n) selalu sama dengan h*(n) ✓</li>
+                    <li class="fragment">h(n) ≥ 0</li>
+                </ol>
+                <p class="fragment"><em>Admissible = tidak overestimate, bukan harus exact</em></p>
+            </section>
+            
+            <!-- ==================== SLIDE 28: MERANCANG HEURISTIK ==================== -->
+            <section>
+                <h2>🛠️ Merancang Heuristik</h2>
+                <h3>Teknik: Relaxed Problem</h3>
+                <div class="definition-box fragment">
+                    <p>Hilangkan beberapa constraint dari masalah asli. Biaya optimal dari relaxed problem → heuristik admissible!</p>
+                </div>
+            </section>
+            
+            <!-- ==================== SLIDE 29: RELAXATION CONTOH ==================== -->
+            <section>
+                <h2>🧩 Relaxation untuk 8-Puzzle</h2>
+                <table>
+                    <tr>
+                        <th>Relaxation</th>
+                        <th>Heuristik</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Tile bisa teleport ke mana saja</td>
+                        <td>Misplaced Tiles</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Tile bisa menembus tile lain</td>
+                        <td>Manhattan Distance</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Tidak ada relaxation</td>
+                        <td>h* (biaya sebenarnya)</td>
+                    </tr>
+                </table>
+                <p class="fragment">Semakin sedikit relaxation → heuristik lebih informatif</p>
+            </section>
+            
+            <!-- ==================== SLIDE 30: KOMBINASI HEURISTIK ==================== -->
+            <section>
+                <h2>🔀 Kombinasi Heuristik</h2>
+                <p>Jika h₁ dan h₂ keduanya admissible:</p>
+                <div class="formula fragment">
+                    h(n) = max(h₁(n), h₂(n))
+                </div>
+                <p class="fragment">Hasilnya:</p>
+                <ul>
+                    <li class="fragment">✓ Tetap admissible</li>
+                    <li class="fragment">✓ Mendominasi h₁ dan h₂</li>
+                    <li class="fragment">✓ A* lebih efisien!</li>
+                </ul>
+            </section>
+            
+            <!-- ==================== SLIDE 31: OPTIMALITAS BUKTI ==================== -->
+            <section>
+                <h2>📊 Mengapa A* Optimal?</h2>
+                <img src="images/p03-05-astar-optimality-proof.png" alt="A* Optimality" class="r-stretch">
+                <p class="fragment">A* ekspansi dalam urutan f-value → goal optimal ditemukan duluan!</p>
+            </section>
+            
+            <!-- ==================== SLIDE 32: KOMPLEKSITAS ==================== -->
+            <section>
+                <h2>⏱️ Kompleksitas A*</h2>
+                <table>
+                    <tr>
+                        <th>Metrik</th>
+                        <th>Worst Case</th>
+                        <th>Dengan h baik</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Waktu</td>
+                        <td>O(b<sup>d</sup>)</td>
+                        <td>Mendekati O(d)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Ruang</td>
+                        <td>O(b<sup>d</sup>)</td>
+                        <td>O(b<sup>d</sup>)</td>
+                    </tr>
+                </table>
+                <p class="fragment warning-text">⚠️ Memori adalah bottleneck utama A*!</p>
+            </section>
+            
+            <!-- ==================== SLIDE 33: IDA* ==================== -->
+            <section>
+                <h2>💾 IDA* (Iterative Deepening A*)</h2>
+                <p>Solusi untuk masalah memori:</p>
+                <ul>
+                    <li class="fragment">Gunakan f-limit sebagai cutoff (bukan depth)</li>
+                    <li class="fragment">Setiap iterasi naikkan f-limit</li>
+                    <li class="fragment"><strong>Space: O(bd)</strong> - Linear!</li>
+                    <li class="fragment">Tetap optimal dengan h admissible</li>
+                </ul>
+            </section>
+            
+            <!-- ==================== SLIDE 34: APLIKASI ==================== -->
+            <section data-background-color="#1a3a2a">
+                <h2>🎮 Aplikasi A*</h2>
+                <div class="two-column">
+                    <div>
+                        <h3>Games</h3>
+                        <ul>
+                            <li class="fragment">NPC pathfinding</li>
+                            <li class="fragment">Puzzle solving</li>
+                            <li class="fragment">Strategy planning</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Real World</h3>
+                        <ul>
+                            <li class="fragment">GPS navigation</li>
+                            <li class="fragment">Robot motion</li>
+                            <li class="fragment">Network routing</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- ==================== SLIDE 35: KONTEKS PERTAHANAN ==================== -->
+            <section>
+                <h2>🎖️ Aplikasi Pertahanan</h2>
+                <ul>
+                    <li class="fragment"><strong>UAV Path Planning</strong> - Hindari radar musuh</li>
+                    <li class="fragment"><strong>SAR Operations</strong> - Cari korban optimal</li>
+                    <li class="fragment"><strong>Tactical Movement</strong> - Minimize exposure</li>
+                    <li class="fragment"><strong>Logistics</strong> - Optimal supply routes</li>
+                </ul>
+            </section>
+            
+            <!-- ==================== SLIDE 36: UAV HEURISTIC ==================== -->
+            <section>
+                <h2>🛩️ Heuristik UAV</h2>
+                <pre><code class="language-cpp" data-trim>
+double heuristic(State n, Target t, vector&lt;Radar&gt;&amp; radars) {
+    // Jarak ke target
+    double dist = euclideanDistance(n.pos, t.pos);
+    
+    // Penalti radar
+    double penalty = 0;
+    for (auto&amp; r : radars) {
+        if (distance(n, r) < r.range)
+            penalty += r.threat_level;
+    }
+    
+    return dist + RADAR_WEIGHT * penalty;
+}
+                </code></pre>
+            </section>
+            
+            <!-- ==================== SLIDE 37: QUIZ 3 ==================== -->
+            <section data-background-color="#4a1a4a">
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Soal 3:</strong> Manhattan distance untuk state ini?</p>
+                <pre>
+Current: [2,1,3,4,5,6,7,8,0]
+Goal:    [1,2,3,4,5,6,7,8,0]</pre>
+                <ol type="A">
+                    <li class="fragment">1</li>
+                    <li class="fragment highlight-green">2 ✓</li>
+                    <li class="fragment">3</li>
+                    <li class="fragment">4</li>
+                </ol>
+                <p class="fragment"><em>Tile 1: jarak 1, Tile 2: jarak 1 → Total = 2</em></p>
+            </section>
+            
+            <!-- ==================== SLIDE 38: SUMMARY TABLE ==================== -->
+            <section>
+                <h2>📋 Ringkasan</h2>
+                <table class="small-table">
+                    <tr><th>Konsep</th><th>Definisi</th></tr>
+                    <tr><td>Heuristik</td><td>Estimasi biaya ke goal</td></tr>
+                    <tr><td>Greedy BFS</td><td>f(n) = h(n)</td></tr>
+                    <tr><td>A*</td><td>f(n) = g(n) + h(n)</td></tr>
+                    <tr><td>Admissible</td><td>h(n) ≤ h*(n)</td></tr>
+                    <tr><td>Consistent</td><td>h(n) ≤ c + h(n')</td></tr>
+                    <tr><td>Dominance</td><td>h₂ ≥ h₁ → lebih efisien</td></tr>
+                </table>
+            </section>
+            
+            <!-- ==================== SLIDE 39: KEY TAKEAWAYS ==================== -->
+            <section>
+                <h2>🔑 Key Takeaways</h2>
+                <ol>
+                    <li class="fragment">Heuristik = estimasi biaya ke goal</li>
+                    <li class="fragment">A* = UCS + Greedy (terbaik dari keduanya)</li>
+                    <li class="fragment">Admissible h → A* optimal</li>
+                    <li class="fragment">Heuristik lebih baik → A* lebih cepat</li>
+                    <li class="fragment">Relaxed problem → cara membuat heuristik</li>
+                </ol>
+            </section>
+            
+            <!-- ==================== SLIDE 40: NEXT WEEK ==================== -->
+            <section>
+                <h2>📅 Pertemuan Berikutnya</h2>
+                <div class="highlight-box">
+                    <h3>Pertemuan 04: Pencarian Lokal dan Optimisasi</h3>
+                    <p class="medium-text">Local Search dan Optimization Algorithms</p>
+                </div>
+                <ul class="medium-text">
+                    <li class="fragment">Hill Climbing</li>
+                    <li class="fragment">Simulated Annealing</li>
+                    <li class="fragment">Algoritma Genetika</li>
+                </ul>
+            </section>
+
+            <!-- ==================== SLIDE 41: REFERENCES ==================== -->
+            <section>
+                <h2>📚 Referensi</h2>
+                <ol class="small-text">
+                    <li>Russell, S. & Norvig, P. (2020). <em>Artificial Intelligence: A Modern Approach</em> (4th Ed.). Pearson. <strong>Chapter 3.5-3.6</strong></li>
+                    <li>Ertel, W. (2017). <em>Introduction to Artificial Intelligence</em> (2nd Ed.). Springer. Chapter 4.</li>
+                    <li>CS188 Berkeley AI Materials: <a href="https://inst.eecs.berkeley.edu/~cs188/">https://inst.eecs.berkeley.edu/~cs188/</a></li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 42: CLOSING ==================== -->
+            <section class="center">
+                <h1>Terima Kasih</h1>
+                <h3>🤖 Kecerdasan Artifisial</h3>
+                <p>Pertemuan 03: Pencarian Heuristik - Informed Search</p>
+                <br>
+                <p class="small-text">Ada pertanyaan?</p>
+            </section>
+            
+        </div>
+    </div>
+
+    <!-- Reveal.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/math/math.min.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            showSlideNumber: 'all',
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            pdfSeparateFragments: false,
+            plugins: [ RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+        });
+    </script>
+</body>
+</html>
