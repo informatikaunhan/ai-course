@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pertemuan 11: Penalaran dengan Ketidakpastian - Probabilitas</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/league.min.css">
+    
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css">
+    
+    <!-- Custom Theme -->
+    <link rel="stylesheet" href="unhan-theme.css">
+    
+    <style>
+        /* Fallback styles if unhan-theme.css is not available */
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+        }
+        .reveal .slides section {
+            text-align: left;
+        }
+        .reveal .slides section.center {
+            text-align: center;
+        }
+        .reveal table {
+            margin: 20px auto;
+            font-size: 0.7em;
+        }
+        .reveal table th {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px;
+        }
+        .reveal table td {
+            padding: 8px 12px;
+            border: 1px solid #444;
+        }
+        .reveal .highlight-box {
+            background-color: rgba(37, 99, 235, 0.2);
+            border-left: 4px solid #2563eb;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .definition-box {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .warning-box {
+            background-color: rgba(245, 158, 11, 0.2);
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .two-column {
+            display: flex;
+            gap: 40px;
+        }
+        .reveal .two-column > div {
+            flex: 1;
+        }
+        .reveal .emoji-large {
+            font-size: 3em;
+        }
+        .reveal .quiz-option {
+            background-color: rgba(100, 100, 100, 0.3);
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .reveal .quiz-option:hover {
+            background-color: rgba(37, 99, 235, 0.4);
+        }
+        .reveal code {
+            background-color: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .reveal pre code {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .reveal .small-text {
+            font-size: 0.6em;
+        }
+        .reveal .medium-text {
+            font-size: 0.8em;
+        }
+        .reveal img {
+            max-height: 450px;
+            border-radius: 8px;
+        }
+        .reveal .formula-highlight {
+            background: rgba(212, 168, 75, 0.15);
+            border: 2px solid #d4a84b;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        .reveal .step-card {
+            background: rgba(26, 58, 110, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- ==================== SLIDE 1: TITLE ==================== -->
+            <section class="center">
+                <h1>Kecerdasan Artifisial</h1>
+                <h3>Pertemuan 11</h3>
+                <h2>Penalaran dengan Ketidakpastian — Probabilitas</h2>
+                <p class="small-text" style="margin-top: 50px;">
+                    Mata Kuliah: Kecerdasan Artifisial (AI401) | 3 SKS
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 2: LEARNING OUTCOMES ==================== -->
+            <section>
+                <h2>🎯 Capaian Pembelajaran</h2>
+                <p>Setelah pertemuan ini, mahasiswa mampu:</p>
+                <ol class="medium-text">
+                    <li class="fragment">Menjelaskan sumber ketidakpastian dalam AI</li>
+                    <li class="fragment">Mengidentifikasi keterbatasan logika untuk ketidakpastian</li>
+                    <li class="fragment">Menerapkan probabilitas bersyarat dan aturan produk</li>
+                    <li class="fragment">Menghitung posterior menggunakan Teorema Bayes</li>
+                    <li class="fragment">Menerapkan normalisasi dalam perhitungan Bayes</li>
+                    <li class="fragment">Membedakan independensi dan independensi bersyarat</li>
+                    <li class="fragment">Menerapkan Naive Bayes untuk klasifikasi</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 3: AGENDA ==================== -->
+            <section>
+                <h2>📋 Agenda Hari Ini</h2>
+                <div class="two-column">
+                    <div>
+                        <h4>Bagian 1</h4>
+                        <ul class="medium-text">
+                            <li>Sumber Ketidakpastian</li>
+                            <li>Keterbatasan Logika</li>
+                            <li>Dasar Probabilitas</li>
+                            <li>Probabilitas Bersyarat</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Bagian 2</h4>
+                        <ul class="medium-text">
+                            <li>Teorema Bayes</li>
+                            <li>Normalisasi</li>
+                            <li>Independensi Bersyarat</li>
+                            <li>Naive Bayes Classifier</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 4: RECAP ==================== -->
+            <section>
+                <h2>🔄 Recap: Pertemuan 9-10</h2>
+                <div class="two-column medium-text">
+                    <div>
+                        <div class="highlight-box">
+                            <h4>Logika Proposisional</h4>
+                            <ul>
+                                <li>Konnektif: ∧, ∨, ¬, →</li>
+                                <li>Inferensi: Modus Ponens, Resolution</li>
+                                <li>Pengetahuan bersifat <strong>PASTI</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="highlight-box">
+                            <h4>Logika Predikat (FOL)</h4>
+                            <ul>
+                                <li>Kuantor: ∀, ∃</li>
+                                <li>Unifikasi, Forward/Backward Chaining</li>
+                                <li>Pengetahuan bersifat <strong>PASTI</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <p class="fragment warning-box">⚠️ Masalah: Dunia nyata penuh <strong>ketidakpastian</strong>! Logika biner (TRUE/FALSE) tidak cukup.</p>
+            </section>
+
+            <!-- ==================== SLIDE 5: WHY UNCERTAINTY ==================== -->
+            <section>
+                <h2>❓ Mengapa Ketidakpastian Penting?</h2>
+                <div class="definition-box">
+                    <strong>Ketidakpastian</strong> — Agen tidak memiliki informasi lengkap atau pasti tentang state lingkungan, efek tindakan, atau hubungan sebab-akibat.
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Contoh:</strong> Radar mendeteksi sinyal →</p>
+                    <ul class="medium-text">
+                        <li>Pesawat musuh? 🎯</li>
+                        <li>Pesawat sipil? ✈️</li>
+                        <li>Burung? 🐦</li>
+                        <li>Noise? 📡</li>
+                    </ul>
+                    <p class="medium-text">Tidak bisa dijawab dengan TRUE/FALSE!</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 6: SOURCES OF UNCERTAINTY ==================== -->
+            <section>
+                <h2>🔍 Sumber Ketidakpastian</h2>
+                <table>
+                    <tr>
+                        <th>Sumber</th>
+                        <th>Deskripsi</th>
+                        <th>Contoh</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Laziness</strong></td>
+                        <td>Terlalu sulit mendaftar semua aturan</td>
+                        <td>"Jika demam → flu" (mengabaikan puluhan penyakit lain)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Ignorance</strong></td>
+                        <td>Informasi tidak tersedia</td>
+                        <td>Hasil tes belum keluar, data radar tidak lengkap</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Sensor Noise</strong></td>
+                        <td>Data tidak akurat</td>
+                        <td>Radar false positive/negative</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Adversarial</strong></td>
+                        <td>Musuh menyembunyikan info</td>
+                        <td>Stealth aircraft, cyber deception</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 7: LIMITATIONS OF LOGIC ==================== -->
+            <section>
+                <h2>⛔ Keterbatasan Logika</h2>
+                <div class="two-column medium-text">
+                    <div>
+                        <div class="warning-box">
+                            <h4>Masalah Logika Biner</h4>
+                            <ul>
+                                <li class="fragment"><strong>Biner:</strong> Hanya TRUE/FALSE</li>
+                                <li class="fragment"><strong>Monotonic:</strong> Info baru tidak bisa batalkan kesimpulan</li>
+                                <li class="fragment"><strong>Qualification Problem:</strong> Tak mungkin daftar semua prasyarat</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>Solusi: Probabilitas!</h4>
+                            <p>Gunakan <strong>derajat kepercayaan</strong> (0 sampai 1)</p>
+                            <p><em>"Sinyal ini 75% kemungkinan pesawat musuh"</em></p>
+                            <p>Lebih informatif daripada TRUE/FALSE</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 8: PROBABILITY BASICS ==================== -->
+            <section>
+                <h2>📊 Dasar-Dasar Probabilitas</h2>
+                <div class="definition-box">
+                    <strong>Probabilitas</strong> — Ukuran numerik derajat kepercayaan terhadap suatu proposisi, bernilai antara 0 (pasti salah) dan 1 (pasti benar).
+                </div>
+                <table class="fragment medium-text">
+                    <tr>
+                        <th>Notasi</th>
+                        <th>Makna</th>
+                        <th>Contoh</th>
+                    </tr>
+                    <tr>
+                        <td>P(A)</td>
+                        <td>Probabilitas event A</td>
+                        <td>P(Hujan) = 0.3</td>
+                    </tr>
+                    <tr>
+                        <td>P(¬A)</td>
+                        <td>Probabilitas bukan A</td>
+                        <td>P(¬Hujan) = 0.7</td>
+                    </tr>
+                    <tr>
+                        <td>P(A, B)</td>
+                        <td>Joint probability</td>
+                        <td>P(Hujan, Macet)</td>
+                    </tr>
+                    <tr>
+                        <td>P(A | B)</td>
+                        <td>Conditional probability</td>
+                        <td>P(Macet | Hujan)</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 9: AXIOMS ==================== -->
+            <section>
+                <h2>📐 Aksioma Probabilitas</h2>
+                <p class="medium-text">Tiga aksioma Kolmogorov:</p>
+                <div class="step-card fragment">
+                    <p><strong>1. Non-negativity:</strong> P(A) ≥ 0 untuk semua event A</p>
+                </div>
+                <div class="step-card fragment">
+                    <p><strong>2. Normalization:</strong> P(Ω) = 1 — total probabilitas seluruh sample space = 1</p>
+                </div>
+                <div class="step-card fragment">
+                    <p><strong>3. Additivity:</strong> Jika A dan B mutually exclusive: P(A ∪ B) = P(A) + P(B)</p>
+                </div>
+                <div class="fragment highlight-box">
+                    <p>Turunan penting: <strong>P(¬A) = 1 − P(A)</strong> dan <strong>0 ≤ P(A) ≤ 1</strong></p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 10: PRIOR PROBABILITY ==================== -->
+            <section>
+                <h2>📌 Prior Probability</h2>
+                <div class="definition-box">
+                    <strong>Prior Probability</strong> (probabilitas prior) — Probabilitas yang ditetapkan <em>sebelum</em> ada bukti baru. Disebut juga <em>unconditional probability</em>.
+                </div>
+                <div class="fragment medium-text">
+                    <p><strong>Contoh:</strong></p>
+                    <ul>
+                        <li>P(Pesawat asing melintas) = 0.02 (data historis)</li>
+                        <li>P(Serangan siber hari ini) = 0.05</li>
+                        <li>P(Sensor radar false alarm) = 0.03</li>
+                    </ul>
+                </div>
+                <p class="fragment warning-box medium-text">Prior bisa diperbarui saat ada bukti baru → inilah inti <strong>Teorema Bayes</strong>!</p>
+            </section>
+
+            <!-- ==================== SLIDE 11: JOINT PROBABILITY ==================== -->
+            <section>
+                <h2>📋 Joint Probability</h2>
+                <p class="medium-text">Contoh: 1000 misi drone TNI AU</p>
+                <table class="medium-text fragment">
+                    <tr>
+                        <th></th>
+                        <th>Misi Sukses</th>
+                        <th>Misi Gagal</th>
+                        <th>Total</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Cuaca Baik</strong></td>
+                        <td>600</td>
+                        <td>50</td>
+                        <td>650</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cuaca Buruk</strong></td>
+                        <td>200</td>
+                        <td>150</td>
+                        <td>350</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total</strong></td>
+                        <td>800</td>
+                        <td>200</td>
+                        <td><strong>1000</strong></td>
+                    </tr>
+                </table>
+                <div class="fragment medium-text">
+                    <p><strong>Joint:</strong> P(Cuaca Baik, Sukses) = 600/1000 = 0.60</p>
+                    <p><strong>Marginal:</strong> P(Sukses) = 800/1000 = 0.80</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 12: CONDITIONAL PROBABILITY ==================== -->
+            <section>
+                <h2>🔗 Probabilitas Bersyarat</h2>
+                <div class="formula-highlight">
+                    <p>$$P(A \mid B) = \frac{P(A, B)}{P(B)}$$</p>
+                </div>
+                <p class="fragment medium-text">"Probabilitas A terjadi, <em>diketahui</em> B telah terjadi"</p>
+                <div class="fragment">
+                    <img src="images/p11-01-conditional-probability-venn.png" alt="Probabilitas Bersyarat" style="max-height: 300px;">
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 13: CONDITIONAL EXAMPLE ==================== -->
+            <section>
+                <h2>🧮 Contoh Probabilitas Bersyarat</h2>
+                <p class="medium-text">Dari data misi drone:</p>
+                <div class="two-column">
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>Cuaca Baik</h4>
+                            <p>P(Sukses | Cuaca Baik)</p>
+                            <p>= 0.60 / 0.65</p>
+                            <p>= <strong>0.923 (92.3%)</strong></p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="warning-box">
+                            <h4>Cuaca Buruk</h4>
+                            <p>P(Sukses | Cuaca Buruk)</p>
+                            <p>= 0.20 / 0.35</p>
+                            <p>= <strong>0.571 (57.1%)</strong></p>
+                        </div>
+                    </div>
+                </div>
+                <p class="fragment highlight-box medium-text">💡 Cuaca secara signifikan mempengaruhi keberhasilan misi (92% vs 57%)!</p>
+            </section>
+
+            <!-- ==================== SLIDE 14: PRODUCT RULE ==================== -->
+            <section>
+                <h2>✖️ Aturan Produk (Product Rule)</h2>
+                <div class="formula-highlight">
+                    <p>$$P(A, B) = P(A \mid B) \cdot P(B) = P(B \mid A) \cdot P(A)$$</p>
+                </div>
+                <p class="medium-text fragment">Menulis ulang rumus conditional probability:</p>
+                <ul class="medium-text">
+                    <li class="fragment">Joint probability = conditional × marginal</li>
+                    <li class="fragment">Ini adalah fondasi untuk <strong>Teorema Bayes</strong></li>
+                </ul>
+                <div class="fragment highlight-box medium-text">
+                    <p><strong>Contoh:</strong> P(Sukses, Cuaca Baik) = P(Sukses | Cuaca Baik) × P(Cuaca Baik)</p>
+                    <p>= 0.923 × 0.65 = 0.60 ✓</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 15: BAYES THEOREM INTRO ==================== -->
+            <section>
+                <h2>⭐ Teorema Bayes</h2>
+                <div class="definition-box">
+                    <strong>Teorema Bayes</strong> memungkinkan kita memperbarui kepercayaan terhadap hipotesis berdasarkan bukti baru.
+                </div>
+                <div class="formula-highlight fragment">
+                    <p style="font-size: 1.2em;">$$P(H \mid E) = \frac{P(E \mid H) \cdot P(H)}{P(E)}$$</p>
+                </div>
+                <p class="fragment medium-text">Ini mungkin rumus <strong>paling penting</strong> dalam AI probabilistik!</p>
+            </section>
+
+            <!-- ==================== SLIDE 16: BAYES COMPONENTS ==================== -->
+            <section>
+                <h2>🧩 Komponen Teorema Bayes</h2>
+                <img src="images/p11-02-bayes-theorem-components.png" alt="Komponen Teorema Bayes" style="max-height: 300px;">
+                <table class="medium-text fragment">
+                    <tr>
+                        <th>Komponen</th>
+                        <th>Nama</th>
+                        <th>Makna</th>
+                    </tr>
+                    <tr>
+                        <td>P(H | E)</td>
+                        <td><strong>Posterior</strong></td>
+                        <td>Kepercayaan setelah bukti</td>
+                    </tr>
+                    <tr>
+                        <td>P(E | H)</td>
+                        <td><strong>Likelihood</strong></td>
+                        <td>Seberapa cocok bukti dengan hipotesis</td>
+                    </tr>
+                    <tr>
+                        <td>P(H)</td>
+                        <td><strong>Prior</strong></td>
+                        <td>Kepercayaan awal</td>
+                    </tr>
+                    <tr>
+                        <td>P(E)</td>
+                        <td><strong>Evidence</strong></td>
+                        <td>Konstanta normalisasi</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 17: BAYES DERIVATION ==================== -->
+            <section>
+                <h2>📝 Derivasi Teorema Bayes</h2>
+                <div class="medium-text">
+                    <div class="step-card fragment">
+                        <p><strong>Step 1:</strong> Dari aturan produk: P(H, E) = P(H | E) · P(E)</p>
+                    </div>
+                    <div class="step-card fragment">
+                        <p><strong>Step 2:</strong> Juga: P(H, E) = P(E | H) · P(H)</p>
+                    </div>
+                    <div class="step-card fragment">
+                        <p><strong>Step 3:</strong> Karena ruas kiri sama: P(H | E) · P(E) = P(E | H) · P(H)</p>
+                    </div>
+                    <div class="step-card fragment">
+                        <p><strong>Step 4:</strong> Bagi kedua ruas dengan P(E):</p>
+                    </div>
+                </div>
+                <div class="formula-highlight fragment">
+                    <p>$$P(H \mid E) = \frac{P(E \mid H) \cdot P(H)}{P(E)}$$</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 18: TOTAL PROBABILITY ==================== -->
+            <section>
+                <h2>📊 Hukum Probabilitas Total</h2>
+                <p class="medium-text">Untuk menghitung P(E) — penyebut Teorema Bayes:</p>
+                <div class="formula-highlight">
+                    <p>$$P(E) = \sum_{i} P(E \mid H_i) \cdot P(H_i)$$</p>
+                </div>
+                <div class="fragment medium-text">
+                    <p><strong>Kasus biner:</strong></p>
+                    <div class="highlight-box">
+                        <p>P(E) = P(E | H) · P(H) + P(E | ¬H) · P(¬H)</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 19: BAYES EXAMPLE - RADAR ==================== -->
+            <section>
+                <h2>📡 Contoh: Deteksi Radar</h2>
+                <p class="medium-text"><strong>Diketahui:</strong></p>
+                <ul class="medium-text">
+                    <li>P(Musuh) = 0.01 (prior)</li>
+                    <li>P(Alarm | Musuh) = 0.95 (true positive)</li>
+                    <li>P(Alarm | ¬Musuh) = 0.03 (false positive)</li>
+                </ul>
+                <p class="fragment medium-text"><strong>Pertanyaan:</strong> Jika alarm berbunyi, berapa P(Musuh)?</p>
+            </section>
+
+            <!-- ==================== SLIDE 20: BAYES EXAMPLE - SOLUTION ==================== -->
+            <section>
+                <h2>📡 Solusi: Deteksi Radar</h2>
+                <div class="medium-text">
+                    <div class="step-card fragment">
+                        <p><strong>Step 1:</strong> P(Alarm) = 0.95 × 0.01 + 0.03 × 0.99 = 0.0095 + 0.0297 = <strong>0.0392</strong></p>
+                    </div>
+                    <div class="step-card fragment">
+                        <p><strong>Step 2:</strong> P(Musuh | Alarm) = (0.95 × 0.01) / 0.0392 = 0.0095 / 0.0392</p>
+                    </div>
+                    <div class="formula-highlight fragment">
+                        <p><strong>P(Musuh | Alarm) = 0.242 (24.2%)</strong></p>
+                    </div>
+                </div>
+                <p class="fragment warning-box medium-text">⚠️ Meskipun true positive rate = 95%, hanya 24.2% alarm benar karena prior sangat rendah (1%). Ini disebut <strong>Base Rate Fallacy</strong>!</p>
+            </section>
+
+            <!-- ==================== SLIDE 21: BASE RATE FALLACY ==================== -->
+            <section>
+                <h2>🚨 Base Rate Fallacy</h2>
+                <div class="warning-box">
+                    <strong>Base Rate Fallacy</strong> — Kesalahan mengabaikan prior probability (base rate) saat menilai bukti.
+                </div>
+                <div class="fragment medium-text">
+                    <p><strong>Intuisi yang salah:</strong></p>
+                    <p>"Radar akurasi 95% berbunyi → pasti 95% benar ada musuh"</p>
+                </div>
+                <div class="fragment medium-text">
+                    <p><strong>Kenyataan (Bayes):</strong></p>
+                    <p>"Dengan prior rendah (1%), alarm hanya 24.2% benar"</p>
+                </div>
+                <p class="fragment highlight-box medium-text">💡 Implikasi militer: Jangan langsung tembak saat alarm berbunyi — verifikasi dengan sensor tambahan!</p>
+            </section>
+
+            <!-- ==================== SLIDE 22: BAYESIAN UPDATING ==================== -->
+            <section>
+                <h2>🔄 Bayesian Updating</h2>
+                <p class="medium-text"><strong>Dua alarm radar berturut-turut (independen):</strong></p>
+                <table class="medium-text fragment">
+                    <tr>
+                        <th>Tahap</th>
+                        <th>Prior</th>
+                        <th>Evidence</th>
+                        <th>Posterior</th>
+                    </tr>
+                    <tr>
+                        <td>Awal</td>
+                        <td>1%</td>
+                        <td>—</td>
+                        <td>1%</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Setelah alarm 1</td>
+                        <td>1%</td>
+                        <td>Alarm +</td>
+                        <td><strong>24.2%</strong></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Setelah alarm 2</td>
+                        <td>24.2%</td>
+                        <td>Alarm +</td>
+                        <td><strong>91.0%</strong></td>
+                    </tr>
+                </table>
+                <p class="fragment definition-box medium-text">✅ Setiap bukti baru memperbarui kepercayaan → Bayesian updating kumulatif!</p>
+            </section>
+
+            <!-- ==================== SLIDE 23: NORMALIZATION ==================== -->
+            <section>
+                <h2>⚖️ Normalisasi</h2>
+                <div class="definition-box">
+                    <strong>Normalisasi</strong> — Teknik menghitung posterior tanpa P(E) eksplisit.
+                </div>
+                <div class="medium-text fragment">
+                    <p><strong>Prosedur:</strong></p>
+                    <ol>
+                        <li>Hitung <strong>numerator</strong> untuk setiap hipotesis: P(E | Hᵢ) × P(Hᵢ)</li>
+                        <li>Jumlahkan semua numerator → ini sama dengan P(E)</li>
+                        <li>Bagi setiap numerator dengan total</li>
+                    </ol>
+                </div>
+                <div class="formula-highlight fragment">
+                    <p>$$P(H \mid E) = \alpha \cdot P(E \mid H) \cdot P(H)$$</p>
+                    <p class="small-text">di mana α = 1/P(E) adalah konstanta normalisasi</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 24: NORMALIZATION EXAMPLE ==================== -->
+            <section>
+                <h2>📧 Contoh Normalisasi: Spam Filter</h2>
+                <p class="medium-text">P(Spam) = 0.4, P(Ham) = 0.6, P("gratis" | Spam) = 0.8, P("gratis" | Ham) = 0.1</p>
+                <div class="medium-text">
+                    <div class="step-card fragment">
+                        <p><strong>Step 1 — Numerator:</strong></p>
+                        <p>Spam: 0.8 × 0.4 = <strong>0.32</strong></p>
+                        <p>Ham: 0.1 × 0.6 = <strong>0.06</strong></p>
+                    </div>
+                    <div class="step-card fragment">
+                        <p><strong>Step 2 — Total:</strong> 0.32 + 0.06 = 0.38</p>
+                    </div>
+                    <div class="step-card fragment">
+                        <p><strong>Step 3 — Normalisasi:</strong></p>
+                        <p>P(Spam | "gratis") = 0.32 / 0.38 = <strong>0.842 (84.2%)</strong></p>
+                        <p>P(Ham | "gratis") = 0.06 / 0.38 = <strong>0.158 (15.8%)</strong></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 25: MULTI-HYPOTHESIS BAYES ==================== -->
+            <section>
+                <h2>📡 Bayes dengan Multiple Hipotesis</h2>
+                <p class="medium-text"><strong>Sistem SIGINT mendeteksi sinyal terenkripsi:</strong></p>
+                <table class="small-text">
+                    <tr>
+                        <th>Hipotesis</th>
+                        <th>Prior</th>
+                        <th>P(Enkripsi | H)</th>
+                        <th>Numerator</th>
+                        <th>Posterior</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Militer musuh</td>
+                        <td>0.10</td>
+                        <td>0.90</td>
+                        <td>0.090</td>
+                        <td><strong>0.556</strong></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Sipil</td>
+                        <td>0.70</td>
+                        <td>0.10</td>
+                        <td>0.070</td>
+                        <td>0.432</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Noise</td>
+                        <td>0.20</td>
+                        <td>0.01</td>
+                        <td>0.002</td>
+                        <td>0.012</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td colspan="3"><strong>Total</strong></td>
+                        <td><strong>0.162</strong></td>
+                        <td><strong>1.000</strong></td>
+                    </tr>
+                </table>
+                <p class="fragment highlight-box medium-text">Bukti enkripsi menaikkan probabilitas militer dari 10% → 55.6%!</p>
+            </section>
+
+            <!-- ==================== SLIDE 26: INDEPENDENCE ==================== -->
+            <section>
+                <h2>🔓 Independensi</h2>
+                <div class="definition-box">
+                    Dua event A dan B <strong>independen</strong> jika dan hanya jika:<br>
+                    <strong>P(A, B) = P(A) · P(B)</strong>
+                </div>
+                <div class="fragment medium-text">
+                    <p>Equivalen dengan: <strong>P(A | B) = P(A)</strong></p>
+                    <p><em>Mengetahui B tidak mengubah probabilitas A</em></p>
+                </div>
+                <div class="two-column fragment medium-text">
+                    <div>
+                        <div class="definition-box">
+                            <p>✅ <strong>Independen:</strong></p>
+                            <p>Lemparan dadu ke-1 dan ke-2</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="warning-box">
+                            <p>❌ <strong>Tidak Independen:</strong></p>
+                            <p>Cuaca dan keberhasilan misi</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 27: WHY INDEPENDENCE MATTERS ==================== -->
+            <section>
+                <h2>💡 Mengapa Independensi Penting?</h2>
+                <p class="medium-text"><strong>Full Joint Distribution tanpa independensi:</strong></p>
+                <table class="medium-text fragment">
+                    <tr>
+                        <th>Variabel Boolean</th>
+                        <th>Parameter</th>
+                    </tr>
+                    <tr>
+                        <td>5 variabel</td>
+                        <td>2⁵ − 1 = <strong>31</strong></td>
+                    </tr>
+                    <tr>
+                        <td>10 variabel</td>
+                        <td>2¹⁰ − 1 = <strong>1.023</strong></td>
+                    </tr>
+                    <tr>
+                        <td>20 variabel</td>
+                        <td>2²⁰ − 1 ≈ <strong>1 juta</strong></td>
+                    </tr>
+                    <tr>
+                        <td>30 variabel</td>
+                        <td>2³⁰ − 1 ≈ <strong>1 miliar!</strong></td>
+                    </tr>
+                </table>
+                <p class="fragment warning-box medium-text">⚠️ Pertumbuhan eksponensial! Asumsi independensi mengurangi parameter secara drastis.</p>
+            </section>
+
+            <!-- ==================== SLIDE 28: CONDITIONAL INDEPENDENCE ==================== -->
+            <section>
+                <h2>🔗 Independensi Bersyarat</h2>
+                <div class="definition-box">
+                    A dan B <strong>conditionally independent</strong> given C jika:<br>
+                    <strong>P(A, B | C) = P(A | C) · P(B | C)</strong>
+                </div>
+                <div class="fragment">
+                    <img src="images/p11-03-conditional-independence.png" alt="Independensi Bersyarat" style="max-height: 300px;">
+                </div>
+                <p class="fragment medium-text">Jika sudah tahu C, mengetahui B tidak menambah info tentang A.</p>
+            </section>
+
+            <!-- ==================== SLIDE 29: CONDITIONAL INDEPENDENCE EXAMPLE ==================== -->
+            <section>
+                <h2>📌 Contoh Independensi Bersyarat</h2>
+                <div class="medium-text">
+                    <table>
+                        <tr>
+                            <th>Variabel</th>
+                            <th>Keterangan</th>
+                        </tr>
+                        <tr>
+                            <td><strong>C (Penyebab)</strong></td>
+                            <td>Cuaca Buruk</td>
+                        </tr>
+                        <tr>
+                            <td><strong>A (Efek 1)</strong></td>
+                            <td>Traffic Macet</td>
+                        </tr>
+                        <tr>
+                            <td><strong>B (Efek 2)</strong></td>
+                            <td>Penerbangan Delay</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="fragment medium-text">
+                    <p>❌ A dan B <strong>tidak</strong> independen secara umum (keduanya sering terjadi bersamaan)</p>
+                </div>
+                <div class="fragment medium-text">
+                    <p>✅ A dan B <strong>conditionally independent given C</strong>: Jika tahu cuaca buruk, traffic macet tidak menambah info tentang penerbangan delay</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 30: SENSOR FUSION ==================== -->
+            <section>
+                <h2>📡 Sensor Fusion dengan Bayes</h2>
+                <p class="medium-text"><strong>Dua radar (conditionally independent):</strong></p>
+                <ul class="medium-text">
+                    <li>P(H) = 0.02, P(R₁⁺ | H) = 0.90, P(R₂⁺ | H) = 0.85</li>
+                    <li>P(R₁⁺ | ¬H) = 0.05, P(R₂⁺ | ¬H) = 0.08</li>
+                </ul>
+                <div class="medium-text">
+                    <div class="step-card fragment">
+                        <p><strong>Kedua radar positif:</strong></p>
+                        <p>P(R₁⁺, R₂⁺ | H) = 0.90 × 0.85 = 0.765</p>
+                        <p>P(R₁⁺, R₂⁺ | ¬H) = 0.05 × 0.08 = 0.004</p>
+                    </div>
+                    <div class="formula-highlight fragment">
+                        <p><strong>P(H | R₁⁺, R₂⁺) = 79.6%</strong></p>
+                    </div>
+                </div>
+                <p class="fragment highlight-box medium-text">💡 Dari prior 2% → 79.6%! Sensor fusion meningkatkan kepercayaan secara dramatis.</p>
+            </section>
+
+            <!-- ==================== SLIDE 31: NAIVE BAYES INTRO ==================== -->
+            <section>
+                <h2>🤖 Naive Bayes Classifier</h2>
+                <div class="definition-box">
+                    <strong>Naive Bayes</strong> — Model probabilistik yang menggunakan Teorema Bayes dengan asumsi <em>conditional independence</em> antar fitur given kelas.
+                </div>
+                <div class="formula-highlight fragment">
+                    <p>$$\hat{C} = \arg\max_C \; P(C) \cdot \prod_{i=1}^{n} P(x_i \mid C)$$</p>
+                </div>
+                <p class="fragment medium-text">Pilih kelas yang memaksimalkan prior × product of likelihoods</p>
+            </section>
+
+            <!-- ==================== SLIDE 32: NAIVE BAYES STRUCTURE ==================== -->
+            <section>
+                <h2>🏗️ Struktur Naive Bayes</h2>
+                <img src="images/p11-04-naive-bayes-structure.png" alt="Struktur Naive Bayes" style="max-height: 350px;">
+                <p class="medium-text fragment">Kelas sebagai <strong>parent</strong>, fitur sebagai <strong>children</strong> yang conditionally independent.</p>
+                <p class="small-text fragment">📌 Inilah bentuk paling sederhana dari <strong>Jaringan Bayesian</strong> (Pertemuan 12)</p>
+            </section>
+
+            <!-- ==================== SLIDE 33: WHY NAIVE ==================== -->
+            <section>
+                <h2>❓ Mengapa Disebut "Naive"?</h2>
+                <div class="two-column medium-text">
+                    <div>
+                        <div class="definition-box">
+                            <h4>✅ Kelebihan</h4>
+                            <ul>
+                                <li class="fragment">Sederhana dan cepat</li>
+                                <li class="fragment">Bekerja baik dengan data sedikit</li>
+                                <li class="fragment">Mudah diinterpretasi</li>
+                                <li class="fragment">Robust terhadap fitur irrelevant</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="warning-box">
+                            <h4>⚠️ Kekurangan</h4>
+                            <ul>
+                                <li class="fragment">Asumsi independensi <em>jarang benar</em></li>
+                                <li class="fragment">Tidak model korelasi fitur</li>
+                                <li class="fragment">Estimasi probabilitas bisa buruk</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <p class="fragment highlight-box medium-text">Meski asumsi dilanggar, Naive Bayes sering tetap memberikan klasifikasi yang benar!</p>
+            </section>
+
+            <!-- ==================== SLIDE 34: SPAM FILTER DATA ==================== -->
+            <section>
+                <h2>📧 Contoh: Spam Filter</h2>
+                <p class="medium-text">Data training:</p>
+                <table class="small-text">
+                    <tr>
+                        <th>Email</th>
+                        <th>"diskon"</th>
+                        <th>"gratis"</th>
+                        <th>"rapat"</th>
+                        <th>"laporan"</th>
+                        <th>Kelas</th>
+                    </tr>
+                    <tr>
+                        <td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>Spam</td>
+                    </tr>
+                    <tr>
+                        <td>2</td><td>1</td><td>0</td><td>0</td><td>0</td><td>Spam</td>
+                    </tr>
+                    <tr>
+                        <td>3</td><td>0</td><td>1</td><td>0</td><td>1</td><td>Spam</td>
+                    </tr>
+                    <tr>
+                        <td>4</td><td>0</td><td>0</td><td>1</td><td>1</td><td>Ham</td>
+                    </tr>
+                    <tr>
+                        <td>5</td><td>0</td><td>0</td><td>1</td><td>0</td><td>Ham</td>
+                    </tr>
+                    <tr>
+                        <td>6</td><td>1</td><td>0</td><td>1</td><td>1</td><td>Ham</td>
+                    </tr>
+                </table>
+                <p class="fragment medium-text">Klasifikasikan: <strong>"diskon"=1, "gratis"=0, "rapat"=1, "laporan"=0</strong></p>
+            </section>
+
+            <!-- ==================== SLIDE 35: SPAM FILTER SOLUTION ==================== -->
+            <section>
+                <h2>📧 Solusi Spam Filter (Laplace Smoothing)</h2>
+                <div class="medium-text">
+                    <div class="step-card fragment">
+                        <p><strong>Prior:</strong> P(Spam) = 0.5, P(Ham) = 0.5</p>
+                    </div>
+                    <div class="step-card fragment">
+                        <p><strong>Spam:</strong> 0.5 × (3/5) × (2/5) × (1/5) × (3/5) = <strong>0.0144</strong></p>
+                    </div>
+                    <div class="step-card fragment">
+                        <p><strong>Ham:</strong> 0.5 × (2/5) × (4/5) × (4/5) × (2/5) = <strong>0.0512</strong></p>
+                    </div>
+                    <div class="step-card fragment">
+                        <p><strong>Normalisasi:</strong></p>
+                        <p>P(Spam) = 0.0144 / 0.0656 = 22.0%</p>
+                        <p>P(Ham) = 0.0512 / 0.0656 = <strong>78.0%</strong></p>
+                    </div>
+                </div>
+                <p class="fragment definition-box medium-text">✅ Hasil: <strong>Ham</strong> (bukan spam) — kata "rapat" sangat berkorelasi dengan Ham.</p>
+            </section>
+
+            <!-- ==================== SLIDE 36: LAPLACE SMOOTHING ==================== -->
+            <section>
+                <h2>🧊 Laplace Smoothing</h2>
+                <div class="warning-box">
+                    <strong>Masalah:</strong> Jika P(fitur | kelas) = 0, seluruh produk = 0!
+                </div>
+                <div class="formula-highlight fragment">
+                    <p>$$P_{smooth}(x_i = v \mid C) = \frac{count(x_i = v, C) + k}{count(C) + k \cdot |V|}$$</p>
+                    <p class="small-text">k = pseudocount (biasanya 1), |V| = jumlah nilai yang mungkin</p>
+                </div>
+                <div class="fragment medium-text">
+                    <p><strong>Contoh:</strong></p>
+                    <p>Tanpa smoothing: P("rapat"=1 | Spam) = 0/3 = <strong>0</strong> → produk = 0!</p>
+                    <p>Dengan smoothing: P("rapat"=1 | Spam) = (0+1)/(3+2) = <strong>0.2</strong> ✓</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 37: DEFENSE APPLICATION ==================== -->
+            <section>
+                <h2>🎖️ Aplikasi: Klasifikasi Target Radar</h2>
+                <p class="medium-text">Objek terdeteksi: kecepatan <strong>tinggi</strong>, altitude <strong>rendah</strong>, RCS <strong>kecil</strong></p>
+                <table class="small-text fragment">
+                    <tr>
+                        <th>Kelas</th>
+                        <th>Prior</th>
+                        <th>Likelihood</th>
+                        <th>Unnorm.</th>
+                        <th>Posterior</th>
+                    </tr>
+                    <tr>
+                        <td>Pesawat Tempur</td>
+                        <td>0.15</td>
+                        <td>0.90 × 0.30 × 0.40</td>
+                        <td>0.0162</td>
+                        <td><strong>45.0%</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Pesawat Sipil</td>
+                        <td>0.70</td>
+                        <td>0.80 × 0.15 × 0.10</td>
+                        <td>0.0084</td>
+                        <td>23.3%</td>
+                    </tr>
+                    <tr>
+                        <td>Drone</td>
+                        <td>0.15</td>
+                        <td>0.10 × 0.80 × 0.95</td>
+                        <td>0.0114</td>
+                        <td>31.7%</td>
+                    </tr>
+                </table>
+                <p class="fragment warning-box medium-text">⚠️ Prior pesawat sipil 70%, tapi posterior hanya 23.3%! Bukti mengubah kesimpulan.</p>
+            </section>
+
+            <!-- ==================== SLIDE 38: EXPECTED UTILITY ==================== -->
+            <section>
+                <h2>🎯 Probabilitas + Utility = Keputusan</h2>
+                <p class="medium-text"><strong>Expected Utility:</strong></p>
+                <div class="formula-highlight">
+                    <p>$$EU(aksi) = \sum_i P(outcome_i) \times U(outcome_i)$$</p>
+                </div>
+                <div class="fragment medium-text">
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th>Cuaca Baik (0.7)</th>
+                            <th>Cuaca Buruk (0.3)</th>
+                            <th>EU</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Patroli</strong></td>
+                            <td>80</td>
+                            <td>-20</td>
+                            <td><strong>50</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Kembali</strong></td>
+                            <td>30</td>
+                            <td>50</td>
+                            <td>36</td>
+                        </tr>
+                    </table>
+                </div>
+                <p class="fragment highlight-box medium-text">Aksi rasional: <strong>Patroli</strong> (EU = 50 > 36)</p>
+            </section>
+
+            <!-- ==================== SLIDE 39: PROBABILISTIC INFERENCE FLOW ==================== -->
+            <section>
+                <h2>🔄 Alur Inferensi Probabilistik</h2>
+                <img src="images/p11-05-probabilistic-inference-flow.png" alt="Alur Inferensi Probabilistik" style="max-height: 350px;">
+                <p class="medium-text fragment">Data Sensor → Model Probabilistik → Inferensi Bayes → Posterior → Keputusan</p>
+            </section>
+
+            <!-- ==================== SLIDE 40: QUIZ 1 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 1:</strong></p>
+                <p class="medium-text">Sebuah tes keamanan siber memiliki true positive rate 90% dan false positive rate 5%. Jika P(serangan) = 0.01, berapa P(serangan | alarm)?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. 90%</div>
+                <div class="quiz-option fragment" data-fragment-index="2">B. 50%</div>
+                <div class="quiz-option fragment" data-fragment-index="3" style="background-color: rgba(16, 185, 129, 0.4);">C. 15.4% ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. 5%</div>
+                <p class="fragment small-text highlight-box">💡 P = (0.90 × 0.01) / (0.90 × 0.01 + 0.05 × 0.99) = 0.009 / 0.0585 = 15.4%. Base rate fallacy!</p>
+            </section>
+
+            <!-- ==================== SLIDE 41: QUIZ 2 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 2:</strong></p>
+                <p class="medium-text">Asumsi apa yang membuat Naive Bayes "naive"?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Semua fitur memiliki probabilitas sama</div>
+                <div class="quiz-option fragment" data-fragment-index="2" style="background-color: rgba(16, 185, 129, 0.4);">B. Semua fitur conditionally independent given kelas ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="3">C. Prior selalu uniform</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Tidak ada noise dalam data</div>
+            </section>
+
+            <!-- ==================== SLIDE 42: QUIZ 3 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 3:</strong></p>
+                <p class="medium-text">Dalam Teorema Bayes, P(E) berfungsi sebagai:</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Probabilitas hipotesis benar</div>
+                <div class="quiz-option fragment" data-fragment-index="2">B. Probabilitas error</div>
+                <div class="quiz-option fragment" data-fragment-index="3" style="background-color: rgba(16, 185, 129, 0.4);">C. Konstanta normalisasi ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Likelihood</div>
+                <p class="fragment small-text highlight-box">💡 P(E) memastikan semua posterior berjumlah 1. Bisa dihitung via total probability.</p>
+            </section>
+
+            <!-- ==================== SLIDE 43: SUMMARY ==================== -->
+            <section>
+                <h2>📝 Ringkasan</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Konsep</th>
+                        <th>Poin Kunci</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Ketidakpastian</strong></td>
+                        <td>Laziness, ignorance, noise, adversarial</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Teorema Bayes</strong></td>
+                        <td>P(H|E) = P(E|H) · P(H) / P(E)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Normalisasi</strong></td>
+                        <td>α · P(E|H) · P(H), jumlahkan lalu bagi</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Base Rate Fallacy</strong></td>
+                        <td>Prior rendah → TP rate tinggi pun hasilkan banyak false alarm</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cond. Independence</strong></td>
+                        <td>P(A,B|C) = P(A|C) · P(B|C) — kunci efisiensi</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Naive Bayes</strong></td>
+                        <td>argmax P(C) · ∏P(xᵢ|C) + Laplace smoothing</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 44: NEXT WEEK ==================== -->
+            <section>
+                <h2>📅 Pertemuan Berikutnya</h2>
+                <div class="highlight-box">
+                    <h3>Pertemuan 12: Jaringan Bayesian</h3>
+                    <p class="medium-text">Representasi probabilistik yang compact dan powerful</p>
+                </div>
+                <ul class="medium-text">
+                    <li class="fragment">Struktur Jaringan Bayesian (DAG + CPT)</li>
+                    <li class="fragment">Membangun Bayesian Network</li>
+                    <li class="fragment">Inferensi: Enumeration, Variable Elimination</li>
+                    <li class="fragment">D-Separation dan Conditional Independence</li>
+                </ul>
+            </section>
+
+            <!-- ==================== SLIDE 45: REFERENCES ==================== -->
+            <section>
+                <h2>📚 Referensi</h2>
+                <ol class="small-text">
+                    <li>Russell, S. & Norvig, P. (2020). <em>Artificial Intelligence: A Modern Approach</em> (4th Ed.). Pearson. <strong>Chapter 12-13</strong></li>
+                    <li>Bishop, C.M. (2006). <em>Pattern Recognition and Machine Learning</em>. Springer. <strong>Chapter 1-2</strong></li>
+                    <li>CS188 Berkeley AI Materials: <a href="https://inst.eecs.berkeley.edu/~cs188/">https://inst.eecs.berkeley.edu/~cs188/</a></li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 46: CLOSING ==================== -->
+            <section class="center">
+                <h1>Terima Kasih</h1>
+                <h3>🤖 Kecerdasan Artifisial</h3>
+                <p>Pertemuan 11: Penalaran dengan Ketidakpastian — Probabilitas</p>
+                <br>
+                <p class="small-text">Ada pertanyaan?</p>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/math/math.min.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            showSlideNumber: 'all',
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            pdfSeparateFragments: false,
+            plugins: [ RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+        });
+    </script>
+</body>
+</html>
