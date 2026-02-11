@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pertemuan 01: Pengantar Kecerdasan Artifisial dan Agen Cerdas</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/league.min.css">
+    
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css">
+    
+    <!-- Custom Theme -->
+    <link rel="stylesheet" href="../css/unhan-theme.css">
+    
+    <style>
+        /* Fallback styles if unhan-theme.css is not available */
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+        }
+        .reveal .slides section {
+            text-align: left;
+        }
+        .reveal .slides section.center {
+            text-align: center;
+        }
+        .reveal table {
+            margin: 20px auto;
+            font-size: 0.7em;
+        }
+        .reveal table th {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px;
+        }
+        .reveal table td {
+            padding: 8px 12px;
+            border: 1px solid #444;
+        }
+        .reveal .highlight-box {
+            background-color: rgba(37, 99, 235, 0.2);
+            border-left: 4px solid #2563eb;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .definition-box {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .warning-box {
+            background-color: rgba(245, 158, 11, 0.2);
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .two-column {
+            display: flex;
+            gap: 40px;
+        }
+        .reveal .two-column > div {
+            flex: 1;
+        }
+        .reveal .emoji-large {
+            font-size: 3em;
+        }
+        .reveal .quiz-option {
+            background-color: rgba(100, 100, 100, 0.3);
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .reveal .quiz-option:hover {
+            background-color: rgba(37, 99, 235, 0.4);
+        }
+        .reveal code {
+            background-color: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .reveal pre code {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .reveal .small-text {
+            font-size: 0.6em;
+        }
+        .reveal .medium-text {
+            font-size: 0.8em;
+        }
+        .reveal img {
+            max-height: 450px;
+            border-radius: 8px;
+        }
+        .reveal .agent-type {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- ==================== SLIDE 1: TITLE ==================== -->
+            <section class="center">
+                <h1>Kecerdasan Artifisial</h1>
+                <h3>Pertemuan 01</h3>
+                <h2>Pengantar AI dan Agen Cerdas</h2>
+                <p class="small-text" style="margin-top: 50px;">
+                    Mata Kuliah: Kecerdasan Artifisial (AI401) | 3 SKS
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 2: LEARNING OUTCOMES ==================== -->
+            <section>
+                <h2>🎯 Capaian Pembelajaran</h2>
+                <p>Setelah pertemuan ini, mahasiswa mampu:</p>
+                <ol class="medium-text">
+                    <li class="fragment">Menjelaskan definisi dan sejarah perkembangan AI</li>
+                    <li class="fragment">Membedakan empat pendekatan dalam AI</li>
+                    <li class="fragment">Menjelaskan konsep agen cerdas dan lingkungannya</li>
+                    <li class="fragment">Mengidentifikasi lima jenis agen cerdas</li>
+                    <li class="fragment">Menganalisis karakteristik lingkungan tugas</li>
+                    <li class="fragment">Menerapkan kerangka PEAS untuk analisis sistem AI</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 3: AGENDA ==================== -->
+            <section>
+                <h2>📋 Agenda Hari Ini</h2>
+                <div class="two-column">
+                    <div>
+                        <h4>Bagian 1</h4>
+                        <ul class="medium-text">
+                            <li>Definisi AI</li>
+                            <li>Sejarah AI</li>
+                            <li>Empat Pendekatan AI</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Bagian 2</h4>
+                        <ul class="medium-text">
+                            <li>Konsep Agen Cerdas</li>
+                            <li>Jenis-jenis Agen</li>
+                            <li>Karakteristik Lingkungan</li>
+                            <li>Kerangka PEAS</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 4: WHAT IS AI ==================== -->
+            <section>
+                <h2>🤖 Apa itu Kecerdasan Artifisial?</h2>
+                <div class="definition-box">
+                    <strong>Kecerdasan Artifisial (AI)</strong> adalah cabang ilmu komputer yang berfokus pada pembuatan sistem yang dapat melakukan tugas-tugas yang memerlukan kecerdasan manusia.
+                </div>
+                <p class="fragment">Kemampuan yang ditiru:</p>
+                <ul class="medium-text">
+                    <li class="fragment">🧠 Penalaran (Reasoning)</li>
+                    <li class="fragment">📚 Pembelajaran (Learning)</li>
+                    <li class="fragment">🧩 Pemecahan Masalah (Problem Solving)</li>
+                    <li class="fragment">🎯 Pengambilan Keputusan (Decision Making)</li>
+                </ul>
+            </section>
+
+            <!-- ==================== SLIDE 5: AI EXAMPLES ==================== -->
+            <section>
+                <h2>Contoh AI di Sekitar Kita</h2>
+                <div class="two-column medium-text">
+                    <div>
+                        <h4>🏠 Kehidupan Sehari-hari</h4>
+                        <ul>
+                            <li class="fragment">Virtual Assistant (Siri, Alexa)</li>
+                            <li class="fragment">Rekomendasi Netflix/Spotify</li>
+                            <li class="fragment">Filter spam email</li>
+                            <li class="fragment">Face unlock smartphone</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>🎖️ Bidang Pertahanan</h4>
+                        <ul>
+                            <li class="fragment">Drone otonom</li>
+                            <li class="fragment">Sistem radar cerdas</li>
+                            <li class="fragment">Analisis citra satelit</li>
+                            <li class="fragment">Cybersecurity AI</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 6: HISTORY TIMELINE ==================== -->
+            <section>
+                <h2>📜 Sejarah Singkat AI</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Tahun</th>
+                        <th>Peristiwa</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>1950</td>
+                        <td>Alan Turing mengusulkan "Turing Test"</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>1956</td>
+                        <td>Dartmouth Conference - lahirnya istilah "AI"</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>1997</td>
+                        <td>Deep Blue mengalahkan Kasparov (Catur)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>2016</td>
+                        <td>AlphaGo mengalahkan Lee Sedol (Go)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>2022+</td>
+                        <td>Era Large Language Models (ChatGPT)</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 7: TURING TEST ==================== -->
+            <section>
+                <h2>🧪 Turing Test</h2>
+                <div class="definition-box">
+                    <strong>Turing Test:</strong> Metode pengujian untuk menentukan apakah mesin dapat menunjukkan perilaku cerdas yang setara dengan manusia.
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Prosedur:</strong></p>
+                    <ol class="medium-text">
+                        <li>Penguji berkomunikasi via teks dengan mesin dan manusia</li>
+                        <li>Penguji tidak tahu mana yang mesin</li>
+                        <li>Jika tidak bisa membedakan → Mesin "lulus"</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 8: AI WINTERS ==================== -->
+            <section>
+                <h2>❄️ AI Winter</h2>
+                <p>Periode penurunan minat dan pendanaan AI:</p>
+                <div class="two-column medium-text">
+                    <div class="fragment">
+                        <div class="warning-box">
+                            <strong>AI Winter 1 (1974-1980)</strong>
+                            <ul>
+                                <li>Keterbatasan hardware</li>
+                                <li>Kompleksitas kombinatorial</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="warning-box">
+                            <strong>AI Winter 2 (1987-1993)</strong>
+                            <ul>
+                                <li>Expert systems gagal scale</li>
+                                <li>Biaya maintenance tinggi</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <p class="fragment highlight-box">💡 Pelajaran: Ekspektasi harus realistis dengan kapabilitas teknologi</p>
+            </section>
+
+            <!-- ==================== SLIDE 9: FOUR APPROACHES ==================== -->
+            <section>
+                <h2>🔄 Empat Pendekatan dalam AI</h2>
+                <img src="images/p01-01-four-approaches-ai.png" alt="Empat Pendekatan AI">
+                <p class="small-text">Gambar 1.1: Matriks empat pendekatan dalam AI</p>
+            </section>
+
+            <!-- ==================== SLIDE 10: THINKING APPROACHES ==================== -->
+            <section>
+                <h2>Pendekatan "Berpikir"</h2>
+                <div class="two-column">
+                    <div class="fragment">
+                        <div class="highlight-box">
+                            <h4>🧠 Berpikir seperti Manusia</h4>
+                            <p class="medium-text">Mensimulasikan proses kognitif manusia</p>
+                            <p class="small-text"><em>Bidang: Cognitive Science</em></p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="highlight-box">
+                            <h4>⚙️ Berpikir Rasional</h4>
+                            <p class="medium-text">Menggunakan logika formal untuk penalaran</p>
+                            <p class="small-text"><em>Bidang: Logic, Mathematics</em></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 11: ACTING APPROACHES ==================== -->
+            <section>
+                <h2>Pendekatan "Bertindak"</h2>
+                <div class="two-column">
+                    <div class="fragment">
+                        <div class="highlight-box">
+                            <h4>👤 Bertindak seperti Manusia</h4>
+                            <p class="medium-text">Perilaku tidak dapat dibedakan dari manusia</p>
+                            <p class="small-text"><em>Benchmark: Turing Test</em></p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>🎯 Bertindak Rasional ⭐</h4>
+                            <p class="medium-text">Memilih tindakan untuk hasil optimal</p>
+                            <p class="small-text"><em>Pendekatan paling populer di AI modern</em></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 12: RATIONAL AGENT DEFINITION ==================== -->
+            <section>
+                <h2>🎯 Rational Agent</h2>
+                <div class="definition-box">
+                    <strong>Rational Agent</strong> adalah agen yang bertindak untuk mencapai hasil terbaik atau, ketika ada ketidakpastian, hasil yang <em>diharapkan</em> terbaik.
+                </div>
+                <div class="fragment">
+                    <p class="warning-box">
+                        ⚠️ <strong>Rational ≠ Omniscient (Maha Tahu)</strong><br>
+                        <span class="medium-text">Agen rasional memaksimalkan hasil berdasarkan informasi yang <em>tersedia</em>, bukan hasil aktual.</span>
+                    </p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 13: AGENT CONCEPT ==================== -->
+            <section>
+                <h2>🤖 Konsep Agen</h2>
+                <div class="definition-box">
+                    <strong>Agen</strong> adalah entitas yang mempersepsi lingkungan melalui <strong>sensor</strong> dan bertindak melalui <strong>aktuator</strong>.
+                </div>
+                <img src="images/p01-02-agent-environment-interaction.png" alt="Interaksi Agen-Lingkungan" style="max-height: 350px;">
+            </section>
+
+            <!-- ==================== SLIDE 14: AGENT COMPONENTS ==================== -->
+            <section>
+                <h2>Komponen Agen</h2>
+                <table>
+                    <tr>
+                        <th>Komponen</th>
+                        <th>Fungsi</th>
+                        <th>Contoh (Robot)</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Sensor</strong></td>
+                        <td>Menerima input dari lingkungan</td>
+                        <td>Kamera, LIDAR, microphone</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Aktuator</strong></td>
+                        <td>Melakukan tindakan</td>
+                        <td>Motor, speaker, display</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Agent Function</strong></td>
+                        <td>Memetakan percept → action</td>
+                        <td>Program kontrol</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 15: PERCEPT SEQUENCE ==================== -->
+            <section>
+                <h2>Percept dan Percept Sequence</h2>
+                <ul>
+                    <li class="fragment"><strong>Percept:</strong> Input yang diterima agen pada satu waktu</li>
+                    <li class="fragment"><strong>Percept Sequence:</strong> Sejarah lengkap semua percept</li>
+                </ul>
+                <div class="fragment highlight-box">
+                    <p><strong>Agent Function (matematis):</strong></p>
+                    <p style="text-align: center; font-size: 1.2em;">f : P* → A</p>
+                    <p class="small-text">P* = semua percept sequence, A = semua tindakan</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 16: AGENT TYPES OVERVIEW ==================== -->
+            <section>
+                <h2>🏗️ Lima Jenis Agen Cerdas</h2>
+                <ol class="medium-text">
+                    <li class="fragment"><strong>Simple Reflex Agent</strong> - Hanya berdasarkan percept saat ini</li>
+                    <li class="fragment"><strong>Model-Based Reflex Agent</strong> - Memiliki internal state</li>
+                    <li class="fragment"><strong>Goal-Based Agent</strong> - Mempertimbangkan tujuan</li>
+                    <li class="fragment"><strong>Utility-Based Agent</strong> - Mengukur "kebahagiaan"</li>
+                    <li class="fragment"><strong>Learning Agent</strong> - Belajar dari pengalaman</li>
+                </ol>
+                <p class="fragment small-text" style="text-align: center;">↑ Kompleksitas meningkat ↑</p>
+            </section>
+
+            <!-- ==================== SLIDE 17: SIMPLE REFLEX AGENT ==================== -->
+            <section>
+                <h2>1️⃣ Simple Reflex Agent</h2>
+                <div class="two-column">
+                    <div>
+                        <img src="images/p01-03-simple-reflex-agent.png" alt="Simple Reflex Agent" style="max-height: 400px;">
+                    </div>
+                    <div class="medium-text">
+                        <p><strong>Karakteristik:</strong></p>
+                        <ul>
+                            <li class="fragment">Aturan IF-THEN sederhana</li>
+                            <li class="fragment">Tidak ada memori (stateless)</li>
+                            <li class="fragment">Sangat cepat</li>
+                            <li class="fragment">Hanya untuk <em>fully observable</em></li>
+                        </ul>
+                        <div class="fragment">
+                            <p><strong>Contoh:</strong> Thermostat</p>
+                            <code>IF suhu > 25 THEN matikan_AC</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 18: MODEL-BASED REFLEX AGENT ==================== -->
+            <section>
+                <h2>2️⃣ Model-Based Reflex Agent</h2>
+                <div class="two-column">
+                    <div>
+                        <img src="images/p01-04-model-based-reflex-agent.png" alt="Model-Based Agent" style="max-height: 400px;">
+                    </div>
+                    <div class="medium-text">
+                        <p><strong>Tambahan dari Simple Reflex:</strong></p>
+                        <ul>
+                            <li class="fragment"><strong>Internal State</strong> - Menyimpan informasi</li>
+                            <li class="fragment"><strong>Transition Model</strong> - Bagaimana dunia berubah</li>
+                            <li class="fragment"><strong>Sensor Model</strong> - Interpretasi percept</li>
+                        </ul>
+                        <div class="fragment">
+                            <p><strong>Contoh:</strong> Robot yang mengingat posisi objek yang pernah dilihat</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 19: GOAL-BASED AGENT ==================== -->
+            <section>
+                <h2>3️⃣ Goal-Based Agent</h2>
+                <div class="two-column">
+                    <div>
+                        <img src="images/p01-05-goal-based-agent.png" alt="Goal-Based Agent" style="max-height: 400px;">
+                    </div>
+                    <div class="medium-text">
+                        <p><strong>Tambahan dari Model-Based:</strong></p>
+                        <ul>
+                            <li class="fragment"><strong>Goal</strong> - Keadaan yang ingin dicapai</li>
+                            <li class="fragment"><strong>Planning</strong> - Mencari cara mencapai goal</li>
+                        </ul>
+                        <div class="fragment definition-box">
+                            <p>Lebih fleksibel! Ubah goal = ubah perilaku</p>
+                        </div>
+                        <div class="fragment">
+                            <p><strong>Contoh:</strong> Robot navigasi dengan tujuan tertentu</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 20: UTILITY-BASED AGENT ==================== -->
+            <section>
+                <h2>4️⃣ Utility-Based Agent</h2>
+                <div class="two-column">
+                    <div>
+                        <img src="images/p01-06-utility-based-agent.png" alt="Utility-Based Agent" style="max-height: 400px;">
+                    </div>
+                    <div class="medium-text">
+                        <p><strong>Tambahan dari Goal-Based:</strong></p>
+                        <ul>
+                            <li class="fragment"><strong>Utility Function</strong> - Mengukur "kebahagiaan"</li>
+                            <li class="fragment">Dapat membandingkan alternatif</li>
+                            <li class="fragment">Menangani trade-off</li>
+                        </ul>
+                        <div class="fragment">
+                            <p><strong>Contoh:</strong> Self-driving car</p>
+                            <p class="small-text">Menyeimbangkan: kecepatan, keamanan, kenyamanan</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 21: UTILITY EXAMPLE ==================== -->
+            <section>
+                <h2>📊 Contoh Utility Function</h2>
+                <p class="medium-text"><strong>Skenario:</strong> Drone militer memilih target</p>
+                <p>U(target) = Military_Value × Survival_Prob - Fuel_Cost</p>
+                <table class="small-text fragment">
+                    <tr>
+                        <th>Target</th>
+                        <th>Value</th>
+                        <th>Survival</th>
+                        <th>Fuel Cost</th>
+                        <th>Utility</th>
+                    </tr>
+                    <tr>
+                        <td>A</td>
+                        <td>80</td>
+                        <td>0.70</td>
+                        <td>20</td>
+                        <td>36</td>
+                    </tr>
+                    <tr style="background-color: rgba(16, 185, 129, 0.3);">
+                        <td><strong>B ⭐</strong></td>
+                        <td>60</td>
+                        <td>0.90</td>
+                        <td>10</td>
+                        <td><strong>44</strong></td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>100</td>
+                        <td>0.50</td>
+                        <td>30</td>
+                        <td>20</td>
+                    </tr>
+                </table>
+                <p class="fragment highlight-box">Target B optimal meskipun value-nya bukan tertinggi!</p>
+            </section>
+
+            <!-- ==================== SLIDE 22: LEARNING AGENT ==================== -->
+            <section>
+                <h2>5️⃣ Learning Agent</h2>
+                <img src="images/p01-07-learning-agent.png" alt="Learning Agent" style="max-height: 380px;">
+                <p class="medium-text fragment">Dapat meningkatkan kinerja dari pengalaman</p>
+            </section>
+
+            <!-- ==================== SLIDE 23: LEARNING AGENT COMPONENTS ==================== -->
+            <section>
+                <h2>Komponen Learning Agent</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Komponen</th>
+                        <th>Fungsi</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Elemen Kinerja</strong></td>
+                        <td>Memilih tindakan (seperti agen biasa)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Elemen Pembelajaran</strong></td>
+                        <td>Memperbaiki elemen kinerja</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Kritik</strong></td>
+                        <td>Mengevaluasi performa</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Generator Masalah</strong></td>
+                        <td>Menyarankan eksplorasi</td>
+                    </tr>
+                </table>
+                <p class="fragment small-text">📌 Akan dibahas lebih dalam di Pertemuan 13-14 (Machine Learning)</p>
+            </section>
+
+            <!-- ==================== SLIDE 24: AGENT COMPARISON ==================== -->
+            <section>
+                <h2>📋 Perbandingan Jenis Agen</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Jenis Agen</th>
+                        <th>State?</th>
+                        <th>Goal?</th>
+                        <th>Utility?</th>
+                        <th>Belajar?</th>
+                    </tr>
+                    <tr>
+                        <td>Simple Reflex</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                    </tr>
+                    <tr>
+                        <td>Model-Based Reflex</td>
+                        <td>✅</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                    </tr>
+                    <tr>
+                        <td>Goal-Based</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                    </tr>
+                    <tr>
+                        <td>Utility-Based</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>❌</td>
+                    </tr>
+                    <tr>
+                        <td>Learning</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 25: ENVIRONMENT CHARACTERISTICS ==================== -->
+            <section>
+                <h2>🌍 Karakteristik Lingkungan Tugas</h2>
+                <p>Enam dimensi untuk menganalisis lingkungan:</p>
+                <img src="images/p01-08-environment-characteristics.png" alt="Karakteristik Lingkungan" style="max-height: 380px;">
+            </section>
+
+            <!-- ==================== SLIDE 26: OBSERVABLE ==================== -->
+            <section>
+                <h2>👁️ Observable</h2>
+                <div class="two-column">
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>Fully Observable</h4>
+                            <p class="medium-text">Agen dapat melihat <em>seluruh</em> state lingkungan</p>
+                            <p class="small-text">Contoh: Permainan catur</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="warning-box">
+                            <h4>Partially Observable</h4>
+                            <p class="medium-text">Agen hanya melihat <em>sebagian</em> state</p>
+                            <p class="small-text">Contoh: Poker, self-driving car</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="fragment highlight-box medium-text">⚠️ Partially observable → perlu internal state!</p>
+            </section>
+
+            <!-- ==================== SLIDE 27: DETERMINISTIC ==================== -->
+            <section>
+                <h2>🎲 Deterministic vs Stochastic</h2>
+                <div class="two-column">
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>Deterministik</h4>
+                            <p class="medium-text">State berikutnya <em>pasti</em> ditentukan oleh state dan aksi</p>
+                            <p class="small-text">Contoh: Catur</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="warning-box">
+                            <h4>Stokastik</h4>
+                            <p class="medium-text">Ada elemen <em>ketidakpastian</em></p>
+                            <p class="small-text">Contoh: Backgammon (ada dadu)</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 28: EPISODIC VS SEQUENTIAL ==================== -->
+            <section>
+                <h2>🔄 Episodic vs Sequential</h2>
+                <div class="two-column">
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>Episodik</h4>
+                            <p class="medium-text">Episode independen, keputusan tidak mempengaruhi episode lain</p>
+                            <p class="small-text">Contoh: Klasifikasi gambar</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="warning-box">
+                            <h4>Sekuensial</h4>
+                            <p class="medium-text">Keputusan saat ini mempengaruhi keputusan masa depan</p>
+                            <p class="small-text">Contoh: Permainan catur</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 29: STATIC VS DYNAMIC ==================== -->
+            <section>
+                <h2>⏱️ Static vs Dynamic</h2>
+                <div class="two-column">
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>Statis</h4>
+                            <p class="medium-text">Lingkungan tidak berubah saat agen berpikir</p>
+                            <p class="small-text">Contoh: Crossword puzzle</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="warning-box">
+                            <h4>Dinamis</h4>
+                            <p class="medium-text">Lingkungan dapat berubah kapan saja</p>
+                            <p class="small-text">Contoh: Combat drone</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="fragment small-text">📌 Semi-dynamic: Lingkungan tidak berubah, tapi skor/waktu berubah (catur dengan timer)</p>
+            </section>
+
+            <!-- ==================== SLIDE 30: DISCRETE VS CONTINUOUS ==================== -->
+            <section>
+                <h2>📊 Discrete vs Continuous</h2>
+                <div class="two-column">
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>Diskret</h4>
+                            <p class="medium-text">State dan action dapat dihitung</p>
+                            <p class="small-text">Contoh: Permainan papan</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="warning-box">
+                            <h4>Kontinu</h4>
+                            <p class="medium-text">State/action dalam rentang kontinu</p>
+                            <p class="small-text">Contoh: Robot navigasi (posisi x, y, z)</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 31: SINGLE VS MULTI-AGENT ==================== -->
+            <section>
+                <h2>👥 Single vs Multi-Agent</h2>
+                <div class="two-column">
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>Agen Tunggal</h4>
+                            <p class="medium-text">Hanya satu agen di lingkungan</p>
+                            <p class="small-text">Contoh: Sudoku solver</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="warning-box">
+                            <h4>Multi-Agen</h4>
+                            <p class="medium-text">Beberapa agen berinteraksi</p>
+                            <p class="small-text">
+                                <strong>Cooperative:</strong> Bekerja sama<br>
+                                <strong>Competitive:</strong> Bersaing
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 32: PEAS FRAMEWORK ==================== -->
+            <section>
+                <h2>📋 Kerangka PEAS</h2>
+                <div class="definition-box">
+                    <strong>PEAS</strong> adalah kerangka untuk menspesifikasikan lingkungan tugas:
+                </div>
+                <table class="medium-text fragment">
+                    <tr>
+                        <th>Komponen</th>
+                        <th>Pertanyaan</th>
+                    </tr>
+                    <tr>
+                        <td><strong>P</strong>erformance</td>
+                        <td>Bagaimana mengukur kesuksesan?</td>
+                    </tr>
+                    <tr>
+                        <td><strong>E</strong>nvironment</td>
+                        <td>Apa saja yang ada di lingkungan?</td>
+                    </tr>
+                    <tr>
+                        <td><strong>A</strong>ctuators</td>
+                        <td>Apa yang dapat dilakukan agen?</td>
+                    </tr>
+                    <tr>
+                        <td><strong>S</strong>ensors</td>
+                        <td>Apa yang dapat dipersepsi agen?</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 33: PEAS EXAMPLE 1 ==================== -->
+            <section>
+                <h2>📝 Contoh PEAS: Automated Taxi</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Komponen</th>
+                        <th>Spesifikasi</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Performance</strong></td>
+                        <td>Keselamatan, waktu tempuh, kenyamanan, efisiensi BBM</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Environment</strong></td>
+                        <td>Jalan, lalu lintas, pejalan kaki, rambu, cuaca</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Actuators</strong></td>
+                        <td>Kemudi, akselerator, rem, klakson</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Sensors</strong></td>
+                        <td>Kamera, LIDAR, GPS, speedometer</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 34: PEAS EXAMPLE 2 - DEFENSE ==================== -->
+            <section>
+                <h2>🎖️ Contoh PEAS: UAV Pengintai</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Komponen</th>
+                        <th>Spesifikasi</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Performance</strong></td>
+                        <td>Area coverage, detection rate, survival rate</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Environment</strong></td>
+                        <td>Airspace, terrain, target, ancaman, cuaca</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Actuators</strong></td>
+                        <td>Flight controls, camera gimbal, transmitter</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Sensors</strong></td>
+                        <td>Cameras (visual, thermal), radar, GPS, altimeter</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 35: QUIZ 1 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 1:</strong></p>
+                <p>Pendekatan AI mana yang paling banyak diadopsi dalam AI modern?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Berpikir seperti Manusia</div>
+                <div class="quiz-option fragment" data-fragment-index="2">B. Berpikir Rasional</div>
+                <div class="quiz-option fragment" data-fragment-index="3">C. Bertindak seperti Manusia</div>
+                <div class="quiz-option fragment" data-fragment-index="4" style="background-color: rgba(16, 185, 129, 0.4);">D. Bertindak Rasional ✅</div>
+            </section>
+
+            <!-- ==================== SLIDE 36: QUIZ 2 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 2:</strong></p>
+                <p>Jenis agen apa yang diperlukan untuk lingkungan <em>partially observable</em>?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Simple Reflex Agent</div>
+                <div class="quiz-option fragment" data-fragment-index="2" style="background-color: rgba(16, 185, 129, 0.4);">B. Model-Based Agent (minimal) ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="3">C. Hanya Learning Agent</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Tidak ada yang cocok</div>
+                <p class="fragment small-text highlight-box">💡 Model-based agent memiliki internal state untuk menyimpan informasi yang tidak terlihat</p>
+            </section>
+
+            <!-- ==================== SLIDE 37: QUIZ 3 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 3:</strong></p>
+                <p>Lingkungan permainan catur (tanpa timer) memiliki karakteristik:</p>
+                <div class="fragment">
+                    <table class="small-text">
+                        <tr>
+                            <td>Observable</td>
+                            <td style="background-color: rgba(16, 185, 129, 0.3);"><strong>Fully Observable</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Determinism</td>
+                            <td style="background-color: rgba(16, 185, 129, 0.3);"><strong>Deterministik</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Episode</td>
+                            <td style="background-color: rgba(245, 158, 11, 0.3);"><strong>Sekuensial</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Dynamics</td>
+                            <td style="background-color: rgba(16, 185, 129, 0.3);"><strong>Statis</strong></td>
+                        </tr>
+                        <tr>
+                            <td>State/Action</td>
+                            <td style="background-color: rgba(16, 185, 129, 0.3);"><strong>Diskret</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Agents</td>
+                            <td style="background-color: rgba(245, 158, 11, 0.3);"><strong>Multi-Agent (Competitive)</strong></td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 38: SUMMARY ==================== -->
+            <section>
+                <h2>📝 Ringkasan</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Konsep</th>
+                        <th>Poin Kunci</th>
+                    </tr>
+                    <tr>
+                        <td><strong>AI</strong></td>
+                        <td>Sistem yang meniru kecerdasan manusia</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4 Pendekatan</strong></td>
+                        <td>Think/Act × Human/Rational</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Agen</strong></td>
+                        <td>Sensor → Agent Function → Aktuator</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5 Jenis Agen</strong></td>
+                        <td>Simple Reflex → Learning Agent</td>
+                    </tr>
+                    <tr>
+                        <td><strong>6 Karakteristik</strong></td>
+                        <td>Observable, Deterministic, Episodic, Static, Discrete, Single</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PEAS</strong></td>
+                        <td>Performance, Environment, Actuators, Sensors</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 39: NEXT WEEK ==================== -->
+            <section>
+                <h2>📅 Pertemuan Berikutnya</h2>
+                <div class="highlight-box">
+                    <h3>Pertemuan 02: Uninformed Search</h3>
+                    <p class="medium-text">Pemecahan Masalah dengan Pencarian</p>
+                </div>
+                <ul class="medium-text">
+                    <li class="fragment">Formulasi masalah pencarian</li>
+                    <li class="fragment">Breadth-First Search (BFS)</li>
+                    <li class="fragment">Depth-First Search (DFS)</li>
+                    <li class="fragment">Uniform-Cost Search (UCS)</li>
+                </ul>
+            </section>
+
+            <!-- ==================== SLIDE 40: REFERENCES ==================== -->
+            <section>
+                <h2>📚 Referensi</h2>
+                <ol class="small-text">
+                    <li>Russell, S. & Norvig, P. (2020). <em>Artificial Intelligence: A Modern Approach</em> (4th Ed.). Pearson. <strong>Chapter 1-2</strong></li>
+                    <li>Poole, D.L. & Mackworth, A.K. (2023). <em>Artificial Intelligence: Foundations of Computational Agents</em> (3rd Ed.). Cambridge University Press. Chapter 1.</li>
+                    <li>CS188 Berkeley AI Materials: <a href="https://inst.eecs.berkeley.edu/~cs188/">https://inst.eecs.berkeley.edu/~cs188/</a></li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 41: CLOSING ==================== -->
+            <section class="center">
+                <h1>Terima Kasih</h1>
+                <h3>🤖 Kecerdasan Artifisial</h3>
+                <p>Pertemuan 01: Pengantar AI dan Agen Cerdas</p>
+                <br>
+                <p class="small-text">Ada pertanyaan?</p>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/math/math.min.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            showSlideNumber: 'all',
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            pdfSeparateFragments: false,
+            plugins: [ RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+        });
+    </script>
+</body>
+</html>
