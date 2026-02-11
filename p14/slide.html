@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pertemuan 14: Pembelajaran Mesin - Unsupervised Learning dan Reinforcement Learning</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/league.min.css">
+    
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css">
+    
+    <!-- Custom Theme -->
+    <link rel="stylesheet" href="unhan-theme.css">
+    
+    <style>
+        /* Fallback styles if unhan-theme.css is not available */
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+        }
+        .reveal .slides section {
+            text-align: left;
+        }
+        .reveal .slides section.center {
+            text-align: center;
+        }
+        .reveal table {
+            margin: 20px auto;
+            font-size: 0.7em;
+        }
+        .reveal table th {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px;
+        }
+        .reveal table td {
+            padding: 8px 12px;
+            border: 1px solid #444;
+        }
+        .reveal .highlight-box {
+            background-color: rgba(37, 99, 235, 0.2);
+            border-left: 4px solid #2563eb;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .definition-box {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .warning-box {
+            background-color: rgba(245, 158, 11, 0.2);
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .two-column {
+            display: flex;
+            gap: 40px;
+        }
+        .reveal .two-column > div {
+            flex: 1;
+        }
+        .reveal .emoji-large {
+            font-size: 3em;
+        }
+        .reveal .quiz-option {
+            background-color: rgba(100, 100, 100, 0.3);
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .reveal .quiz-option:hover {
+            background-color: rgba(37, 99, 235, 0.4);
+        }
+        .reveal code {
+            background-color: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .reveal pre code {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .reveal .small-text {
+            font-size: 0.6em;
+        }
+        .reveal .medium-text {
+            font-size: 0.8em;
+        }
+        .reveal img {
+            max-height: 450px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- ==================== SLIDE 1: TITLE ==================== -->
+            <section class="center">
+                <h1>Kecerdasan Artifisial</h1>
+                <h3>Pertemuan 14</h3>
+                <h2>Unsupervised Learning &amp; Reinforcement Learning</h2>
+                <p class="small-text" style="margin-top: 50px;">
+                    Mata Kuliah: Kecerdasan Artifisial (AI401) | 3 SKS
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 2: LEARNING OUTCOMES ==================== -->
+            <section>
+                <h2>🎯 Capaian Pembelajaran</h2>
+                <p>Setelah pertemuan ini, mahasiswa mampu:</p>
+                <ol class="medium-text">
+                    <li class="fragment">Menjelaskan dan menerapkan algoritma K-Means clustering</li>
+                    <li class="fragment">Memahami hierarchical clustering dan dendrogramnya</li>
+                    <li class="fragment">Menerapkan evaluasi clustering (silhouette, elbow method)</li>
+                    <li class="fragment">Menjelaskan konsep PCA untuk dimensionality reduction</li>
+                    <li class="fragment">Memahami komponen reinforcement learning dan MDP</li>
+                    <li class="fragment">Menerapkan algoritma Q-Learning pada masalah sederhana</li>
+                    <li class="fragment">Membandingkan tiga paradigma machine learning</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 3: AGENDA ==================== -->
+            <section>
+                <h2>📋 Agenda Hari Ini</h2>
+                <div class="two-column">
+                    <div>
+                        <h4>Bagian 1: Unsupervised Learning</h4>
+                        <ul class="medium-text">
+                            <li>Konsep Unsupervised Learning</li>
+                            <li>K-Means Clustering</li>
+                            <li>Hierarchical Clustering</li>
+                            <li>Evaluasi Clustering</li>
+                            <li>PCA (Pengenalan)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Bagian 2: Reinforcement Learning</h4>
+                        <ul class="medium-text">
+                            <li>Konsep RL</li>
+                            <li>Markov Decision Process</li>
+                            <li>Policy &amp; Value Function</li>
+                            <li>Q-Learning</li>
+                            <li>Perbandingan 3 Paradigma ML</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 4: RECAP SUPERVISED ==================== -->
+            <section>
+                <h2>📝 Recap: Supervised Learning (Pertemuan 13)</h2>
+                <div class="highlight-box">
+                    <p class="medium-text"><strong>Supervised Learning:</strong> Belajar dari data <em>berlabel</em> (input → output yang diketahui)</p>
+                </div>
+                <table class="medium-text fragment">
+                    <tr>
+                        <th>Konsep</th>
+                        <th>Keterangan</th>
+                    </tr>
+                    <tr>
+                        <td>Decision Tree</td>
+                        <td>Klasifikasi dengan information gain</td>
+                    </tr>
+                    <tr>
+                        <td>Naive Bayes</td>
+                        <td>Klasifikasi probabilistik</td>
+                    </tr>
+                    <tr>
+                        <td>Regresi Linear</td>
+                        <td>Prediksi nilai kontinu</td>
+                    </tr>
+                    <tr>
+                        <td>Evaluasi</td>
+                        <td>Accuracy, precision, recall, F1</td>
+                    </tr>
+                </table>
+                <p class="fragment warning-box medium-text">❓ Bagaimana jika data <strong>tidak memiliki label</strong>?</p>
+            </section>
+
+            <!-- ==================== SLIDE 5: UNSUPERVISED LEARNING ==================== -->
+            <section>
+                <h2>🔍 Apa itu Unsupervised Learning?</h2>
+                <div class="definition-box">
+                    <strong>Unsupervised Learning</strong> adalah paradigma ML di mana model belajar dari data <strong>tanpa label</strong> untuk menemukan pola atau struktur tersembunyi.
+                </div>
+                <div class="two-column medium-text fragment">
+                    <div>
+                        <h4>Supervised</h4>
+                        <p>Data: (x, <strong>y</strong>) ✅</p>
+                        <p>Tujuan: Prediksi y baru</p>
+                    </div>
+                    <div>
+                        <h4>Unsupervised</h4>
+                        <p>Data: (x) saja ❌</p>
+                        <p>Tujuan: Temukan pola</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 6: UNSUPERVISED APPLICATIONS ==================== -->
+            <section>
+                <h2>📌 Aplikasi Unsupervised Learning</h2>
+                <div class="two-column medium-text">
+                    <div>
+                        <h4>🏠 Umum</h4>
+                        <ul>
+                            <li class="fragment">Segmentasi pelanggan</li>
+                            <li class="fragment">Deteksi anomali (fraud)</li>
+                            <li class="fragment">Kompresi data</li>
+                            <li class="fragment">Rekomendasi produk</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>🎖️ Pertahanan</h4>
+                        <ul>
+                            <li class="fragment">Clustering sinyal SIGINT</li>
+                            <li class="fragment">Deteksi pola serangan siber</li>
+                            <li class="fragment">Segmentasi citra satelit</li>
+                            <li class="fragment">Analisis trafik jaringan</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 7: CLUSTERING CONCEPT ==================== -->
+            <section>
+                <h2>🎯 Clustering: Konsep Dasar</h2>
+                <div class="definition-box">
+                    <strong>Clustering:</strong> Mengelompokkan data ke dalam klaster sehingga data dalam klaster <em>mirip</em>, data antar klaster <em>berbeda</em>.
+                </div>
+                <img src="images/p14-01-k-means-algorithm.png" alt="K-Means Clustering">
+                <p class="small-text">Gambar 1: Prinsip clustering — intra-cluster similarity tinggi, inter-cluster similarity rendah</p>
+            </section>
+
+            <!-- ==================== SLIDE 8: K-MEANS ALGORITHM ==================== -->
+            <section>
+                <h2>⚙️ Algoritma K-Means</h2>
+                <ol class="medium-text">
+                    <li class="fragment"><strong>Inisialisasi:</strong> Pilih K centroid awal secara acak</li>
+                    <li class="fragment"><strong>Assignment:</strong> Tetapkan setiap data ke centroid terdekat</li>
+                    <li class="fragment"><strong>Update:</strong> Hitung centroid baru (rata-rata anggota klaster)</li>
+                    <li class="fragment"><strong>Ulangi</strong> langkah 2-3 hingga centroid tidak berubah</li>
+                </ol>
+                <div class="fragment highlight-box medium-text">
+                    <p>📏 <strong>Jarak Euclidean:</strong> d(x, y) = √(Σ(xᵢ - yᵢ)²)</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 9: K-MEANS EXAMPLE SETUP ==================== -->
+            <section>
+                <h2>📊 Contoh K-Means (K=2)</h2>
+                <p class="medium-text"><strong>Data:</strong></p>
+                <table class="medium-text">
+                    <tr>
+                        <th>Titik</th><th>x</th><th>y</th>
+                    </tr>
+                    <tr><td>A</td><td>1</td><td>2</td></tr>
+                    <tr><td>B</td><td>2</td><td>1</td></tr>
+                    <tr><td>C</td><td>4</td><td>5</td></tr>
+                    <tr><td>D</td><td>5</td><td>4</td></tr>
+                    <tr><td>E</td><td>3</td><td>3</td></tr>
+                </table>
+                <p class="fragment definition-box medium-text">Centroid awal: μ₁ = (1, 1), μ₂ = (5, 5)</p>
+            </section>
+
+            <!-- ==================== SLIDE 10: K-MEANS ITERATION 1 ==================== -->
+            <section>
+                <h2>📊 K-Means: Iterasi 1 — Assignment</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Titik</th><th>d(titik, μ₁)</th><th>d(titik, μ₂)</th><th>Klaster</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>A(1,2)</td><td>1.00</td><td>5.00</td>
+                        <td style="background-color: rgba(37, 99, 235, 0.3);"><strong>C₁</strong></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>B(2,1)</td><td>1.00</td><td>5.00</td>
+                        <td style="background-color: rgba(37, 99, 235, 0.3);"><strong>C₁</strong></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>C(4,5)</td><td>5.00</td><td>1.00</td>
+                        <td style="background-color: rgba(16, 185, 129, 0.3);"><strong>C₂</strong></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>D(5,4)</td><td>5.00</td><td>1.00</td>
+                        <td style="background-color: rgba(16, 185, 129, 0.3);"><strong>C₂</strong></td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>E(3,3)</td><td>2.83</td><td>2.83</td>
+                        <td style="background-color: rgba(37, 99, 235, 0.3);"><strong>C₁</strong></td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 11: K-MEANS ITERATION 1 UPDATE ==================== -->
+            <section>
+                <h2>📊 K-Means: Iterasi 1 — Update Centroid</h2>
+                <div class="two-column medium-text">
+                    <div class="fragment">
+                        <div class="highlight-box">
+                            <h4>Klaster C₁ = {A, B, E}</h4>
+                            <p>μ₁ = ((1+2+3)/3, (2+1+3)/3)</p>
+                            <p><strong>μ₁ = (2.0, 2.0)</strong></p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>Klaster C₂ = {C, D}</h4>
+                            <p>μ₂ = ((4+5)/2, (5+4)/2)</p>
+                            <p><strong>μ₂ = (4.5, 4.5)</strong></p>
+                        </div>
+                    </div>
+                </div>
+                <p class="fragment warning-box medium-text">Centroid berubah dari (1,1)→(2,2) dan (5,5)→(4.5,4.5) → Lanjut iterasi!</p>
+            </section>
+
+            <!-- ==================== SLIDE 12: K-MEANS CONVERGENCE ==================== -->
+            <section>
+                <h2>✅ K-Means: Konvergensi</h2>
+                <p class="medium-text"><strong>Iterasi 2:</strong> Dengan μ₁=(2,2), μ₂=(4.5,4.5)</p>
+                <table class="small-text fragment">
+                    <tr>
+                        <th>Titik</th><th>d(titik, μ₁)</th><th>d(titik, μ₂)</th><th>Klaster</th>
+                    </tr>
+                    <tr><td>A(1,2)</td><td>1.00</td><td>4.30</td><td>C₁</td></tr>
+                    <tr><td>B(2,1)</td><td>1.00</td><td>4.30</td><td>C₁</td></tr>
+                    <tr><td>C(4,5)</td><td>3.61</td><td>0.71</td><td>C₂</td></tr>
+                    <tr><td>D(5,4)</td><td>3.61</td><td>0.71</td><td>C₂</td></tr>
+                    <tr><td>E(3,3)</td><td>1.41</td><td>2.12</td><td>C₁</td></tr>
+                </table>
+                <p class="fragment definition-box medium-text">Assignment tidak berubah → Centroid tetap → <strong>Konvergen!</strong> ✅</p>
+            </section>
+
+            <!-- ==================== SLIDE 13: K-MEANS CHARACTERISTICS ==================== -->
+            <section>
+                <h2>📋 Karakteristik K-Means</h2>
+                <div class="two-column medium-text">
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>✅ Kelebihan</h4>
+                            <ul>
+                                <li>Sederhana &amp; cepat</li>
+                                <li>Scalable (data besar)</li>
+                                <li>Selalu konvergen</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="warning-box">
+                            <h4>⚠️ Kelemahan</h4>
+                            <ul>
+                                <li>Harus tentukan K</li>
+                                <li>Sensitif inisialisasi</li>
+                                <li>Hanya klaster spherical</li>
+                                <li>Sensitif outlier</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 14: ELBOW METHOD ==================== -->
+            <section>
+                <h2>📐 Menentukan K: Elbow Method</h2>
+                <div class="definition-box medium-text">
+                    <strong>Elbow Method:</strong> Plot WCSS vs K, cari titik "siku" di mana penurunan WCSS melambat signifikan.
+                </div>
+                <img src="images/p14-02-elbow-method.png" alt="Elbow Method">
+                <p class="small-text">Gambar 2: Grafik elbow method — K optimal di titik siku</p>
+            </section>
+
+            <!-- ==================== SLIDE 15: ELBOW EXAMPLE ==================== -->
+            <section>
+                <h2>📐 Elbow Method: Contoh</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>K</th><th>WCSS</th><th>Penurunan</th><th>% Penurunan</th>
+                    </tr>
+                    <tr class="fragment"><td>1</td><td>500</td><td>—</td><td>—</td></tr>
+                    <tr class="fragment"><td>2</td><td>200</td><td>300</td><td>60%</td></tr>
+                    <tr class="fragment"><td>3</td><td>100</td><td>100</td><td>50%</td></tr>
+                    <tr class="fragment" style="background-color: rgba(245, 158, 11, 0.3);">
+                        <td><strong>3→4</strong></td><td>80</td><td>20</td><td><strong>20% ← Siku!</strong></td>
+                    </tr>
+                    <tr class="fragment"><td>5</td><td>75</td><td>5</td><td>6%</td></tr>
+                    <tr class="fragment"><td>6</td><td>72</td><td>3</td><td>4%</td></tr>
+                </table>
+                <p class="fragment highlight-box medium-text">K optimal = <strong>3</strong> (penurunan drastis berkurang setelahnya)</p>
+            </section>
+
+            <!-- ==================== SLIDE 16: SILHOUETTE SCORE ==================== -->
+            <section>
+                <h2>📏 Evaluasi: Silhouette Score</h2>
+                <div class="definition-box medium-text">
+                    <p><strong>s(i) = (b(i) - a(i)) / max(a(i), b(i))</strong></p>
+                    <ul>
+                        <li><strong>a(i)</strong> = rata-rata jarak ke anggota klaster <em>sendiri</em></li>
+                        <li><strong>b(i)</strong> = rata-rata jarak ke klaster <em>terdekat lain</em></li>
+                    </ul>
+                </div>
+                <table class="medium-text fragment">
+                    <tr>
+                        <th>Nilai s(i)</th><th>Interpretasi</th>
+                    </tr>
+                    <tr style="background-color: rgba(16, 185, 129, 0.3);">
+                        <td>≈ +1</td><td>Sangat cocok dengan klasternya ✅</td>
+                    </tr>
+                    <tr style="background-color: rgba(245, 158, 11, 0.3);">
+                        <td>≈ 0</td><td>Di batas dua klaster ⚠️</td>
+                    </tr>
+                    <tr style="background-color: rgba(239, 68, 68, 0.3);">
+                        <td>≈ -1</td><td>Mungkin salah klaster ❌</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 17: HIERARCHICAL CLUSTERING ==================== -->
+            <section>
+                <h2>🌳 Hierarchical Clustering</h2>
+                <div class="definition-box medium-text">
+                    Membangun hierarki klaster dalam bentuk <strong>dendrogram</strong>, tanpa perlu menentukan K di awal.
+                </div>
+                <div class="two-column medium-text fragment">
+                    <div>
+                        <div class="highlight-box">
+                            <h4>⬆️ Agglomerative (Bottom-Up)</h4>
+                            <p>Mulai dari n klaster → gabung yang terdekat</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="warning-box">
+                            <h4>⬇️ Divisive (Top-Down)</h4>
+                            <p>Mulai dari 1 klaster → pecah iteratif</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 18: LINKAGE METHODS ==================== -->
+            <section>
+                <h2>🔗 Metode Linkage</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Metode</th><th>Jarak Antar Klaster</th><th>Karakteristik</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Single</strong></td>
+                        <td>Minimum distance</td>
+                        <td>Rawan chaining</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Complete</strong></td>
+                        <td>Maksimum distance</td>
+                        <td>Klaster kompak</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Average</strong></td>
+                        <td>Rata-rata distance</td>
+                        <td>Kompromi</td>
+                    </tr>
+                </table>
+                <img src="images/p14-03-dendrogram.png" alt="Dendrogram" class="fragment" style="max-height: 250px;">
+            </section>
+
+            <!-- ==================== SLIDE 19: K-MEANS VS HIERARCHICAL ==================== -->
+            <section>
+                <h2>⚖️ K-Means vs Hierarchical</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Aspek</th><th>K-Means</th><th>Hierarchical</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Input K</td>
+                        <td>Harus ditentukan</td>
+                        <td>Tidak perlu</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Kompleksitas</td>
+                        <td>O(nKt)</td>
+                        <td>O(n³)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Bentuk klaster</td>
+                        <td>Spherical</td>
+                        <td>Fleksibel</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Scalability</td>
+                        <td>✅ Baik</td>
+                        <td>⚠️ Kurang</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Deterministik</td>
+                        <td>❌ Tidak</td>
+                        <td>✅ Ya</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 20: PCA INTRO ==================== -->
+            <section>
+                <h2>📉 PCA: Dimensionality Reduction</h2>
+                <div class="definition-box medium-text">
+                    <strong>Principal Component Analysis (PCA):</strong> Mentransformasi data ke dimensi lebih rendah dengan mempertahankan <strong>variansi</strong> maksimal.
+                </div>
+                <ul class="medium-text">
+                    <li class="fragment">Mengurangi jumlah fitur tanpa kehilangan banyak informasi</li>
+                    <li class="fragment">Mencari arah (principal components) dengan variansi terbesar</li>
+                    <li class="fragment">Contoh: 100 fitur → 3 komponen yang menjelaskan 95% variansi</li>
+                </ul>
+                <p class="fragment highlight-box medium-text">🎖️ Pertahanan: Reduksi 50 sensor surveillance → 5-10 komponen utama untuk pemrosesan real-time</p>
+            </section>
+
+            <!-- ==================== SLIDE 21: TRANSITION TO RL ==================== -->
+            <section class="center">
+                <h1>🎮</h1>
+                <h2>Bagian 2: Reinforcement Learning</h2>
+                <p class="medium-text">Belajar dari Interaksi dan Reward</p>
+            </section>
+
+            <!-- ==================== SLIDE 22: RL CONCEPT ==================== -->
+            <section>
+                <h2>🤖 Apa itu Reinforcement Learning?</h2>
+                <div class="definition-box">
+                    <strong>Reinforcement Learning (RL):</strong> Agen belajar mengambil tindakan dalam lingkungan untuk memaksimalkan <strong>reward kumulatif</strong> melalui trial and error.
+                </div>
+                <img src="images/p14-04-reinforcement-learning.png" alt="Reinforcement Learning Cycle">
+                <p class="small-text">Gambar 3: Siklus interaksi agen-lingkungan dalam RL</p>
+            </section>
+
+            <!-- ==================== SLIDE 23: RL COMPONENTS ==================== -->
+            <section>
+                <h2>🧩 Komponen Reinforcement Learning</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Komponen</th><th>Simbol</th><th>Deskripsi</th>
+                    </tr>
+                    <tr class="fragment"><td><strong>Agent</strong></td><td>—</td><td>Entitas yang belajar</td></tr>
+                    <tr class="fragment"><td><strong>Environment</strong></td><td>—</td><td>Dunia tempat agen berinteraksi</td></tr>
+                    <tr class="fragment"><td><strong>State</strong></td><td>sₜ</td><td>Situasi saat ini</td></tr>
+                    <tr class="fragment"><td><strong>Action</strong></td><td>aₜ</td><td>Tindakan yang diambil</td></tr>
+                    <tr class="fragment"><td><strong>Reward</strong></td><td>rₜ</td><td>Sinyal feedback numerik</td></tr>
+                    <tr class="fragment"><td><strong>Policy</strong></td><td>π(s)</td><td>Strategi: state → action</td></tr>
+                    <tr class="fragment"><td><strong>Value Function</strong></td><td>V(s)</td><td>Estimasi reward kumulatif</td></tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 24: RL EXAMPLE DRONE ==================== -->
+            <section>
+                <h2>🎖️ Contoh RL: Drone Otonom</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Komponen</th><th>Drone Menghindari Rintangan</th>
+                    </tr>
+                    <tr class="fragment"><td><strong>Agent</strong></td><td>Drone otonom</td></tr>
+                    <tr class="fragment"><td><strong>State</strong></td><td>Posisi (x,y,z), kecepatan, jarak rintangan</td></tr>
+                    <tr class="fragment"><td><strong>Action</strong></td><td>Naik, turun, belok kiri/kanan, hover</td></tr>
+                    <tr class="fragment">
+                        <td><strong>Reward</strong></td>
+                        <td>+1 terbang aman, -100 tabrakan, +10 sampai tujuan</td>
+                    </tr>
+                    <tr class="fragment"><td><strong>Policy</strong></td><td>"Jika rintangan di depan → belok kiri"</td></tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 25: THREE PARADIGMS COMPARISON ==================== -->
+            <section>
+                <h2>⚖️ Tiga Paradigma ML</h2>
+                <img src="images/p14-06-three-ml-paradigms.png" alt="Tiga Paradigma ML">
+                <p class="small-text">Gambar 4: Perbandingan supervised, unsupervised, dan reinforcement learning</p>
+            </section>
+
+            <!-- ==================== SLIDE 26: THREE PARADIGMS TABLE ==================== -->
+            <section>
+                <h2>⚖️ Perbandingan Detail</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Aspek</th><th>Supervised</th><th>Unsupervised</th><th>Reinforcement</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Data</strong></td><td>Berlabel (x, y)</td><td>Tanpa label (x)</td><td>Interaksi (s, a, r)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Feedback</strong></td><td>Langsung (label)</td><td>Tidak ada</td><td>Delayed (reward)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Tujuan</strong></td><td>Prediksi</td><td>Temukan pola</td><td>Maks. reward</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Algoritma</strong></td><td>Decision Tree, NB</td><td>K-Means, PCA</td><td>Q-Learning</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Pertahanan</strong></td><td>Klasifikasi citra</td><td>Clustering sinyal</td><td>Strategi drone</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 27: MDP ==================== -->
+            <section>
+                <h2>📐 Markov Decision Process (MDP)</h2>
+                <div class="definition-box medium-text">
+                    <strong>MDP</strong> = (S, A, T, R, γ) — framework formal untuk pengambilan keputusan sekuensial
+                </div>
+                <table class="medium-text fragment">
+                    <tr>
+                        <th>Komponen</th><th>Deskripsi</th>
+                    </tr>
+                    <tr><td><strong>S</strong></td><td>Himpunan state</td></tr>
+                    <tr><td><strong>A</strong></td><td>Himpunan action</td></tr>
+                    <tr><td><strong>T(s'|s,a)</strong></td><td>Fungsi transisi (probabilitas)</td></tr>
+                    <tr><td><strong>R(s,a,s')</strong></td><td>Fungsi reward</td></tr>
+                    <tr><td><strong>γ</strong></td><td>Discount factor (0 ≤ γ ≤ 1)</td></tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 28: MARKOV PROPERTY ==================== -->
+            <section>
+                <h2>🔑 Markov Property</h2>
+                <div class="definition-box">
+                    <p><strong>Markov Property:</strong> Masa depan hanya bergantung pada <em>state saat ini</em>, bukan pada sejarah.</p>
+                    <p style="text-align: center; font-size: 1.1em;">P(s<sub>t+1</sub> | s<sub>t</sub>, a<sub>t</sub>) — cukup!</p>
+                </div>
+                <div class="fragment warning-box medium-text">
+                    <p>💡 Analogi: Dalam catur, posisi papan saat ini berisi semua informasi yang relevan — tidak perlu tahu urutan langkah sebelumnya.</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 29: MDP GRID EXAMPLE ==================== -->
+            <section>
+                <h2>📊 Contoh MDP: Grid 2×2</h2>
+                <div class="two-column">
+                    <div>
+                        <div class="highlight-box medium-text">
+                            <p><strong>Grid:</strong></p>
+                            <table>
+                                <tr><td>S1</td><td>S2</td></tr>
+                                <tr><td>S3</td><td><strong>S4 ⭐</strong></td></tr>
+                            </table>
+                            <p>S4 = Goal (reward +10)</p>
+                            <p>Setiap langkah: reward -1</p>
+                        </div>
+                    </div>
+                    <div class="medium-text">
+                        <p class="fragment"><strong>S</strong> = {S1, S2, S3, S4}</p>
+                        <p class="fragment"><strong>A</strong> = {U, D, L, R}</p>
+                        <p class="fragment"><strong>R</strong> = -1/langkah, +10 di S4</p>
+                        <p class="fragment"><strong>γ</strong> = 0.9</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 30: POLICY AND VALUE ==================== -->
+            <section>
+                <h2>🎯 Policy dan Value Function</h2>
+                <div class="two-column medium-text">
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>Policy π(s) → a</h4>
+                            <p>Strategi: "di state s, lakukan action a"</p>
+                            <p><em>Contoh:</em> S1→R, S2→D, S3→R</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="highlight-box">
+                            <h4>Value V<sup>π</sup>(s)</h4>
+                            <p>Expected cumulative reward dari state s mengikuti policy π</p>
+                            <p>V(S2) = +10 (1 langkah ke goal)</p>
+                            <p>V(S1) = -1 + 0.9×10 = 8.0</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 31: EXPLORATION VS EXPLOITATION ==================== -->
+            <section>
+                <h2>🔄 Exploration vs Exploitation</h2>
+                <div class="two-column medium-text">
+                    <div class="fragment">
+                        <div class="highlight-box">
+                            <h4>🔍 Exploration</h4>
+                            <p>Mencoba aksi <em>baru</em></p>
+                            <p>Pro: Temukan strategi lebih baik</p>
+                            <p>Con: Reward rendah sementara</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="definition-box">
+                            <h4>💰 Exploitation</h4>
+                            <p>Gunakan pengetahuan <em>terbaik</em></p>
+                            <p>Pro: Reward tinggi segera</p>
+                            <p>Con: Terjebak sub-optimal</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="fragment warning-box medium-text">
+                    <p>🎖️ <strong>Analogi:</strong> Drone patroli — selalu rute sama (exploitation) vs coba rute baru (exploration). Solusi: <strong>ε-greedy</strong></p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 32: Q-LEARNING INTRO ==================== -->
+            <section>
+                <h2>🧠 Algoritma Q-Learning</h2>
+                <div class="definition-box medium-text">
+                    <strong>Q-Learning:</strong> Algoritma RL model-free yang mempelajari Q(s,a) — expected utility dari action a di state s.
+                </div>
+                <div class="fragment highlight-box">
+                    <p style="text-align: center;"><strong>Update Rule:</strong></p>
+                    <p style="text-align: center;">Q(s,a) ← Q(s,a) + α[r + γ max<sub>a'</sub> Q(s',a') - Q(s,a)]</p>
+                </div>
+                <ul class="small-text fragment">
+                    <li><strong>α</strong> = learning rate</li>
+                    <li><strong>r</strong> = reward yang diterima</li>
+                    <li><strong>γ</strong> = discount factor</li>
+                    <li><strong>max Q(s',a')</strong> = estimasi value terbaik dari state berikutnya</li>
+                </ul>
+            </section>
+
+            <!-- ==================== SLIDE 33: Q-LEARNING ALGORITHM ==================== -->
+            <section>
+                <h2>⚙️ Algoritma Q-Learning</h2>
+                <img src="images/p14-05-q-learning-algorithm.png" alt="Q-Learning Flowchart">
+                <p class="small-text">Gambar 5: Flowchart algoritma Q-Learning</p>
+            </section>
+
+            <!-- ==================== SLIDE 34: Q-LEARNING EXAMPLE SETUP ==================== -->
+            <section>
+                <h2>📊 Q-Learning: Contoh</h2>
+                <div class="medium-text">
+                    <p><strong>Grid 1×3:</strong> S1 — S2 — S3(Goal)</p>
+                    <p>Actions: Left (L), Right (R)</p>
+                    <p>Reward: -1 per langkah, +10 di S3</p>
+                    <p>α = 0.5, γ = 0.9</p>
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Q-Table awal:</strong></p>
+                    <table class="medium-text">
+                        <tr><th>State</th><th>Q(s, L)</th><th>Q(s, R)</th></tr>
+                        <tr><td>S1</td><td>0</td><td>0</td></tr>
+                        <tr><td>S2</td><td>0</td><td>0</td></tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 35: Q-LEARNING EPISODE 1 ==================== -->
+            <section>
+                <h2>📊 Q-Learning: Episode 1</h2>
+                <p class="medium-text"><strong>Path:</strong> S1 →R→ S2 →R→ S3</p>
+                <div class="fragment">
+                    <div class="highlight-box medium-text">
+                        <p><strong>Step 1:</strong> S1 →R→ S2, reward = -1</p>
+                        <p>Q(S1,R) ← 0 + 0.5×[-1 + 0.9×max(0,0) - 0] = <strong>-0.5</strong></p>
+                    </div>
+                </div>
+                <div class="fragment">
+                    <div class="definition-box medium-text">
+                        <p><strong>Step 2:</strong> S2 →R→ S3(goal), reward = +10</p>
+                        <p>Q(S2,R) ← 0 + 0.5×[10 + 0 - 0] = <strong>5.0</strong></p>
+                    </div>
+                </div>
+                <table class="small-text fragment">
+                    <tr><th>State</th><th>Q(s, L)</th><th>Q(s, R)</th></tr>
+                    <tr><td>S1</td><td>0</td><td><strong>-0.5</strong></td></tr>
+                    <tr><td>S2</td><td>0</td><td><strong>5.0</strong></td></tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 36: Q-LEARNING EPISODE 2 ==================== -->
+            <section>
+                <h2>📊 Q-Learning: Episode 2</h2>
+                <p class="medium-text"><strong>Path:</strong> S1 →R→ S2 →R→ S3 (lagi)</p>
+                <div class="fragment">
+                    <div class="highlight-box medium-text">
+                        <p><strong>Step 1:</strong> Q(S1,R) ← -0.5 + 0.5×[-1 + 0.9×5.0 + 0.5] = <strong>1.5</strong></p>
+                    </div>
+                </div>
+                <div class="fragment">
+                    <div class="definition-box medium-text">
+                        <p><strong>Step 2:</strong> Q(S2,R) ← 5.0 + 0.5×[10 + 0 - 5.0] = <strong>7.5</strong></p>
+                    </div>
+                </div>
+                <table class="small-text fragment">
+                    <tr><th>Episode</th><th>Q(S1, R)</th><th>Q(S2, R)</th></tr>
+                    <tr><td>0</td><td>0</td><td>0</td></tr>
+                    <tr><td>1</td><td>-0.5</td><td>5.0</td></tr>
+                    <tr><td>2</td><td>1.5</td><td>7.5</td></tr>
+                    <tr style="background-color: rgba(16, 185, 129, 0.3);">
+                        <td>∞</td><td><strong>~8.0</strong></td><td><strong>~10.0</strong></td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 37: DISCOUNT FACTOR ==================== -->
+            <section>
+                <h2>⏱️ Discount Factor (γ)</h2>
+                <div class="definition-box medium-text">
+                    <strong>γ</strong> menentukan seberapa penting reward <em>masa depan</em> dibanding <em>sekarang</em>.
+                </div>
+                <table class="medium-text fragment">
+                    <tr>
+                        <th>γ</th><th>Perilaku Agen</th><th>Analogi</th>
+                    </tr>
+                    <tr>
+                        <td><strong>γ = 0</strong></td>
+                        <td>Hanya reward segera (myopic)</td>
+                        <td>Penghindaran tabrakan instan</td>
+                    </tr>
+                    <tr>
+                        <td><strong>γ = 0.5</strong></td>
+                        <td>Seimbang</td>
+                        <td>Patroli taktis</td>
+                    </tr>
+                    <tr>
+                        <td><strong>γ = 0.9</strong></td>
+                        <td>Pertimbangkan masa depan</td>
+                        <td>Strategi jangka panjang</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 38: DEEP LEARNING OVERVIEW ==================== -->
+            <section>
+                <h2>🧬 Trend: Deep Learning (Overview)</h2>
+                <div class="definition-box medium-text">
+                    <strong>Deep Learning:</strong> Neural network dengan banyak hidden layers untuk representasi data hierarkis.
+                </div>
+                <table class="small-text fragment">
+                    <tr>
+                        <th>Arsitektur</th><th>Aplikasi</th><th>Contoh Pertahanan</th>
+                    </tr>
+                    <tr>
+                        <td><strong>CNN</strong></td>
+                        <td>Computer Vision</td>
+                        <td>Deteksi objek citra satelit</td>
+                    </tr>
+                    <tr>
+                        <td><strong>RNN/LSTM</strong></td>
+                        <td>Sequence data</td>
+                        <td>Analisis SIGINT</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Transformer</strong></td>
+                        <td>NLP, multimodal</td>
+                        <td>Analisis intelijen teks</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Deep RL</strong></td>
+                        <td>Decision making</td>
+                        <td>Autonomous drone navigation</td>
+                    </tr>
+                </table>
+                <p class="fragment small-text">📌 Akan diperdalam di mata kuliah <strong>Machine Learning (Semester 5)</strong></p>
+            </section>
+
+            <!-- ==================== SLIDE 39: QUIZ 1 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 1:</strong></p>
+                <p>K-Means memerlukan parameter apa yang harus ditentukan di awal?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Learning rate (α)</div>
+                <div class="quiz-option fragment" data-fragment-index="2">B. Jumlah iterasi maksimal</div>
+                <div class="quiz-option fragment" data-fragment-index="3" style="background-color: rgba(16, 185, 129, 0.4);">C. Jumlah klaster (K) ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Jenis linkage</div>
+                <p class="fragment small-text highlight-box">💡 Elbow Method dan Silhouette Score dapat membantu menentukan K optimal</p>
+            </section>
+
+            <!-- ==================== SLIDE 40: QUIZ 2 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 2:</strong></p>
+                <p>Dalam RL, sinyal feedback numerik yang diterima agen setelah mengambil tindakan disebut?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Policy</div>
+                <div class="quiz-option fragment" data-fragment-index="2">B. Value function</div>
+                <div class="quiz-option fragment" data-fragment-index="3">C. State transition</div>
+                <div class="quiz-option fragment" data-fragment-index="4" style="background-color: rgba(16, 185, 129, 0.4);">D. Reward ✅</div>
+            </section>
+
+            <!-- ==================== SLIDE 41: QUIZ 3 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 3:</strong></p>
+                <p>Paradigma ML mana yang paling sesuai untuk mengelompokkan sinyal komunikasi musuh yang terintersepsi tanpa label?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Supervised Learning</div>
+                <div class="quiz-option fragment" data-fragment-index="2" style="background-color: rgba(16, 185, 129, 0.4);">B. Unsupervised Learning ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="3">C. Reinforcement Learning</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Transfer Learning</div>
+                <p class="fragment small-text highlight-box">💡 Data tanpa label + cari kelompok alami = Unsupervised (Clustering)</p>
+            </section>
+
+            <!-- ==================== SLIDE 42: SUMMARY ==================== -->
+            <section>
+                <h2>📝 Ringkasan</h2>
+                <table class="small-text">
+                    <tr><th>Konsep</th><th>Poin Kunci</th></tr>
+                    <tr><td><strong>Unsupervised Learning</strong></td><td>Data tanpa label, temukan pola</td></tr>
+                    <tr><td><strong>K-Means</strong></td><td>Partisi data ke K klaster via centroid</td></tr>
+                    <tr><td><strong>Hierarchical</strong></td><td>Dendrogram, tidak perlu K di awal</td></tr>
+                    <tr><td><strong>Evaluasi</strong></td><td>Elbow Method (WCSS), Silhouette Score</td></tr>
+                    <tr><td><strong>PCA</strong></td><td>Reduksi dimensi, pertahankan variansi</td></tr>
+                    <tr><td><strong>RL</strong></td><td>Agen belajar dari reward</td></tr>
+                    <tr><td><strong>MDP</strong></td><td>(S, A, T, R, γ)</td></tr>
+                    <tr><td><strong>Q-Learning</strong></td><td>Model-free, pelajari Q(s,a)</td></tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 43: NEXT WEEK ==================== -->
+            <section>
+                <h2>📅 Pertemuan Berikutnya</h2>
+                <div class="highlight-box">
+                    <h3>Pertemuan 15: Etika AI, Keamanan, dan Review Komprehensif</h3>
+                    <p class="medium-text">Persiapan Ujian Akhir Semester</p>
+                </div>
+                <ul class="medium-text">
+                    <li class="fragment">Bias algoritmik dan fairness</li>
+                    <li class="fragment">AI safety dan alignment problem</li>
+                    <li class="fragment">AI dalam konteks pertahanan</li>
+                    <li class="fragment">Review komprehensif seluruh materi</li>
+                    <li class="fragment">Latihan soal UAS</li>
+                </ul>
+            </section>
+
+            <!-- ==================== SLIDE 44: REFERENCES ==================== -->
+            <section>
+                <h2>📚 Referensi</h2>
+                <ol class="small-text">
+                    <li>Russell, S. &amp; Norvig, P. (2020). <em>Artificial Intelligence: A Modern Approach</em> (4th Ed.). Pearson. <strong>Chapter 19-22</strong></li>
+                    <li>Mitchell, T. (1997). <em>Machine Learning</em>. McGraw-Hill. Chapter 13.</li>
+                    <li>Bishop, C.M. (2006). <em>Pattern Recognition and Machine Learning</em>. Springer. Chapter 9.</li>
+                    <li>Sutton, R.S. &amp; Barto, A.G. (2018). <em>Reinforcement Learning: An Introduction</em> (2nd Ed.). MIT Press.</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 45: CLOSING ==================== -->
+            <section class="center">
+                <h1>Terima Kasih</h1>
+                <h3>🤖 Kecerdasan Artifisial</h3>
+                <p>Pertemuan 14: Unsupervised Learning &amp; Reinforcement Learning</p>
+                <br>
+                <p class="small-text">Ada pertanyaan?</p>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/math/math.min.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            showSlideNumber: 'all',
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            pdfSeparateFragments: false,
+            plugins: [ RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+        });
+    </script>
+</body>
+</html>
