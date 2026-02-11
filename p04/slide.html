@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pertemuan 04: Pencarian Lokal dan Optimisasi</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/league.min.css">
+    
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css">
+    
+    <!-- Custom Theme -->
+    <link rel="stylesheet" href="unhan-theme.css">
+    
+    <style>
+        /* Fallback styles if unhan-theme.css is not available */
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+        }
+        .reveal .slides section {
+            text-align: left;
+        }
+        .reveal .slides section.center {
+            text-align: center;
+        }
+        .reveal table {
+            margin: 20px auto;
+            font-size: 0.7em;
+        }
+        .reveal table th {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px;
+        }
+        .reveal table td {
+            padding: 8px 12px;
+            border: 1px solid #444;
+        }
+        .reveal .highlight-box {
+            background-color: rgba(37, 99, 235, 0.2);
+            border-left: 4px solid #2563eb;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .definition-box {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .warning-box {
+            background-color: rgba(245, 158, 11, 0.2);
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .two-column {
+            display: flex;
+            gap: 40px;
+        }
+        .reveal .two-column > div {
+            flex: 1;
+        }
+        .reveal .emoji-large {
+            font-size: 3em;
+        }
+        .reveal .quiz-option {
+            background-color: rgba(100, 100, 100, 0.3);
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .reveal .quiz-option:hover {
+            background-color: rgba(37, 99, 235, 0.4);
+        }
+        .reveal code {
+            background-color: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .reveal pre code {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .reveal .small-text {
+            font-size: 0.6em;
+        }
+        .reveal .medium-text {
+            font-size: 0.8em;
+        }
+        .reveal img {
+            max-height: 450px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- ==================== SLIDE 1: TITLE ==================== -->
+            <section class="center">
+                <h1>Kecerdasan Artifisial</h1>
+                <h3>Pertemuan 04</h3>
+                <h2>Pencarian Lokal dan Optimisasi</h2>
+                <p class="small-text" style="margin-top: 50px;">
+                    Mata Kuliah: Kecerdasan Artifisial (AI401) | 3 SKS
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 2: LEARNING OUTCOMES ==================== -->
+            <section>
+                <h2>🎯 Capaian Pembelajaran</h2>
+                <p>Setelah pertemuan ini, mahasiswa mampu:</p>
+                <ol class="medium-text">
+                    <li class="fragment">Menjelaskan perbedaan pencarian lokal dengan pencarian sistematis</li>
+                    <li class="fragment">Mengimplementasikan algoritma Hill Climbing dan variasinya</li>
+                    <li class="fragment">Mengimplementasikan Simulated Annealing</li>
+                    <li class="fragment">Menerapkan algoritma genetika untuk optimisasi</li>
+                    <li class="fragment">Mengaplikasikan pencarian lokal pada N-Queens dan TSP</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 3: AGENDA ==================== -->
+            <section>
+                <h2>📋 Agenda Hari Ini</h2>
+                <div class="two-columns">
+                    <div>
+                        <h4>Bagian 1</h4>
+                        <ul class="medium-text">
+                            <li>Konsep Pencarian Lokal</li>
+                            <li>Hill Climbing</li>
+                            <li>Simulated Annealing</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Bagian 2</h4>
+                        <ul class="medium-text">
+                            <li>Local Beam Search</li>
+                            <li>Algoritma Genetika</li>
+                            <li>Aplikasi: N-Queens & TSP</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 4: REVIEW ==================== -->
+            <section>
+                <h2>📚 Review: Pencarian Sistematis</h2>
+                <p>Pada Pertemuan 2-3, kita mempelajari:</p>
+                <ul class="medium-text">
+                    <li class="fragment"><strong>Uninformed Search:</strong> BFS, DFS, UCS</li>
+                    <li class="fragment"><strong>Informed Search:</strong> Greedy, A*</li>
+                    <li class="fragment">Menyimpan <span class="highlight">banyak state</span> dalam memori</li>
+                    <li class="fragment">Menyimpan <span class="highlight">jalur</span> ke solusi</li>
+                </ul>
+                <div class="fragment box-warning">
+                    <p>⚠️ Bagaimana jika ruang pencarian SANGAT BESAR?</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 5: LOCAL SEARCH INTRO ==================== -->
+            <section>
+                <h2>🔍 Pencarian Lokal</h2>
+                <div class="box-definition">
+                    <strong>Pencarian Lokal (Local Search)</strong> adalah algoritma yang hanya menyimpan <strong>satu state saat ini</strong> dan bergerak ke state tetangga tanpa menyimpan jalur.
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Kapan digunakan?</strong></p>
+                    <ul class="medium-text">
+                        <li>Yang penting <em>solusi</em>, bukan <em>jalur</em></li>
+                        <li>Masalah <strong>optimisasi</strong></li>
+                        <li>Ruang pencarian sangat besar</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 6: COMPARISON TABLE ==================== -->
+            <section>
+                <h2>📊 Perbandingan Pendekatan</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Aspek</th>
+                        <th>Sistematis</th>
+                        <th>Lokal</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Memori</strong></td>
+                        <td>O(b<sup>d</sup>)</td>
+                        <td>O(1)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Jalur</strong></td>
+                        <td>Tersimpan</td>
+                        <td>Tidak</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Completeness</strong></td>
+                        <td>Ya (umumnya)</td>
+                        <td>Tidak</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Cocok untuk</strong></td>
+                        <td>Path finding</td>
+                        <td>Optimisasi</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 7: LANDSCAPE CONCEPT ==================== -->
+            <section>
+                <h2>🏔️ Landscape dalam Pencarian</h2>
+                <img src="images/p04-02-search-landscape.png" alt="Search Landscape">
+                <p class="small-text">Gambar 1: Landscape dengan global maximum, local maximum, dan plateau</p>
+            </section>
+
+            <!-- ==================== SLIDE 8: LANDSCAPE FEATURES ==================== -->
+            <section>
+                <h2>Fitur-fitur Landscape</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Fitur</th>
+                        <th>Deskripsi</th>
+                        <th>Masalah</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Global Max/Min</strong></td>
+                        <td>Titik optimal sejati</td>
+                        <td>Tujuan kita! ✅</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Local Max/Min</strong></td>
+                        <td>Optimal di area lokal</td>
+                        <td>Bisa terjebak ⚠️</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Plateau</strong></td>
+                        <td>Area datar</td>
+                        <td>Arah tidak jelas 😕</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Ridge</strong></td>
+                        <td>Puncak sempit</td>
+                        <td>Sulit navigasi 🧗</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 9: HILL CLIMBING INTRO ==================== -->
+            <section>
+                <h2>⛰️ Hill Climbing</h2>
+                <div class="box-definition">
+                    <strong>Hill Climbing</strong> adalah algoritma yang terus bergerak ke arah nilai yang lebih baik dan berhenti ketika tidak ada tetangga yang lebih baik.
+                </div>
+                <div class="fragment">
+                    <p>Disebut juga <strong>Greedy Local Search</strong></p>
+                    <p class="small-text">Selalu pilih langkah terbaik secara lokal</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 10: HILL CLIMBING PSEUDOCODE ==================== -->
+            <section>
+                <h2>Hill Climbing: Algoritma</h2>
+                <pre><code class="python" data-trim>
+def hill_climbing(problem):
+    current = problem.initial_state()
+    
+    while True:
+        neighbors = current.get_neighbors()
+        best_neighbor = max(neighbors, 
+                           key=problem.value)
+        
+        if problem.value(best_neighbor) <= \
+           problem.value(current):
+            return current  # Stuck!
+        
+        current = best_neighbor
+                </code></pre>
+            </section>
+
+            <!-- ==================== SLIDE 11: HILL CLIMBING VARIANTS ==================== -->
+            <section>
+                <h2>Variasi Hill Climbing</h2>
+                <img src="images/p04-03-hill-climbing-variants.png" alt="Hill Climbing Variants">
+                <p class="small-text">Gambar 2: Steepest Ascent, Stochastic, dan First-Choice</p>
+            </section>
+
+            <!-- ==================== SLIDE 12: VARIANTS DETAIL ==================== -->
+            <section>
+                <h2>Tiga Variasi Hill Climbing</h2>
+                <div class="three-columns medium-text">
+                    <div class="fragment">
+                        <div class="box-info">
+                            <h4>Steepest Ascent</h4>
+                            <p>Evaluasi SEMUA tetangga, pilih terbaik</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="box-warning">
+                            <h4>Stochastic</h4>
+                            <p>Pilih ACAK dari yang lebih baik</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="box-success">
+                            <h4>First-Choice</h4>
+                            <p>Pilih PERTAMA yang lebih baik</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 13: RANDOM RESTART ==================== -->
+            <section>
+                <h2>🔄 Random Restart Hill Climbing</h2>
+                <div class="box-definition">
+                    Jalankan Hill Climbing berkali-kali dari titik awal acak, pilih hasil terbaik.
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Probabilitas sukses:</strong></p>
+                    <div class="formula-box">
+                        <p>P(sukses setelah k restart) = 1 - (1-p)<sup>k</sup></p>
+                    </div>
+                    <p class="small-text">p = probabilitas sukses satu kali</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 14: HC PROBLEMS ==================== -->
+            <section>
+                <h2>⚠️ Masalah Hill Climbing</h2>
+                <div class="two-columns">
+                    <div>
+                        <h4 class="warning">Keterbatasan:</h4>
+                        <ul class="medium-text">
+                            <li class="fragment">Terjebak di <strong>Local Maximum</strong></li>
+                            <li class="fragment">Stuck di <strong>Plateau</strong></li>
+                            <li class="fragment">Kesulitan di <strong>Ridge</strong></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="success">Solusi:</h4>
+                        <ul class="medium-text">
+                            <li class="fragment">Random Restart</li>
+                            <li class="fragment">Simulated Annealing</li>
+                            <li class="fragment">Genetic Algorithm</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 15: QUIZ 1 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <div class="quiz-box">
+                    <p><strong>Pertanyaan 1:</strong></p>
+                    <p>Jika Hill Climbing memiliki probabilitas 25% untuk menemukan global optimum, berapa kali restart minimal agar probabilitas sukses ≥ 90%?</p>
+                </div>
+                <div class="fragment answer-reveal">
+                    <p><strong>Jawaban:</strong></p>
+                    <p>1 - (0.75)<sup>k</sup> ≥ 0.90 → k ≥ 8</p>
+                    <p>Minimal <strong>8 restart</strong></p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 16: SIMULATED ANNEALING INTRO ==================== -->
+            <section>
+                <h2>🔥 Simulated Annealing</h2>
+                <div class="box-definition">
+                    <strong>Simulated Annealing</strong> terinspirasi dari proses annealing dalam metalurgi - memanaskan logam lalu mendinginkan perlahan untuk struktur kristal optimal.
+                </div>
+                <div class="fragment highlight-box">
+                    <p>💡 <strong>Ide Kunci:</strong> Kadang-kadang menerima langkah LEBIH BURUK untuk keluar dari local optima!</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 17: SA PROCESS ==================== -->
+            <section>
+                <h2>Proses Simulated Annealing</h2>
+                <img src="images/p04-04-simulated-annealing-process.png" alt="Simulated Annealing Process">
+                <p class="small-text">Gambar 3: Temperatur tinggi → eksplorasi, Temperatur rendah → eksploitasi</p>
+            </section>
+
+            <!-- ==================== SLIDE 18: SA PROBABILITY ==================== -->
+            <section>
+                <h2>Probabilitas Penerimaan</h2>
+                <div class="formula-box">
+                    <p style="font-size: 1.3em;">P(terima) = e<sup>ΔE/T</sup></p>
+                </div>
+                <table class="medium-text fragment">
+                    <tr>
+                        <th>Kondisi</th>
+                        <th>Probabilitas</th>
+                    </tr>
+                    <tr>
+                        <td>T tinggi (panas)</td>
+                        <td>Mendekati 1 → hampir selalu terima</td>
+                    </tr>
+                    <tr>
+                        <td>T rendah (dingin)</td>
+                        <td>Mendekati 0 → jarang terima</td>
+                    </tr>
+                    <tr>
+                        <td>ΔE kecil (sedikit buruk)</td>
+                        <td>Lebih tinggi</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 19: SA ALGORITHM ==================== -->
+            <section>
+                <h2>Simulated Annealing: Algoritma</h2>
+                <pre><code class="python" data-trim>
+def simulated_annealing(problem, schedule):
+    current = problem.initial_state()
+    
+    for t in range(1, MAX_ITER):
+        T = schedule(t)  # Temperatur
+        if T == 0:
+            return current
+        
+        next = random.choice(current.neighbors())
+        delta_E = value(next) - value(current)
+        
+        if delta_E > 0:  # Lebih baik
+            current = next
+        elif random.random() < exp(delta_E/T):
+            current = next  # Terima yg lebih buruk!
+                </code></pre>
+            </section>
+
+            <!-- ==================== SLIDE 20: COOLING SCHEDULE ==================== -->
+            <section>
+                <h2>📉 Jadwal Pendinginan</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Jenis</th>
+                        <th>Formula</th>
+                        <th>Karakteristik</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Linear</strong></td>
+                        <td>T(t) = T₀ - αt</td>
+                        <td>Sederhana</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Exponential</strong></td>
+                        <td>T(t) = T₀ × α<sup>t</sup></td>
+                        <td>Paling umum (α≈0.95)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Logarithmic</strong></td>
+                        <td>T(t) = T₀ / ln(t+1)</td>
+                        <td>Sangat lambat</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 21: QUIZ 2 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <div class="quiz-box">
+                    <p><strong>Pertanyaan 2:</strong></p>
+                    <p>Nilai saat ini = 100, tetangga = 95, T = 5. Berapa probabilitas menerima tetangga?</p>
+                </div>
+                <div class="fragment answer-reveal">
+                    <p><strong>Jawaban:</strong></p>
+                    <p>ΔE = 95 - 100 = -5</p>
+                    <p>P = e<sup>-5/5</sup> = e<sup>-1</sup> = <strong>0.368 (36.8%)</strong></p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 22: HC vs SA ==================== -->
+            <section>
+                <h2>Hill Climbing vs Simulated Annealing</h2>
+                <table class="medium-text">
+                    <tr>
+                        <th>Aspek</th>
+                        <th>Hill Climbing</th>
+                        <th>Simulated Annealing</th>
+                    </tr>
+                    <tr>
+                        <td>Langkah buruk</td>
+                        <td class="warning">❌ Tidak pernah</td>
+                        <td class="success">✅ Bisa diterima</td>
+                    </tr>
+                    <tr>
+                        <td>Escape local optima</td>
+                        <td class="warning">❌ Tidak bisa</td>
+                        <td class="success">✅ Bisa</td>
+                    </tr>
+                    <tr>
+                        <td>Kecepatan</td>
+                        <td class="success">✅ Cepat</td>
+                        <td class="warning">⚠️ Lebih lambat</td>
+                    </tr>
+                    <tr>
+                        <td>Hasil</td>
+                        <td>Local optimum</td>
+                        <td>Mendekati global</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 23: LOCAL BEAM SEARCH ==================== -->
+            <section>
+                <h2>🔦 Local Beam Search</h2>
+                <div class="box-definition">
+                    <strong>Local Beam Search</strong> memelihara <strong>k state</strong> secara bersamaan, bukan hanya satu.
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Proses:</strong></p>
+                    <ol class="medium-text">
+                        <li>Generate semua successors dari k state</li>
+                        <li>Pilih k terbaik dari SEMUA successors</li>
+                        <li>Ulangi</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 24: BEAM SEARCH ILLUSTRATION ==================== -->
+            <section>
+                <h2>Local Beam Search (k=3)</h2>
+                <img src="images/p04-05-local-beam-search.png" alt="Local Beam Search">
+                <p class="small-text">Gambar 4: k state dipertahankan, pilih k terbaik dari semua successors</p>
+            </section>
+
+            <!-- ==================== SLIDE 25: GENETIC ALGORITHM INTRO ==================== -->
+            <section>
+                <h2>🧬 Algoritma Genetika</h2>
+                <div class="box-definition">
+                    <strong>Genetic Algorithm</strong> terinspirasi dari evolusi biologis: seleksi alam, crossover, dan mutasi.
+                </div>
+                <div class="fragment">
+                    <table class="medium-text">
+                        <tr>
+                            <th>Biologi</th>
+                            <th>GA</th>
+                        </tr>
+                        <tr><td>Chromosome</td><td>Solusi kandidat</td></tr>
+                        <tr><td>Gen</td><td>Komponen solusi</td></tr>
+                        <tr><td>Fitness</td><td>Nilai objective</td></tr>
+                        <tr><td>Populasi</td><td>Kumpulan solusi</td></tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 26: GA FLOWCHART ==================== -->
+            <section>
+                <h2>Alur Algoritma Genetika</h2>
+                <img src="images/p04-06-genetic-algorithm-components.png" alt="Genetic Algorithm Flow">
+                <p class="small-text">Gambar 5: Populasi → Seleksi → Crossover → Mutasi → Populasi Baru</p>
+            </section>
+
+            <!-- ==================== SLIDE 27: GA SELECTION ==================== -->
+            <section>
+                <h2>Seleksi: Roulette Wheel</h2>
+                <div class="formula-box">
+                    <p>P(individu i) = fitness(i) / Σ fitness(j)</p>
+                </div>
+                <div class="fragment">
+                    <p class="medium-text"><strong>Contoh:</strong></p>
+                    <table class="small-text">
+                        <tr>
+                            <th>Individu</th>
+                            <th>Fitness</th>
+                            <th>Probabilitas</th>
+                        </tr>
+                        <tr><td>A</td><td>30</td><td>30%</td></tr>
+                        <tr><td>B</td><td>50</td><td>50%</td></tr>
+                        <tr><td>C</td><td>20</td><td>20%</td></tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 28: CROSSOVER ==================== -->
+            <section>
+                <h2>Crossover (Rekombinasi)</h2>
+                <img src="images/p04-07-crossover-types.png" alt="Crossover Types">
+                <p class="small-text">Gambar 6: Single-point, Two-point, dan Uniform Crossover</p>
+            </section>
+
+            <!-- ==================== SLIDE 29: CROSSOVER EXAMPLE ==================== -->
+            <section>
+                <h2>Contoh Single-Point Crossover</h2>
+                <pre class="medium-text"><code>
+Parent 1: [1, 1, 1, 1 | 1, 1, 1, 1]
+Parent 2: [0, 0, 0, 0 | 0, 0, 0, 0]
+              ↑ Titik potong
+
+Offspring 1: [1, 1, 1, 1, 0, 0, 0, 0]
+Offspring 2: [0, 0, 0, 0, 1, 1, 1, 1]
+                </code></pre>
+            </section>
+
+            <!-- ==================== SLIDE 30: MUTATION ==================== -->
+            <section>
+                <h2>Mutasi</h2>
+                <div class="box-definition">
+                    <strong>Mutasi:</strong> Perubahan acak kecil untuk mempertahankan keragaman genetik.
+                </div>
+                <pre class="fragment"><code>
+Sebelum: [1, 0, 1, 1, 0, 0, 1, 0]
+                   ↑ mutasi
+Setelah: [1, 0, 0, 1, 0, 0, 1, 0]
+                </code></pre>
+                <div class="fragment box-info">
+                    <p>💡 Mutation rate biasanya rendah (1-5%)</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 31: GA COMPLETE ==================== -->
+            <section>
+                <h2>GA: Algoritma Lengkap</h2>
+                <pre><code class="python" data-trim data-line-numbers="1-5|6-10|11-15">
+def genetic_algorithm(problem, pop_size, generations):
+    population = [random_chromosome() 
+                  for _ in range(pop_size)]
+    
+    for gen in range(generations):
+        # Evaluasi fitness
+        fitness = [problem.fitness(ind) 
+                   for ind in population]
+        
+        # Buat populasi baru
+        new_pop = [best_individual]  # Elitism
+        
+        while len(new_pop) < pop_size:
+            p1, p2 = select(population, fitness)
+            off1, off2 = crossover(p1, p2)
+            new_pop.extend([mutate(off1), mutate(off2)])
+        
+        population = new_pop
+                </code></pre>
+            </section>
+
+            <!-- ==================== SLIDE 32: N-QUEENS PROBLEM ==================== -->
+            <section>
+                <h2>👑 N-Queens Problem</h2>
+                <div class="box-definition">
+                    Tempatkan N ratu pada papan N×N sehingga tidak ada yang saling menyerang.
+                </div>
+                <img src="images/p04-08-n-queens-problem.png" alt="8-Queens Solution" style="max-height: 350px;">
+                <p class="small-text">Gambar 7: Contoh solusi 8-Queens</p>
+            </section>
+
+            <!-- ==================== SLIDE 33: N-QUEENS REPRESENTATION ==================== -->
+            <section>
+                <h2>N-Queens: Representasi</h2>
+                <div class="two-columns">
+                    <div>
+                        <p><strong>Array 1D:</strong></p>
+                        <pre><code>state = [0, 4, 7, 5, 2, 6, 1, 3]</code></pre>
+                        <p class="small-text">Index = kolom, Value = baris</p>
+                    </div>
+                    <div>
+                        <p><strong>Heuristic h:</strong></p>
+                        <div class="box-info">
+                            <p>h = jumlah pasangan ratu yang saling menyerang</p>
+                            <p class="small-text">Goal: h = 0</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 34: N-QUEENS RESULTS ==================== -->
+            <section>
+                <h2>N-Queens: Perbandingan Algoritma</h2>
+                <table>
+                    <tr>
+                        <th>Algoritma</th>
+                        <th>Success Rate (8-Queens)</th>
+                    </tr>
+                    <tr>
+                        <td>Hill Climbing</td>
+                        <td class="warning">~14%</td>
+                    </tr>
+                    <tr>
+                        <td>Random Restart HC (100x)</td>
+                        <td class="success">~100%</td>
+                    </tr>
+                    <tr>
+                        <td>Simulated Annealing</td>
+                        <td class="success">~94%</td>
+                    </tr>
+                    <tr>
+                        <td>Genetic Algorithm</td>
+                        <td class="success">~90%</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 35: TSP ==================== -->
+            <section>
+                <h2>🗺️ Traveling Salesman Problem</h2>
+                <div class="box-definition">
+                    <strong>TSP:</strong> Cari rute terpendek yang mengunjungi setiap kota tepat satu kali dan kembali ke asal.
+                </div>
+                <div class="fragment">
+                    <p><strong>Representasi:</strong> Permutasi kota</p>
+                    <pre><code>[0, 3, 1, 4, 2]  # Urutan kunjungan</code></pre>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 36: 2-OPT ==================== -->
+            <section>
+                <h2>TSP: Operator 2-opt</h2>
+                <img src="images/p04-09-2opt-operator.png" alt="2-opt Operator">
+                <p class="small-text">Gambar 8: 2-opt membalik segmen untuk menghilangkan crossing</p>
+            </section>
+
+            <!-- ==================== SLIDE 37: DEFENSE APPLICATION ==================== -->
+            <section>
+                <h2>🎖️ Aplikasi Pertahanan</h2>
+                <div class="three-columns medium-text">
+                    <div class="fragment">
+                        <div class="box-info">
+                            <h4>Rute Patroli</h4>
+                            <p>TSP untuk optimisasi checkpoint</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="box-warning">
+                            <h4>Sensor Radar</h4>
+                            <p>Maksimalkan coverage area</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="box-success">
+                            <h4>Penjadwalan Misi</h4>
+                            <p>Alokasi resource optimal</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 38: QUIZ 3 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <div class="quiz-box">
+                    <p><strong>Pertanyaan 3:</strong></p>
+                    <p>Untuk masalah dengan banyak local optima dan constraint kompleks, algoritma mana yang paling sesuai?</p>
+                </div>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Steepest Ascent Hill Climbing</div>
+                <div class="quiz-option fragment" data-fragment-index="2">B. First-Choice Hill Climbing</div>
+                <div class="quiz-option fragment" data-fragment-index="3" style="background-color: rgba(16, 185, 129, 0.4);">C. Genetic Algorithm ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Local Beam Search</div>
+            </section>
+
+            <!-- ==================== SLIDE 39: ALGORITHM COMPARISON ==================== -->
+            <section>
+                <h2>📊 Perbandingan Algoritma</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Algoritma</th>
+                        <th>Escape Local?</th>
+                        <th>Memori</th>
+                        <th>Best For</th>
+                    </tr>
+                    <tr>
+                        <td>Hill Climbing</td>
+                        <td>❌</td>
+                        <td>O(1)</td>
+                        <td>Landscape smooth</td>
+                    </tr>
+                    <tr>
+                        <td>Random Restart</td>
+                        <td>✅</td>
+                        <td>O(1)</td>
+                        <td>Multiple local optima</td>
+                    </tr>
+                    <tr>
+                        <td>Simulated Annealing</td>
+                        <td>✅</td>
+                        <td>O(1)</td>
+                        <td>General optimization</td>
+                    </tr>
+                    <tr>
+                        <td>Local Beam</td>
+                        <td>⚠️</td>
+                        <td>O(k)</td>
+                        <td>Parallel problems</td>
+                    </tr>
+                    <tr>
+                        <td>Genetic Algorithm</td>
+                        <td>✅</td>
+                        <td>O(pop)</td>
+                        <td>Complex landscapes</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 40: SUMMARY ==================== -->
+            <section>
+                <h2>📝 Ringkasan</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Konsep</th>
+                        <th>Poin Kunci</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Pencarian Lokal</strong></td>
+                        <td>Hanya simpan state saat ini, O(1)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hill Climbing</strong></td>
+                        <td>Greedy, bisa stuck di local optima</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Simulated Annealing</strong></td>
+                        <td>Terima langkah buruk dengan P = e<sup>ΔE/T</sup></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Genetic Algorithm</strong></td>
+                        <td>Populasi + Seleksi + Crossover + Mutasi</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Aplikasi</strong></td>
+                        <td>N-Queens, TSP, Penjadwalan</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 41: NEXT WEEK ==================== -->
+            <section>
+                <h2>📅 Pertemuan Berikutnya</h2>
+                <div class="highlight-box">
+                    <h3>Pertemuan 05: Pencarian Adversarial</h3>
+                    <p class="medium-text">Game Playing dengan AI</p>
+                </div>
+                <ul class="medium-text">
+                    <li class="fragment">Karakteristik game two-player</li>
+                    <li class="fragment">Algoritma Minimax</li>
+                    <li class="fragment">Alpha-Beta Pruning</li>
+                    <li class="fragment">Fungsi Evaluasi</li>
+                </ul>
+            </section>
+
+            <!-- ==================== SLIDE 42: REFERENCES ==================== -->
+            <section>
+                <h2>📚 Referensi</h2>
+                <ol class="small-text">
+                    <li>Russell, S. & Norvig, P. (2020). <em>Artificial Intelligence: A Modern Approach</em> (4th Ed.). Pearson. <strong>Chapter 4.1-4.2</strong></li>
+                    <li>Ertel, W. (2017). <em>Introduction to Artificial Intelligence</em> (2nd Ed.). Springer. Chapter 5.</li>
+                    <li>Goldberg, D.E. (1989). <em>Genetic Algorithms in Search, Optimization, and Machine Learning</em>. Addison-Wesley.</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 43: CLOSING ==================== -->
+            <section class="center">
+                <h1>Terima Kasih</h1>
+                <h3>🤖 Kecerdasan Artifisial</h3>
+                <p>Pertemuan 04: Pencarian Lokal dan Optimisasi</p>
+                <br>
+                <p class="small-text">Ada pertanyaan?</p>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/math/math.min.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            showSlideNumber: 'all',
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            pdfSeparateFragments: false,
+            plugins: [ RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+        });
+    </script>
+</body>
+</html>
