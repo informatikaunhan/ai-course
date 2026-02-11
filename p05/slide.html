@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pertemuan 05: Pencarian Adversarial - Game Playing</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/league.min.css">
+    
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css">
+    
+    <!-- Custom Theme -->
+    <link rel="stylesheet" href="unhan-theme.css">
+    
+    <style>
+        /* Fallback styles if unhan-theme.css is not available */
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+        }
+        .reveal .slides section {
+            text-align: left;
+        }
+        .reveal .slides section.center {
+            text-align: center;
+        }
+        .reveal table {
+            margin: 20px auto;
+            font-size: 0.7em;
+        }
+        .reveal table th {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px;
+        }
+        .reveal table td {
+            padding: 8px 12px;
+            border: 1px solid #444;
+        }
+        .reveal .highlight-box {
+            background-color: rgba(37, 99, 235, 0.2);
+            border-left: 4px solid #2563eb;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .definition-box {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .warning-box {
+            background-color: rgba(245, 158, 11, 0.2);
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reveal .two-column {
+            display: flex;
+            gap: 40px;
+        }
+        .reveal .two-column > div {
+            flex: 1;
+        }
+        .reveal .emoji-large {
+            font-size: 3em;
+        }
+        .reveal .quiz-option {
+            background-color: rgba(100, 100, 100, 0.3);
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .reveal .quiz-option:hover {
+            background-color: rgba(37, 99, 235, 0.4);
+        }
+        .reveal code {
+            background-color: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .reveal pre code {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .reveal .small-text {
+            font-size: 0.6em;
+        }
+        .reveal .medium-text {
+            font-size: 0.8em;
+        }
+        .reveal img {
+            max-height: 450px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- ==================== SLIDE 1: TITLE ==================== -->
+            <section class="center">
+                <h1>Kecerdasan Artifisial</h1>
+                <h3>Pertemuan 05</h3>
+                <h2>Pencarian Adversarial - Game Playing</h2>
+                <p class="small-text" style="margin-top: 50px;">
+                    Mata Kuliah: Kecerdasan Artifisial (AI401) | 3 SKS
+                </p>
+            </section>
+
+            <!-- ==================== SLIDE 2: LEARNING OUTCOMES ==================== -->
+            <section>
+                <h2>🎯 Capaian Pembelajaran</h2>
+                <p>Setelah pertemuan ini, mahasiswa mampu:</p>
+                <ol class="small-text">
+                    <li class="fragment">Memformulasikan game sebagai problem pencarian adversarial</li>
+                    <li class="fragment">Membangun dan menganalisis game tree</li>
+                    <li class="fragment">Mengimplementasikan algoritma Minimax</li>
+                    <li class="fragment">Menganalisis kompleksitas Minimax O(b<sup>m</sup>)</li>
+                    <li class="fragment">Menerapkan Alpha-Beta Pruning untuk optimasi</li>
+                    <li class="fragment">Merancang fungsi evaluasi untuk game</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 3: AGENDA ==================== -->
+            <section>
+                <h2>📋 Agenda Hari Ini</h2>
+                <div class="two-columns">
+                    <div>
+                        <h4>Bagian 1</h4>
+                        <ul class="small-text">
+                            <li>Pencarian Adversarial</li>
+                            <li>Karakteristik Game</li>
+                            <li>Game Tree</li>
+                            <li>Algoritma Minimax</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Bagian 2</h4>
+                        <ul class="small-text">
+                            <li>Fungsi Evaluasi</li>
+                            <li>Alpha-Beta Pruning</li>
+                            <li>Expectiminimax</li>
+                            <li>Aplikasi Pertahanan</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 4: REVIEW ==================== -->
+            <section>
+                <h2>🔄 Review: Pencarian Sebelumnya</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Pertemuan</th>
+                        <th>Topik</th>
+                        <th>Karakteristik</th>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Uninformed Search</td>
+                        <td>Agen tunggal, tanpa heuristik</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Informed Search</td>
+                        <td>Agen tunggal, dengan heuristik</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Local Search</td>
+                        <td>Agen tunggal, optimasi</td>
+                    </tr>
+                    <tr class="fragment" style="background: rgba(212, 168, 75, 0.3);">
+                        <td><strong>5</strong></td>
+                        <td><strong>Adversarial Search</strong></td>
+                        <td><strong>Multi-agen kompetitif</strong></td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 5: WHAT IS ADVERSARIAL SEARCH ==================== -->
+            <section>
+                <h2>🎮 Apa itu Pencarian Adversarial?</h2>
+                <div class="box-definition">
+                    <strong>Pencarian Adversarial</strong> adalah teknik pencarian dalam situasi kompetitif dimana terdapat agen-agen dengan tujuan yang saling bertentangan.
+                </div>
+                <div class="fragment">
+                    <p class="small-text"><strong>Perbedaan utama:</strong></p>
+                    <ul class="small-text">
+                        <li>🎯 Bukan mencari path ke goal</li>
+                        <li>⚔️ Melawan lawan yang juga optimal</li>
+                        <li>🔄 Giliran bergantian</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 6: SINGLE VS ADVERSARIAL ==================== -->
+            <section>
+                <h2>📊 Single Agent vs Adversarial</h2>
+                <div class="comparison-grid">
+                    <div class="box-info">
+                        <h4>Single Agent (A*)</h4>
+                        <ul class="small-text">
+                            <li>Kontrol penuh atas aksi</li>
+                            <li>Path cost deterministik</li>
+                            <li>Goal state jelas</li>
+                        </ul>
+                    </div>
+                    <div class="box-warning">
+                        <h4>Adversarial (Minimax)</h4>
+                        <ul class="small-text">
+                            <li>Giliran bergantian</li>
+                            <li>Lawan memilih optimal</li>
+                            <li>Mengalahkan lawan</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="fragment small box-danger">⚠️ A* tidak bisa digunakan langsung untuk game karena lawan akan menghalangi!</p>
+            </section>
+
+            <!-- ==================== SLIDE 7: GAME APPLICATIONS ==================== -->
+            <section>
+                <h2>🌍 Aplikasi Pencarian Adversarial</h2>
+                <div class="two-columns">
+                    <div>
+                        <h4>🎲 Dalam Game</h4>
+                        <ul class="small-text">
+                            <li class="fragment">Catur, Go, Checkers</li>
+                            <li class="fragment">Video game AI</li>
+                            <li class="fragment">Card games</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>🎖️ Konteks Pertahanan</h4>
+                        <ul class="small-text">
+                            <li class="fragment">War gaming & simulasi</li>
+                            <li class="fragment">Cyber attack-defense</li>
+                            <li class="fragment">Alokasi sumber daya</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 8: GAME CLASSIFICATION ==================== -->
+            <section>
+                <h2>📂 Klasifikasi Game</h2>
+                <img src="images/p05-01-game-classification.png" alt="Klasifikasi Game">
+                <p class="small-text">Gambar 2.1: Klasifikasi game berdasarkan karakteristiknya</p>
+            </section>
+
+            <!-- ==================== SLIDE 9: DETERMINISTIC VS STOCHASTIC ==================== -->
+            <section>
+                <h2>🎲 Deterministik vs Stokastik</h2>
+                <div class="two-columns">
+                    <div class="fragment">
+                        <div class="box-success">
+                            <h4>Deterministik</h4>
+                            <p class="small-text">State berikutnya <em>pasti</em> ditentukan oleh aksi</p>
+                            <p class="small-text">Contoh: Catur, Go, Tic-Tac-Toe</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="box-warning">
+                            <h4>Stokastik</h4>
+                            <p class="small-text">Ada elemen <em>keacakan</em> (dadu, kartu)</p>
+                            <p class="small-text">Contoh: Backgammon, Poker</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 10: PERFECT VS IMPERFECT INFO ==================== -->
+            <section>
+                <h2>👁️ Perfect vs Imperfect Information</h2>
+                <div class="two-columns">
+                    <div class="fragment">
+                        <div class="box-success">
+                            <h4>Perfect Information</h4>
+                            <p class="small-text">Semua pemain melihat <em>seluruh</em> state</p>
+                            <p class="small-text">Contoh: Catur (semua bidak terlihat)</p>
+                        </div>
+                    </div>
+                    <div class="fragment">
+                        <div class="box-danger">
+                            <h4>Imperfect Information</h4>
+                            <p class="small-text">Sebagian informasi <em>tersembunyi</em></p>
+                            <p class="small-text">Contoh: Poker (kartu lawan tidak terlihat)</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 11: ZERO-SUM GAME ==================== -->
+            <section>
+                <h2>⚖️ Zero-Sum Game</h2>
+                <div class="box-definition">
+                    <strong>Zero-Sum Game:</strong> Game dimana total keuntungan dan kerugian semua pemain selalu berjumlah nol.
+                </div>
+                <div class="formula-box fragment">
+                    <p>U<sub>MAX</sub>(s) + U<sub>MIN</sub>(s) = 0</p>
+                    <p class="small-text">atau: U<sub>MAX</sub>(s) = -U<sub>MIN</sub>(s)</p>
+                </div>
+                <div class="fragment box-info">
+                    <p class="small-text">💡 Keuntungan MAX = Kerugian MIN, dan sebaliknya!</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 12: ZERO-SUM EXAMPLE ==================== -->
+            <section>
+                <h2>♟️ Contoh Zero-Sum: Catur</h2>
+                <table>
+                    <tr>
+                        <th>Hasil</th>
+                        <th>U(White/MAX)</th>
+                        <th>U(Black/MIN)</th>
+                        <th>Total</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>White menang</td>
+                        <td>+1</td>
+                        <td>-1</td>
+                        <td>0 ✓</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Draw</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0 ✓</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Black menang</td>
+                        <td>-1</td>
+                        <td>+1</td>
+                        <td>0 ✓</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 13: FOCUS OF THIS LECTURE ==================== -->
+            <section>
+                <h2>🎯 Fokus Pertemuan Ini</h2>
+                <p>Game dengan karakteristik:</p>
+                <ul>
+                    <li class="fragment"><strong>Two-player</strong> - Dua pemain bergantian</li>
+                    <li class="fragment"><strong>Zero-sum</strong> - Keuntungan satu = kerugian lainnya</li>
+                    <li class="fragment"><strong>Perfect information</strong> - Semua state terlihat</li>
+                    <li class="fragment"><strong>Deterministic</strong> - Tidak ada keacakan</li>
+                </ul>
+                <p class="fragment box-info small">Contoh: Catur, Tic-Tac-Toe, Connect Four, Checkers</p>
+            </section>
+
+            <!-- ==================== SLIDE 14: GAME TREE CONCEPT ==================== -->
+            <section>
+                <h2>🌳 Game Tree</h2>
+                <div class="box-definition">
+                    <strong>Game Tree</strong> adalah representasi graf dari semua kemungkinan permainan, dari posisi awal hingga semua kemungkinan hasil akhir.
+                </div>
+                <img src="images/p05-02-game-tree-structure.png" alt="Struktur Game Tree" class="fragment">
+            </section>
+
+            <!-- ==================== SLIDE 15: GAME TREE COMPONENTS ==================== -->
+            <section>
+                <h2>🏗️ Komponen Game Tree</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Komponen</th>
+                        <th>Deskripsi</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Root Node</strong></td>
+                        <td>State awal permainan</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>MAX Nodes</strong></td>
+                        <td>Giliran kita (memaksimalkan)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>MIN Nodes</strong></td>
+                        <td>Giliran lawan (meminimalkan)</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Terminal Nodes</strong></td>
+                        <td>State akhir dengan nilai utility</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Branching Factor (b)</strong></td>
+                        <td>Rata-rata langkah legal per state</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td><strong>Depth (m)</strong></td>
+                        <td>Kedalaman maksimum tree</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 16: TIC-TAC-TOE GAME TREE ==================== -->
+            <section>
+                <h2>❌⭕ Game Tree: Tic-Tac-Toe</h2>
+                <img src="images/p05-03-tictactoe-game-tree.png" alt="Game Tree Tic-Tac-Toe">
+                <p class="small-text">Gambar 3.2: Sebagian game tree untuk Tic-Tac-Toe</p>
+            </section>
+
+            <!-- ==================== SLIDE 17: TTT COMPLEXITY ==================== -->
+            <section>
+                <h2>📊 Kompleksitas Tic-Tac-Toe</h2>
+                <ul>
+                    <li class="fragment"><strong>Branching factor rata-rata:</strong> b ≈ 5</li>
+                    <li class="fragment"><strong>Kedalaman maksimum:</strong> m = 9</li>
+                    <li class="fragment"><strong>Estimasi nodes:</strong> 5<sup>9</sup> ≈ 2 juta</li>
+                    <li class="fragment"><strong>Actual unique games:</strong> ~255,168</li>
+                </ul>
+                <div class="fragment box-info">
+                    <p class="small-text">💡 Tic-Tac-Toe cukup kecil untuk dieksplorasi sepenuhnya!</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 18: MINIMAX CONCEPT ==================== -->
+            <section>
+                <h2>🎯 Algoritma Minimax</h2>
+                <div class="box-definition">
+                    <strong>Minimax</strong> adalah algoritma untuk menentukan langkah optimal dalam game two-player zero-sum dengan asumsi kedua pemain bermain optimal.
+                </div>
+                <div class="fragment">
+                    <p class="small-text"><strong>Prinsip:</strong></p>
+                    <ul class="small-text">
+                        <li><span class="text-gold">MAX</span> berusaha <strong>memaksimalkan</strong> nilai</li>
+                        <li><span class="text-red">MIN</span> berusaha <strong>meminimalkan</strong> nilai</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 19: MINIMAX ILLUSTRATION ==================== -->
+            <section>
+                <h2>📈 Ilustrasi Minimax</h2>
+                <img src="images/p05-04-minimax-concept.png" alt="Konsep Minimax">
+                <p class="small-text">Gambar 4.1: Propagasi nilai dari terminal ke root</p>
+            </section>
+
+            <!-- ==================== SLIDE 20: MINIMAX FORMULA ==================== -->
+            <section>
+                <h2>📐 Definisi Formal Minimax</h2>
+                <div class="formula-box">
+                    <p class="small-text">MINIMAX(n) =</p>
+                    <ul class="small-text" style="list-style: none; text-align: left;">
+                        <li>Utility(n) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; jika n terminal</li>
+                        <li>max<sub>a</sub> MINIMAX(Result(n,a)) &nbsp; jika Player(n) = MAX</li>
+                        <li>min<sub>a</sub> MINIMAX(Result(n,a)) &nbsp;&nbsp; jika Player(n) = MIN</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 21: MINIMAX PSEUDOCODE ==================== -->
+            <section>
+                <h2>💻 Pseudocode Minimax</h2>
+                <pre><code class="python" data-trim>
+def max_value(state):
+    if terminal_test(state):
+        return utility(state)
+    v = -infinity
+    for action in actions(state):
+        v = max(v, min_value(result(state, action)))
+    return v
+
+def min_value(state):
+    if terminal_test(state):
+        return utility(state)
+    v = +infinity
+    for action in actions(state):
+        v = min(v, max_value(result(state, action)))
+    return v
+                </code></pre>
+            </section>
+
+            <!-- ==================== SLIDE 22: MINIMAX EXAMPLE ==================== -->
+            <section>
+                <h2>✏️ Contoh: Hitung Minimax</h2>
+                <pre style="font-size: 0.5em; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px;">
+        A (MAX)
+       /|\
+      / | \
+     B  C  D (MIN)
+    /\  |  /\
+   3  5 2 6  1
+                </pre>
+                <div class="fragment">
+                    <p class="small-text"><strong>Step 1:</strong> MIN nodes</p>
+                    <ul class="small-text">
+                        <li>B = min(3, 5) = <strong>3</strong></li>
+                        <li>C = <strong>2</strong></li>
+                        <li>D = min(6, 1) = <strong>1</strong></li>
+                    </ul>
+                </div>
+                <div class="fragment">
+                    <p class="small-text"><strong>Step 2:</strong> MAX node</p>
+                    <p class="small-text">A = max(3, 2, 1) = <strong class="text-gold">3</strong> → Pilih B!</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 23: MINIMAX COMPLEXITY ==================== -->
+            <section>
+                <h2>⏱️ Kompleksitas Minimax</h2>
+                <div class="formula-box">
+                    <p><strong>Time Complexity:</strong> O(b<sup>m</sup>)</p>
+                    <p><strong>Space Complexity:</strong> O(bm)</p>
+                </div>
+                <table class="small fragment">
+                    <tr>
+                        <th>Game</th>
+                        <th>b</th>
+                        <th>m</th>
+                        <th>Nodes</th>
+                    </tr>
+                    <tr>
+                        <td>Tic-Tac-Toe</td>
+                        <td>~5</td>
+                        <td>9</td>
+                        <td>~10<sup>6</sup></td>
+                    </tr>
+                    <tr>
+                        <td>Chess</td>
+                        <td>~35</td>
+                        <td>~100</td>
+                        <td>~10<sup>154</sup> 😱</td>
+                    </tr>
+                    <tr>
+                        <td>Go</td>
+                        <td>~250</td>
+                        <td>~150</td>
+                        <td>~10<sup>360</sup> 🤯</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 24: EVALUATION FUNCTION ==================== -->
+            <section>
+                <h2>📊 Fungsi Evaluasi</h2>
+                <div class="box-definition">
+                    <strong>Fungsi Evaluasi</strong> memberikan estimasi nilai state tanpa perlu mengeksplorasi hingga terminal state.
+                </div>
+                <img src="images/p05-05-evaluation-function-cutoff.png" alt="Evaluation Function" class="fragment">
+            </section>
+
+            <!-- ==================== SLIDE 25: EVAL FUNCTION PROPERTIES ==================== -->
+            <section>
+                <h2>✅ Properti Fungsi Evaluasi yang Baik</h2>
+                <ol>
+                    <li class="fragment"><strong>Konsisten dengan utility</strong> - Setuju untuk terminal states</li>
+                    <li class="fragment"><strong>Cepat dihitung</strong> - Tidak terlalu kompleks</li>
+                    <li class="fragment"><strong>Reflektif</strong> - Nilai tinggi = peluang menang tinggi</li>
+                    <li class="fragment"><strong>Linear combination</strong> - Weighted sum dari features</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 26: CHESS EVAL EXAMPLE ==================== -->
+            <section>
+                <h2>♟️ Contoh: Evaluasi Catur</h2>
+                <div class="formula-box">
+                    <p class="small-text">Eval(s) = w₁·material + w₂·mobility + w₃·king_safety + ...</p>
+                </div>
+                <table class="small fragment">
+                    <tr>
+                        <th>Piece</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr><td>Pawn</td><td>1</td></tr>
+                    <tr><td>Knight/Bishop</td><td>3</td></tr>
+                    <tr><td>Rook</td><td>5</td></tr>
+                    <tr><td>Queen</td><td>9</td></tr>
+                </table>
+                <p class="fragment small box-info">Material advantage adalah feature paling penting!</p>
+            </section>
+
+            <!-- ==================== SLIDE 27: ALPHA-BETA MOTIVATION ==================== -->
+            <section>
+                <h2>✂️ Mengapa Perlu Pruning?</h2>
+                <p>Minimax mengevaluasi <strong>banyak node yang tidak perlu</strong>!</p>
+                <div class="fragment box-warning">
+                    <p class="small-text">Contoh: Catur dengan depth 4</p>
+                    <p class="small-text">35<sup>4</sup> = <strong>1.5 juta nodes</strong></p>
+                </div>
+                <div class="fragment box-success">
+                    <p class="small-text">Dengan Alpha-Beta optimal:</p>
+                    <p class="small-text">35<sup>2</sup> = <strong>1,225 nodes</strong> (99.9% lebih sedikit!)</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 28: ALPHA-BETA CONCEPT ==================== -->
+            <section>
+                <h2>🔪 Alpha-Beta Pruning</h2>
+                <div class="box-definition">
+                    <strong>Alpha-Beta Pruning</strong> mengurangi jumlah node yang dievaluasi dengan memotong cabang yang tidak mempengaruhi keputusan akhir.
+                </div>
+                <div class="fragment two-columns">
+                    <div class="box-info">
+                        <p><strong>α (Alpha)</strong></p>
+                        <p class="small-text">Nilai minimum yang dijamin MAX</p>
+                        <p class="small-text">(lower bound)</p>
+                    </div>
+                    <div class="box-warning">
+                        <p><strong>β (Beta)</strong></p>
+                        <p class="small-text">Nilai maksimum yang dijamin MIN</p>
+                        <p class="small-text">(upper bound)</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 29: ALPHA-BETA ILLUSTRATION ==================== -->
+            <section>
+                <h2>📊 Ilustrasi Alpha-Beta</h2>
+                <img src="images/p05-06-alpha-beta-concept.png" alt="Alpha-Beta Pruning">
+                <p class="small-text">Gambar 6.1: Pruning terjadi ketika α ≥ β</p>
+            </section>
+
+            <!-- ==================== SLIDE 30: PRUNING CONDITION ==================== -->
+            <section>
+                <h2>⚡ Kondisi Pruning</h2>
+                <div class="two-columns">
+                    <div class="box-info">
+                        <h4>Pada MIN node</h4>
+                        <p class="small-text">Jika nilai ≤ α</p>
+                        <p class="small-text">→ <strong>Prune!</strong></p>
+                        <p class="small-text">(MAX tidak akan pilih path ini)</p>
+                    </div>
+                    <div class="box-warning">
+                        <h4>Pada MAX node</h4>
+                        <p class="small-text">Jika nilai ≥ β</p>
+                        <p class="small-text">→ <strong>Prune!</strong></p>
+                        <p class="small-text">(MIN tidak akan pilih path ini)</p>
+                    </div>
+                </div>
+                <div class="fragment formula-box">
+                    <p class="small-text"><strong>Pruning Rule:</strong> α ≥ β → PRUNE!</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 31: ALPHA-BETA PSEUDOCODE ==================== -->
+            <section>
+                <h2>💻 Pseudocode Alpha-Beta</h2>
+                <pre><code class="python" data-trim data-line-numbers="1-8|9-16">
+def max_value(state, alpha, beta):
+    if terminal_test(state): return utility(state)
+    v = -infinity
+    for action in actions(state):
+        v = max(v, min_value(result(state, action), alpha, beta))
+        if v >= beta: return v  # Prune!
+        alpha = max(alpha, v)
+    return v
+
+def min_value(state, alpha, beta):
+    if terminal_test(state): return utility(state)
+    v = +infinity
+    for action in actions(state):
+        v = min(v, max_value(result(state, action), alpha, beta))
+        if v <= alpha: return v  # Prune!
+        beta = min(beta, v)
+    return v
+                </code></pre>
+            </section>
+
+            <!-- ==================== SLIDE 32: ALPHA-BETA EXAMPLE ==================== -->
+            <section>
+                <h2>✏️ Contoh Alpha-Beta Pruning</h2>
+                <pre style="font-size: 0.45em; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px;">
+           A (MAX)
+         /   |   \
+        B    C    D (MIN)
+       /\   /\   /\
+      3  5 6  2 1  8
+                </pre>
+                <ol class="small-text">
+                    <li class="fragment">B = min(3,5) = 3 → α = 3</li>
+                    <li class="fragment">C: cek 6, lalu 2. min = 2 (tidak dipilih, 2 < 3)</li>
+                    <li class="fragment">D: cek 1. <strong>1 ≤ α(3)?</strong> Ya! → <span class="text-red">PRUNE 8!</span> ✂️</li>
+                    <li class="fragment">A = max(3, 2, 1) = <strong class="text-gold">3</strong></li>
+                </ol>
+                <p class="fragment small box-success">Node 8 tidak perlu dievaluasi!</p>
+            </section>
+
+            <!-- ==================== SLIDE 33: ALPHA-BETA EFFICIENCY ==================== -->
+            <section>
+                <h2>📊 Efisiensi Alpha-Beta</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Kondisi</th>
+                        <th>Kompleksitas</th>
+                        <th>Penjelasan</th>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Worst case</td>
+                        <td>O(b<sup>m</sup>)</td>
+                        <td>Tidak ada pruning</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Random order</td>
+                        <td>O(b<sup>3m/4</sup>)</td>
+                        <td>Pruning moderat</td>
+                    </tr>
+                    <tr class="fragment" style="background: rgba(16, 185, 129, 0.3);">
+                        <td><strong>Perfect order</strong></td>
+                        <td><strong>O(b<sup>m/2</sup>)</strong></td>
+                        <td>Pruning optimal!</td>
+                    </tr>
+                </table>
+                <p class="fragment box-info small">🎯 Perfect ordering = kedalaman pencarian 2x lipat!</p>
+            </section>
+
+            <!-- ==================== SLIDE 34: MOVE ORDERING ==================== -->
+            <section>
+                <h2>📋 Teknik Move Ordering</h2>
+                <p class="small-text">Untuk mendekati efisiensi optimal:</p>
+                <ol class="small-text">
+                    <li class="fragment"><strong>Killer Move Heuristic</strong> - Simpan langkah yang menyebabkan cutoff</li>
+                    <li class="fragment"><strong>History Heuristic</strong> - Lacak langkah yang sering sukses</li>
+                    <li class="fragment"><strong>Iterative Deepening</strong> - Gunakan hasil pencarian dangkal</li>
+                    <li class="fragment"><strong>Transposition Table</strong> - Cache hasil evaluasi</li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 35: EXPECTIMINIMAX ==================== -->
+            <section>
+                <h2>🎲 Expectiminimax</h2>
+                <div class="box-definition">
+                    <strong>Expectiminimax</strong> adalah variasi Minimax untuk game stokastik dengan menambahkan "chance nodes".
+                </div>
+                <img src="images/p05-07-expectiminimax-tree.png" alt="Expectiminimax" class="fragment">
+            </section>
+
+            <!-- ==================== SLIDE 36: CHANCE NODES ==================== -->
+            <section>
+                <h2>🎯 Chance Nodes</h2>
+                <p class="small-text">Pada chance node, hitung <strong>expected value</strong>:</p>
+                <div class="formula-box">
+                    <p>E[V] = Σ P(r) × MINIMAX(Result(n, r))</p>
+                </div>
+                <div class="fragment box-warning">
+                    <p class="small-text">⚠️ <strong>Kelemahan:</strong></p>
+                    <p class="small-text">Alpha-Beta kurang efektif karena chance nodes memerlukan semua children!</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 37: DEFENSE APPLICATION ==================== -->
+            <section>
+                <h2>🎖️ Aplikasi: Simulasi Pertahanan</h2>
+                <div class="box-info">
+                    <p class="small-text"><strong>Skenario:</strong> Defender vs Attacker dalam pertahanan pulau</p>
+                </div>
+                <ul class="small-text">
+                    <li class="fragment"><strong>Defender (MAX):</strong> Memilih posisi unit pertahanan</li>
+                    <li class="fragment"><strong>Attacker (MIN):</strong> Memilih jalur serangan</li>
+                    <li class="fragment"><strong>Utility:</strong> +1 jika pertahanan berhasil, -1 jika gagal</li>
+                </ul>
+                <p class="fragment small box-success">Minimax membantu menemukan strategi pertahanan optimal!</p>
+            </section>
+
+            <!-- ==================== SLIDE 38: CYBER DEFENSE ==================== -->
+            <section>
+                <h2>🔐 Aplikasi: Cyber Defense</h2>
+                <div class="two-columns small">
+                    <div>
+                        <p><strong>Defender:</strong></p>
+                        <ul class="small-text">
+                            <li>Pilih sistem untuk diperkuat</li>
+                            <li>Alokasi sumber daya keamanan</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p><strong>Attacker:</strong></p>
+                        <ul class="small-text">
+                            <li>Pilih target serangan</li>
+                            <li>Memaksimalkan damage</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="fragment box-warning">
+                    <p class="small-text">💡 Minimax memprediksi serangan rasional untuk proactive defense!</p>
+                </div>
+            </section>
+
+            <!-- ==================== SLIDE 39: QUIZ 1 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 1:</strong></p>
+                <p class="small-text">Dalam zero-sum game, jika MAX mendapat utility +5, berapa utility MIN?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. +5</div>
+                <div class="quiz-option fragment" data-fragment-index="2">B. 0</div>
+                <div class="quiz-option fragment" data-fragment-index="3" style="background-color: rgba(16, 185, 129, 0.4);">C. -5 ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Tidak dapat ditentukan</div>
+                <p class="fragment small box-info">💡 Zero-sum: U<sub>MAX</sub> + U<sub>MIN</sub> = 0</p>
+            </section>
+
+            <!-- ==================== SLIDE 40: QUIZ 2 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 2:</strong></p>
+                <p class="small-text">Kapan Alpha-Beta Pruning melakukan pruning pada MIN node?</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Ketika nilai ≥ β</div>
+                <div class="quiz-option fragment" data-fragment-index="2" style="background-color: rgba(16, 185, 129, 0.4);">B. Ketika nilai ≤ α ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="3">C. Ketika α = β</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Tidak pernah prune di MIN node</div>
+            </section>
+
+            <!-- ==================== SLIDE 41: QUIZ 3 ==================== -->
+            <section>
+                <h2>🧠 Quiz Time!</h2>
+                <p><strong>Pertanyaan 3:</strong></p>
+                <p class="small-text">Game Backgammon termasuk kategori:</p>
+                <div class="quiz-option fragment" data-fragment-index="1">A. Deterministik, Perfect Information</div>
+                <div class="quiz-option fragment" data-fragment-index="2" style="background-color: rgba(16, 185, 129, 0.4);">B. Stokastik, Perfect Information ✅</div>
+                <div class="quiz-option fragment" data-fragment-index="3">C. Deterministik, Imperfect Information</div>
+                <div class="quiz-option fragment" data-fragment-index="4">D. Stokastik, Imperfect Information</div>
+                <p class="fragment small box-info">💡 Ada dadu (stokastik), tapi semua bidak terlihat (perfect info)</p>
+            </section>
+
+            <!-- ==================== SLIDE 42: SUMMARY ==================== -->
+            <section>
+                <h2>📝 Ringkasan</h2>
+                <table class="small-text">
+                    <tr>
+                        <th>Konsep</th>
+                        <th>Poin Kunci</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Adversarial Search</strong></td>
+                        <td>Pencarian dengan lawan kompetitif</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Zero-Sum</strong></td>
+                        <td>U<sub>MAX</sub> + U<sub>MIN</sub> = 0</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Minimax</strong></td>
+                        <td>MAX maximizes, MIN minimizes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Kompleksitas</strong></td>
+                        <td>O(b<sup>m</sup>) tanpa pruning</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Alpha-Beta</strong></td>
+                        <td>O(b<sup>m/2</sup>) dengan perfect ordering</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Expectiminimax</strong></td>
+                        <td>Untuk game dengan keacakan</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ==================== SLIDE 43: NEXT WEEK ==================== -->
+            <section>
+                <h2>📅 Pertemuan Berikutnya</h2>
+                <div class="box-info">
+                    <h3>Pertemuan 06: Constraint Satisfaction Problems</h3>
+                    <p class="small-text">CSP dan Teknik Penyelesaiannya</p>
+                </div>
+                <ul class="small-text">
+                    <li class="fragment">Formulasi CSP: variabel, domain, constraint</li>
+                    <li class="fragment">Constraint Propagation (AC-3)</li>
+                    <li class="fragment">Backtracking Search dengan heuristik</li>
+                    <li class="fragment">Contoh: Map Coloring, Sudoku</li>
+                </ul>
+            </section>
+
+            <!-- ==================== SLIDE 44: REFERENCES ==================== -->
+            <section>
+                <h2>📚 Referensi</h2>
+                <ol class="small-text">
+                    <li>Russell, S. & Norvig, P. (2020). <em>Artificial Intelligence: A Modern Approach</em> (4th Ed.). Pearson. <strong>Chapter 5: Adversarial Search</strong></li>
+                    <li>Ertel, W. (2017). <em>Introduction to Artificial Intelligence</em> (2nd Ed.). Springer. Chapter 6.</li>
+                    <li>CS188 Berkeley AI Materials: <a href="https://inst.eecs.berkeley.edu/~cs188/">https://inst.eecs.berkeley.edu/~cs188/</a></li>
+                </ol>
+            </section>
+
+            <!-- ==================== SLIDE 45: CLOSING ==================== -->
+            <section class="center">
+                <h1>Terima Kasih</h1>
+                <h3>🤖 Kecerdasan Artifisial</h3>
+                <p>Pertemuan 05: Pencarian Adversarial - Game Playing</p>
+                <br>
+                <p class="small-text">Ada pertanyaan?</p>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/math/math.min.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            showSlideNumber: 'all',
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            pdfSeparateFragments: false,
+            plugins: [ RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+        });
+    </script>
+</body>
+</html>
