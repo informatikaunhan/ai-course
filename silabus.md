@@ -12,9 +12,9 @@
 | **Bobot SKS** | 3 SKS (Teori) |
 | **Semester** | 4 (Empat) |
 | **Prasyarat** | Struktur Data dan Algoritma (SDA201), Statistika dan Probabilitas (STP301) |
-| **Program Studi** | Informatikq |
+| **Program Studi** | Teknik Informatika / Ilmu Komputer |
 | **Dosen Pengampu** | Anindito, S.Kom., S.S., S.H., M.TI., CHFI. |
-| **Tahun Akademik** | 2025/2026 |
+| **Tahun Akademik** | [Tahun Akademik] |
 
 ---
 
@@ -41,9 +41,7 @@ Mata kuliah ini memanfaatkan fondasi dari **Struktur Data dan Algoritma (Semeste
 ## PRASYARAT PENGETAHUAN
 
 ### Dari Mata Kuliah Struktur Data dan Algoritma (SDA201)
-
 Mahasiswa diasumsikan telah menguasai:
-
 1. **Struktur Data Dasar**: Array, linked list, stack, queue
 2. **Struktur Data Non-Linear**: Tree, binary tree, BST, heap, priority queue
 3. **Algoritma Pencarian dan Sorting**: Binary search, berbagai algoritma sorting
@@ -52,9 +50,7 @@ Mahasiswa diasumsikan telah menguasai:
 6. **Graph (Pengenalan)**: Representasi dan traversal dasar
 
 ### Dari Mata Kuliah Statistika dan Probabilitas (STP301)
-
 Mahasiswa diasumsikan telah menguasai:
-
 1. **Probabilitas Dasar**: Ruang sampel, kejadian, probabilitas bersyarat
 2. **Teorema Bayes**: Perhitungan probabilitas posterior
 3. **Distribusi Probabilitas**: Diskret dan kontinu
@@ -65,16 +61,19 @@ Mahasiswa diasumsikan telah menguasai:
 ## REFERENSI
 
 ### Referensi Utama
-
-1. Russell, S. & Norvig, P. (2020). *Artificial Intelligence: A Modern Approach* (4th Ed.). Pearson.
+1. Russell, S. & Norvig, P. (2020). *Artificial Intelligence: A Modern Approach* (4th Ed.). Pearson. ISBN: 978-0134610993
 
 ### Referensi Pendukung
+2. Poole, D.L. & Mackworth, A.K. (2023). *Artificial Intelligence: Foundations of Computational Agents* (3rd Ed.). Cambridge University Press. ISBN: 978-1009349178
+3. Ertel, W. (2017). *Introduction to Artificial Intelligence* (2nd Ed.). Springer. ISBN: 978-3319584867
+4. Nilsson, N.J. (2014). *Principles of Artificial Intelligence*. Morgan Kaufmann. ISBN: 978-0934613101
+5. Mitchell, T. (1997). *Machine Learning*. McGraw-Hill. ISBN: 978-0070428072
+6. Bishop, C.M. (2006). *Pattern Recognition and Machine Learning*. Springer. ISBN: 978-0387310732
 
-2. Poole, D.L. & Mackworth, A.K. (2023). *Artificial Intelligence: Foundations of Computational Agents* (3rd Ed.). Cambridge University Press.
-3. Ertel, W. (2017). *Introduction to Artificial Intelligence* (2nd Ed.). Springer.
-4. Nilsson, N.J. (2014). *Principles of Artificial Intelligence*. Morgan Kaufmann.
-5. Mitchell, T. (1997). *Machine Learning*. McGraw-Hill.
-6. Bishop, C.M. (2006). *Pattern Recognition and Machine Learning*. Springer.
+### Sumber Online
+7. CS188 Berkeley AI Materials: https://inst.eecs.berkeley.edu/~cs188/
+8. Stanford CS221 AI Course: https://stanford-cs221.github.io/
+9. AI Algorithms Visualization: https://algorithm-visualizer.org/
 
 ---
 
@@ -112,7 +111,6 @@ Mahasiswa diasumsikan telah menguasai:
 | **Sub-CPMK-1.2** | Mampu mengidentifikasi jenis-jenis agen cerdas dan karakteristik lingkungan tugas (PEAS) | CPMK-1 |
 | **Sub-CPMK-2.1** | Mampu memformulasikan masalah pencarian dan mengimplementasikan algoritma uninformed search (BFS, DFS, UCS) | CPMK-2 |
 | **Sub-CPMK-2.2** | Mampu merancang fungsi heuristik dan mengimplementasikan algoritma informed search (Greedy, A*) | CPMK-2 |
-| **Sub-CPMK-2.3** | Mampu menerapkan algoritma pencarian lokal (hill climbing, simulated annealing, genetic algorithm) | CPMK-2 |
 | **Sub-CPMK-3.1** | Mampu mengimplementasikan algoritma pencarian adversarial (Minimax, Alpha-Beta Pruning) untuk game | CPMK-3 |
 | **Sub-CPMK-3.2** | Mampu memformulasikan dan menyelesaikan Constraint Satisfaction Problems (CSP) | CPMK-3 |
 | **Sub-CPMK-4.1** | Mampu merepresentasikan pengetahuan menggunakan logika proposisional dan melakukan inferensi | CPMK-4 |
@@ -143,6 +141,7 @@ Mahasiswa diasumsikan telah menguasai:
 | **Penilaian** | Tugas analisis PEAS (15%) |
 | **Estimasi Waktu Belajar Mandiri** | 360 menit |
 | **Referensi** | Russell & Norvig Ch.1-2; Poole & Mackworth Ch.1 |
+| **Sumber Praktikum** | CS188 Berkeley AI Materials: https://inst.eecs.berkeley.edu/~cs188/; AI Demos (PEAS): https://ai-demos.org/ |
 
 ---
 
@@ -151,14 +150,15 @@ Mahasiswa diasumsikan telah menguasai:
 | Komponen | Uraian |
 |----------|--------|
 | **Sub-CPMK** | Sub-CPMK-2.1 |
-| **Indikator Pencapaian** | (1) Mahasiswa mampu memformulasikan masalah sebagai problem pencarian; (2) Mahasiswa mampu menjelaskan dan membandingkan algoritma uninformed search; (3) Mahasiswa mampu menelusuri langkah-langkah BFS, DFS, dan UCS |
+| **Indikator Pencapaian** | (1) Mahasiswa mampu memformulasikan masalah sebagai problem pencarian; (2) Mahasiswa mampu menjelaskan dan membandingkan algoritma uninformed search; (3) Mahasiswa mampu mengimplementasikan BFS, DFS, dan UCS |
 | **Materi Pembelajaran** | Formulasi masalah pencarian: state space, initial state, goal test, actions, path cost; Representasi search tree dan search graph; Kriteria evaluasi algoritma: completeness, optimality, time complexity, space complexity; Breadth-First Search (BFS): algoritma, analisis kompleksitas O(b^d); Depth-First Search (DFS): algoritma, variasi (depth-limited, iterative deepening); Uniform-Cost Search (UCS): algoritma dengan priority queue; Perbandingan ketiga algoritma |
 | **Bentuk & Waktu Pembelajaran** | Teori: 3×50 menit (150 menit) |
 | **Metode Pembelajaran** | Ceramah, demonstrasi algoritma, visualisasi, latihan soal |
 | **Pengalaman Belajar** | Mahasiswa menelusuri langkah-langkah algoritma pada berbagai contoh masalah (puzzle, maze, route finding) |
-| **Penilaian** | Kuis (10%), Tugas penelusuran algoritma (15%) |
+| **Penilaian** | Kuis (10%), Tugas implementasi (15%) |
 | **Estimasi Waktu Belajar Mandiri** | 360 menit |
 | **Referensi** | Russell & Norvig Ch.3.1-3.4; Poole & Mackworth Ch.3 |
+| **Sumber Praktikum** | Visualgo - BFS/DFS: https://visualgo.net/en/dfsbfs; CS188 Search: https://inst.eecs.berkeley.edu/~cs188/; PathFinding.js: https://qiao.github.io/PathFinding.js/visual/ |
 
 ---
 
@@ -167,7 +167,7 @@ Mahasiswa diasumsikan telah menguasai:
 | Komponen | Uraian |
 |----------|--------|
 | **Sub-CPMK** | Sub-CPMK-2.2 |
-| **Indikator Pencapaian** | (1) Mahasiswa mampu menjelaskan konsep heuristik dan admissibility; (2) Mahasiswa mampu merancang fungsi heuristik yang baik; (3) Mahasiswa mampu menelusuri dan menganalisis algoritma A* |
+| **Indikator Pencapaian** | (1) Mahasiswa mampu menjelaskan konsep heuristik dan admissibility; (2) Mahasiswa mampu merancang fungsi heuristik yang baik; (3) Mahasiswa mampu mengimplementasikan dan menganalisis algoritma A* |
 | **Materi Pembelajaran** | Konsep heuristik: estimasi biaya ke goal; Greedy Best-First Search: algoritma, kelebihan dan kelemahan; Algoritma A*: f(n) = g(n) + h(n); Properti heuristik: admissibility dan consistency; Pembuktian optimalitas A* dengan admissible heuristic; Teknik merancang heuristik: relaxed problem, pattern database; Contoh heuristik: Manhattan distance, Euclidean distance, misplaced tiles; Memory-bounded search: IDA*, SMA* (pengenalan) |
 | **Bentuk & Waktu Pembelajaran** | Teori: 3×50 menit (150 menit) |
 | **Metode Pembelajaran** | Ceramah, demonstrasi, problem-based learning |
@@ -175,6 +175,7 @@ Mahasiswa diasumsikan telah menguasai:
 | **Penilaian** | Tugas desain heuristik (20%) |
 | **Estimasi Waktu Belajar Mandiri** | 360 menit |
 | **Referensi** | Russell & Norvig Ch.3.5-3.6; Ertel Ch.4 |
+| **Sumber Praktikum** | A* Visualization: https://qiao.github.io/PathFinding.js/visual/; Algorithm Visualizer: https://algorithm-visualizer.org/; 8-Puzzle Solver Online: https://deniz.co/8-puzzle-solver/ |
 
 ---
 
@@ -182,15 +183,16 @@ Mahasiswa diasumsikan telah menguasai:
 
 | Komponen | Uraian |
 |----------|--------|
-| **Sub-CPMK** | Sub-CPMK-2.3 |
-| **Indikator Pencapaian** | (1) Mahasiswa mampu menjelaskan perbedaan pencarian lokal dengan pencarian sistematis; (2) Mahasiswa mampu menelusuri algoritma hill climbing dan simulated annealing; (3) Mahasiswa mampu menerapkan algoritma genetika untuk optimisasi |
+| **Sub-CPMK** | Sub-CPMK-2.2 |
+| **Indikator Pencapaian** | (1) Mahasiswa mampu menjelaskan perbedaan pencarian lokal dengan pencarian sistematis; (2) Mahasiswa mampu mengimplementasikan algoritma hill climbing dan simulated annealing; (3) Mahasiswa mampu menerapkan algoritma genetika untuk optimisasi |
 | **Materi Pembelajaran** | Konsep pencarian lokal: hanya menyimpan state saat ini; Hill Climbing: steepest ascent, variasi (stochastic, first-choice, random restart); Masalah local maxima, plateau, ridge; Simulated Annealing: inspirasi dari metalurgi, jadwal pendinginan; Local Beam Search; Algoritma Genetika: populasi, seleksi, crossover, mutasi, fitness function; Aplikasi: traveling salesman, scheduling, parameter optimization |
 | **Bentuk & Waktu Pembelajaran** | Teori: 3×50 menit (150 menit) |
 | **Metode Pembelajaran** | Ceramah, demonstrasi, simulasi |
-| **Pengalaman Belajar** | Mahasiswa menelusuri hill climbing dan simulated annealing untuk N-Queens problem |
-| **Penilaian** | Tugas penelusuran algoritma (20%), Kuis (10%) |
+| **Pengalaman Belajar** | Mahasiswa mengimplementasikan hill climbing dan simulated annealing untuk N-Queens problem |
+| **Penilaian** | Tugas implementasi (20%), Kuis (10%) |
 | **Estimasi Waktu Belajar Mandiri** | 360 menit |
 | **Referensi** | Russell & Norvig Ch.4.1-4.2; Ertel Ch.5 |
+| **Sumber Praktikum** | Red Blob Games A* Tutorial: https://www.redblobgames.com/pathfinding/a-star/introduction.html; CS188 Local Search: https://inst.eecs.berkeley.edu/~cs188/ |
 
 ---
 
@@ -199,14 +201,15 @@ Mahasiswa diasumsikan telah menguasai:
 | Komponen | Uraian |
 |----------|--------|
 | **Sub-CPMK** | Sub-CPMK-3.1 |
-| **Indikator Pencapaian** | (1) Mahasiswa mampu memformulasikan game sebagai problem pencarian adversarial; (2) Mahasiswa mampu menelusuri algoritma Minimax; (3) Mahasiswa mampu menerapkan Alpha-Beta Pruning untuk optimasi |
+| **Indikator Pencapaian** | (1) Mahasiswa mampu memformulasikan game sebagai problem pencarian adversarial; (2) Mahasiswa mampu mengimplementasikan algoritma Minimax; (3) Mahasiswa mampu mengoptimalkan Minimax dengan Alpha-Beta Pruning |
 | **Materi Pembelajaran** | Karakteristik game: deterministic, two-player, zero-sum, perfect information; Game tree dan terminal states; Algoritma Minimax: konsep, pseudo-code, analisis kompleksitas O(b^m); Fungsi evaluasi untuk non-terminal states; Alpha-Beta Pruning: konsep, implementasi, efisiensi O(b^(m/2)); Move ordering untuk optimalisasi pruning; Penanganan game dengan elemen stokastik: Expectiminimax (pengenalan) |
 | **Bentuk & Waktu Pembelajaran** | Teori: 3×50 menit (150 menit) |
 | **Metode Pembelajaran** | Ceramah, demonstrasi pada game tree, hands-on tracing |
 | **Pengalaman Belajar** | Mahasiswa menelusuri algoritma Minimax dan Alpha-Beta pada game Tic-Tac-Toe dan game sederhana lainnya |
-| **Penilaian** | Tugas game AI (25%) |
+| **Penilaian** | Tugas implementasi game AI (25%) |
 | **Estimasi Waktu Belajar Mandiri** | 360 menit |
 | **Referensi** | Russell & Norvig Ch.5.1-5.3; Ertel Ch.6 |
+| **Sumber Praktikum** | Minimax Visualization: https://raphsilva.github.io/utilities/minimax_simulator/; CS188 Adversarial Search: https://inst.eecs.berkeley.edu/~cs188/ |
 
 ---
 
@@ -215,7 +218,7 @@ Mahasiswa diasumsikan telah menguasai:
 | Komponen | Uraian |
 |----------|--------|
 | **Sub-CPMK** | Sub-CPMK-3.2 |
-| **Indikator Pencapaian** | (1) Mahasiswa mampu memformulasikan masalah sebagai CSP; (2) Mahasiswa mampu menerapkan teknik constraint propagation; (3) Mahasiswa mampu menelusuri backtracking search dengan heuristik |
+| **Indikator Pencapaian** | (1) Mahasiswa mampu memformulasikan masalah sebagai CSP; (2) Mahasiswa mampu menerapkan teknik constraint propagation; (3) Mahasiswa mampu mengimplementasikan backtracking search dengan heuristik |
 | **Materi Pembelajaran** | Definisi CSP: variabel, domain, constraint; Contoh CSP: map coloring, N-Queens, Sudoku, scheduling; CSP sebagai search problem; Constraint propagation: node consistency, arc consistency (AC-3); Backtracking search untuk CSP; Heuristik pemilihan variabel: MRV (Minimum Remaining Values), degree heuristic; Heuristik pemilihan nilai: LCV (Least Constraining Value); Forward checking; Struktur masalah: CSP dengan struktur tree |
 | **Bentuk & Waktu Pembelajaran** | Teori: 3×50 menit (150 menit) |
 | **Metode Pembelajaran** | Ceramah, demonstrasi, problem-based learning |
@@ -223,6 +226,7 @@ Mahasiswa diasumsikan telah menguasai:
 | **Penilaian** | Tugas CSP (20%), Kuis (10%) |
 | **Estimasi Waktu Belajar Mandiri** | 360 menit |
 | **Referensi** | Russell & Norvig Ch.6; Poole & Mackworth Ch.4 |
+| **Sumber Praktikum** | CSP Visualizer: https://algorithm-visualizer.org/; CS188 CSP: https://inst.eecs.berkeley.edu/~cs188/ |
 
 ---
 
@@ -230,15 +234,16 @@ Mahasiswa diasumsikan telah menguasai:
 
 | Komponen | Uraian |
 |----------|--------|
-| **Sub-CPMK** | Sub-CPMK-1.1, Sub-CPMK-1.2, Sub-CPMK-2.1, Sub-CPMK-2.2, Sub-CPMK-2.3, Sub-CPMK-3.1, Sub-CPMK-3.2 |
+| **Sub-CPMK** | Sub-CPMK-1.1, Sub-CPMK-1.2, Sub-CPMK-2.1, Sub-CPMK-2.2, Sub-CPMK-3.1, Sub-CPMK-3.2 |
 | **Indikator Pencapaian** | (1) Mahasiswa mampu mengintegrasikan konsep-konsep yang telah dipelajari; (2) Mahasiswa mampu menyelesaikan soal-soal komprehensif; (3) Mahasiswa siap menghadapi UTS |
-| **Materi Pembelajaran** | Review konsep agen cerdas dan lingkungan; Review algoritma pencarian: uninformed vs informed; Review pencarian lokal dan optimisasi; Review pencarian adversarial dan CSP; Latihan soal komprehensif; Diskusi dan tanya jawab; Tips mengerjakan UTS |
+| **Materi Pembelajaran** | Review konsep agen cerdas dan lingkungan; Review algoritma pencarian: uninformed vs informed; Review pencarian adversarial dan CSP; Latihan soal komprehensif; Diskusi dan tanya jawab; Tips mengerjakan UTS |
 | **Bentuk & Waktu Pembelajaran** | Teori: 3×50 menit (150 menit) |
 | **Metode Pembelajaran** | Diskusi, latihan soal, tanya jawab |
 | **Pengalaman Belajar** | Mahasiswa mengerjakan latihan soal komprehensif dan mendiskusikan solusinya |
 | **Penilaian** | Partisipasi aktif |
 | **Estimasi Waktu Belajar Mandiri** | 360 menit |
 | **Referensi** | Russell & Norvig Ch.1-6 (review) |
+| **Sumber Praktikum** | CS188 Review Materials: https://inst.eecs.berkeley.edu/~cs188/; AIMA Book Website: http://aima.cs.berkeley.edu/ |
 
 ---
 
@@ -267,6 +272,7 @@ Mahasiswa diasumsikan telah menguasai:
 | **Penilaian** | Tugas pembuktian logika (15%), Kuis (10%) |
 | **Estimasi Waktu Belajar Mandiri** | 360 menit |
 | **Referensi** | Russell & Norvig Ch.7; Poole & Mackworth Ch.5 |
+| **Sumber Praktikum** | Stanford Logic Course: https://web.stanford.edu/class/cs103/; Logic & Proofs Tool: https://lpl.stanford.edu/ |
 
 ---
 
@@ -283,6 +289,7 @@ Mahasiswa diasumsikan telah menguasai:
 | **Penilaian** | Tugas representasi FOL (20%) |
 | **Estimasi Waktu Belajar Mandiri** | 360 menit |
 | **Referensi** | Russell & Norvig Ch.8-9; Poole & Mackworth Ch.5 |
+| **Sumber Praktikum** | SWI-Prolog: https://www.swi-prolog.org/; AIMA Code Repository: https://github.com/aimacode |
 
 ---
 
@@ -299,6 +306,7 @@ Mahasiswa diasumsikan telah menguasai:
 | **Penilaian** | Tugas perhitungan probabilistik (15%), Kuis (10%) |
 | **Estimasi Waktu Belajar Mandiri** | 360 menit |
 | **Referensi** | Russell & Norvig Ch.12-13; Bishop Ch.1-2 |
+| **Sumber Praktikum** | Bayesian Network Visualizer: https://www.bayesserver.com/; CS188 Probability: https://inst.eecs.berkeley.edu/~cs188/ |
 
 ---
 
@@ -315,6 +323,7 @@ Mahasiswa diasumsikan telah menguasai:
 | **Penilaian** | Tugas jaringan Bayesian (20%) |
 | **Estimasi Waktu Belajar Mandiri** | 360 menit |
 | **Referensi** | Russell & Norvig Ch.13-14; Bishop Ch.8 |
+| **Sumber Praktikum** | Bayesian Network Tools: https://www.bnlearn.com/; Netica (Demo): https://www.norsys.com/netica.html |
 
 ---
 
@@ -323,14 +332,15 @@ Mahasiswa diasumsikan telah menguasai:
 | Komponen | Uraian |
 |----------|--------|
 | **Sub-CPMK** | Sub-CPMK-6.1 |
-| **Indikator Pencapaian** | (1) Mahasiswa mampu menjelaskan paradigma pembelajaran mesin; (2) Mahasiswa mampu membangun decision tree secara manual; (3) Mahasiswa mampu menerapkan evaluasi model dengan cross-validation |
+| **Indikator Pencapaian** | (1) Mahasiswa mampu menjelaskan paradigma pembelajaran mesin; (2) Mahasiswa mampu mengimplementasikan algoritma decision tree; (3) Mahasiswa mampu menerapkan evaluasi model dengan cross-validation |
 | **Materi Pembelajaran** | Paradigma pembelajaran mesin: supervised, unsupervised, reinforcement; Konsep supervised learning: training set, test set, features, labels; Decision Tree: algoritma ID3/C4.5, information gain, entropy; Overfitting dan pruning; Naive Bayes classifier (review dari perspektif ML); Regresi linear: least squares, gradient descent; Evaluasi model: accuracy, precision, recall, F1-score; Cross-validation: k-fold, stratified |
 | **Bentuk & Waktu Pembelajaran** | Teori: 3×50 menit (150 menit) |
-| **Metode Pembelajaran** | Ceramah, demonstrasi dengan dataset, hands-on calculation |
+| **Metode Pembelajaran** | Ceramah, demonstrasi dengan dataset, hands-on |
 | **Pengalaman Belajar** | Mahasiswa membangun decision tree secara manual dan mengevaluasi model pada dataset sederhana |
 | **Penilaian** | Tugas decision tree (20%), Kuis (10%) |
 | **Estimasi Waktu Belajar Mandiri** | 360 menit |
 | **Referensi** | Russell & Norvig Ch.19; Mitchell Ch.3; Bishop Ch.4 |
+| **Sumber Praktikum** | Scikit-learn Documentation: https://scikit-learn.org/; Google Colab: https://colab.research.google.com/; Decision Tree Visualizer: https://explained.ai/decision-tree-viz/ |
 
 ---
 
@@ -339,14 +349,15 @@ Mahasiswa diasumsikan telah menguasai:
 | Komponen | Uraian |
 |----------|--------|
 | **Sub-CPMK** | Sub-CPMK-6.2 |
-| **Indikator Pencapaian** | (1) Mahasiswa mampu menjelaskan dan menelusuri algoritma clustering; (2) Mahasiswa mampu menjelaskan konsep reinforcement learning; (3) Mahasiswa mampu mengidentifikasi aplikasi yang sesuai untuk setiap paradigma |
+| **Indikator Pencapaian** | (1) Mahasiswa mampu menjelaskan dan menerapkan algoritma clustering; (2) Mahasiswa mampu menjelaskan konsep reinforcement learning; (3) Mahasiswa mampu mengidentifikasi aplikasi yang sesuai untuk setiap paradigma |
 | **Materi Pembelajaran** | Unsupervised learning: motivasi dan aplikasi; Clustering: K-means algorithm, hierarchical clustering; Evaluasi clustering: silhouette score, elbow method; Dimensionality reduction: PCA (pengenalan); Reinforcement learning: agent, environment, state, action, reward; Markov Decision Process (MDP); Policy dan value function; Q-learning (pengenalan); Perbandingan ketiga paradigma ML; Trend terkini: deep learning (overview) |
 | **Bentuk & Waktu Pembelajaran** | Teori: 3×50 menit (150 menit) |
 | **Metode Pembelajaran** | Ceramah, demonstrasi, diskusi |
-| **Pengalaman Belajar** | Mahasiswa menelusuri K-means pada dataset sederhana dan memahami konsep RL agent |
+| **Pengalaman Belajar** | Mahasiswa menerapkan K-means pada dataset dan mensimulasikan RL agent sederhana |
 | **Penilaian** | Tugas clustering (15%), Kuis (10%) |
 | **Estimasi Waktu Belajar Mandiri** | 360 menit |
 | **Referensi** | Russell & Norvig Ch.19-22; Mitchell Ch.13; Bishop Ch.9 |
+| **Sumber Praktikum** | Scikit-learn Clustering: https://scikit-learn.org/stable/modules/clustering.html; OpenAI Gym: https://www.gymlibrary.dev/; Google Colab: https://colab.research.google.com/ |
 
 ---
 
@@ -363,6 +374,7 @@ Mahasiswa diasumsikan telah menguasai:
 | **Penilaian** | Essay etika AI (15%), Partisipasi diskusi (5%) |
 | **Estimasi Waktu Belajar Mandiri** | 360 menit |
 | **Referensi** | Russell & Norvig Ch.27-28; Artikel dan laporan terkini tentang AI ethics |
+| **Sumber Praktikum** | AI Ethics Resources: https://aiethics.mit.edu/; EU AI Act: https://artificialintelligenceact.eu/; Stanford HAI: https://hai.stanford.edu/ |
 
 ---
 
@@ -444,19 +456,15 @@ Mahasiswa diasumsikan telah menguasai:
 ## KETERHUBUNGAN DENGAN MATA KULIAH LAIN
 
 ### Mata Kuliah Prasyarat
-
 - **Struktur Data dan Algoritma (SDA201)**: Menyediakan fondasi struktur data (tree, graph, priority queue) dan algoritma pencarian yang digunakan dalam implementasi algoritma AI
 - **Statistika dan Probabilitas (STP301)**: Menyediakan fondasi probabilitas dan statistika untuk penalaran probabilistik dan pembelajaran mesin
 
 ### Mata Kuliah Lanjutan
-
 - **Machine Learning (Semester 5)**: Akan memperdalam konsep pembelajaran mesin yang diperkenalkan di mata kuliah ini, termasuk neural networks, deep learning, dan advanced techniques
 - **Sains Data (Semester 4)**: Berkaitan dalam pengolahan dan analisis data untuk aplikasi AI
 
 ### Kontribusi ke Bidang Pertahanan
-
 Mata kuliah ini memberikan fondasi untuk aplikasi AI dalam konteks pertahanan seperti:
-
 - Sistem pengambilan keputusan cerdas (C6ISR)
 - Autonomous systems dan robotika militer
 - Analisis intelijen dan pattern recognition
@@ -467,11 +475,9 @@ Mata kuliah ini memberikan fondasi untuk aplikasi AI dalam konteks pertahanan se
 ## DAFTAR PUSTAKA LENGKAP
 
 ### Referensi Utama
-
 1. Russell, S. & Norvig, P. (2020). *Artificial Intelligence: A Modern Approach* (4th Ed.). Pearson. ISBN: 978-0134610993
 
 ### Referensi Pendukung
-
 2. Poole, D.L. & Mackworth, A.K. (2023). *Artificial Intelligence: Foundations of Computational Agents* (3rd Ed.). Cambridge University Press. ISBN: 978-1009349178
 3. Ertel, W. (2017). *Introduction to Artificial Intelligence* (2nd Ed.). Springer. ISBN: 978-3319584867
 4. Nilsson, N.J. (2014). *Principles of Artificial Intelligence*. Morgan Kaufmann. ISBN: 978-0934613101
@@ -479,18 +485,65 @@ Mata kuliah ini memberikan fondasi untuk aplikasi AI dalam konteks pertahanan se
 6. Bishop, C.M. (2006). *Pattern Recognition and Machine Learning*. Springer. ISBN: 978-0387310732
 
 ### Referensi Tambahan untuk Topik Khusus
-
 7. Sutton, R.S. & Barto, A.G. (2018). *Reinforcement Learning: An Introduction* (2nd Ed.). MIT Press. ISBN: 978-0262039246
 8. Koller, D. & Friedman, N. (2009). *Probabilistic Graphical Models*. MIT Press. ISBN: 978-0262013192
 9. Pearl, J. (2009). *Causality: Models, Reasoning, and Inference* (2nd Ed.). Cambridge University Press. ISBN: 978-0521895606
 
 ### Sumber Online
-
 10. CS188 Berkeley AI Materials: https://inst.eecs.berkeley.edu/~cs188/
 11. Stanford CS221 AI Course: https://stanford-cs221.github.io/
 12. AI Algorithms Visualization: https://algorithm-visualizer.org/
 13. Visualgo - Data Structure Visualization: https://visualgo.net/
 14. AIMA Book Website: http://aima.cs.berkeley.edu/
+
+---
+
+## MEDIA DAN SUMBER BELAJAR
+
+### Perangkat Keras
+- PC/Laptop (minimum 8GB RAM, 256GB storage)
+- Koneksi internet untuk mengakses resources dan online tools
+
+### Perangkat Lunak
+
+| Kategori | Tools | Sumber |
+|----------|-------|--------|
+| Bahasa Pemrograman | Python 3.x | https://www.python.org/ |
+| Notebook | Google Colab / Jupyter Notebook | https://colab.research.google.com/ |
+| Machine Learning | Scikit-learn | https://scikit-learn.org/ |
+| Visualisasi | Matplotlib, Seaborn | https://matplotlib.org/ |
+| Logic Programming | SWI-Prolog (opsional) | https://www.swi-prolog.org/ |
+
+### Sumber Belajar Online
+
+| Sumber | Deskripsi | URL |
+|--------|-----------|-----|
+| CS188 Berkeley | Materi kuliah AI dari UC Berkeley | https://inst.eecs.berkeley.edu/~cs188/ |
+| Stanford CS221 | Materi kuliah AI dari Stanford | https://stanford-cs221.github.io/ |
+| Algorithm Visualizer | Visualisasi algoritma pencarian | https://algorithm-visualizer.org/ |
+| AIMA Book Website | Website resmi buku referensi utama | http://aima.cs.berkeley.edu/ |
+| Visualgo | Visualisasi algoritma dan struktur data | https://visualgo.net/ |
+
+---
+
+## CATATAN PENTING
+
+1. **Mata Kuliah Teori**: Mata kuliah ini bersifat teori (3 SKS Teori) tanpa sesi praktikum formal. Namun, tugas-tugas individual memerlukan implementasi algoritma menggunakan Python atau C++.
+2. **Prasyarat Pemrograman**: Mahasiswa diasumsikan mampu memprogram dalam C++ (dari SDA) dan/atau Python. Tutorial singkat Python diberikan di awal jika diperlukan.
+3. **Prasyarat Matematika**: Pemahaman probabilitas dan statistika (dari STP301) sangat diperlukan terutama untuk materi Bayesian network dan machine learning.
+4. **Kalkulator**: Kalkulator diperbolehkan pada ujian tertentu sesuai pengumuman dosen.
+5. **Koneksi Internet**: Beberapa tugas memerlukan akses ke Google Colab dan resources online.
+
+---
+
+## KONTRAK PERKULIAHAN
+
+Mahasiswa yang mengikuti mata kuliah ini dianggap telah menyetujui:
+1. Mengikuti minimal 80% pertemuan untuk dapat mengikuti UAS
+2. Mengumpulkan tugas individu dan analisis sesuai tenggat waktu
+3. Mengerjakan tugas secara mandiri dan tidak melakukan plagiarisme
+4. Berpartisipasi aktif dalam diskusi kelas dan presentasi
+5. Menyiapkan laptop dan akses internet yang diperlukan untuk tugas
 
 ---
 
