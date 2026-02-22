@@ -37,27 +37,6 @@ Setelah menyelesaikan belajar mandiri ini, Anda diharapkan mampu:
 
 *Gambar 1.1: Hubungan g(n), h(n), dan f(n)*
 
-**[GEMINI IMAGE PROMPT]**
-<prompt>
-SUBJEK: Diagram jalur pencarian dengan visualisasi g(n), h(n), dan f(n)
-GAYA: Ilustrasi vektor datar, diagram edukatif, kualitas buku teks
-TATA LETAK: Jalur horizontal dari Start ke Goal
-WARNA:
-- Start: #10b981 (hijau)
-- Current node: #f59e0b (oranye)
-- Goal: #ef4444 (merah)
-- g(n): #2563eb (biru) garis solid
-- h(n): #8b5cf6 (ungu) garis putus-putus
-ELEMEN:
-1. Node Start, Node n, Node Goal
-2. g(n) = path cost aktual (solid)
-3. h(n) = estimasi ke goal (putus-putus)
-4. f(n) = g(n) + h(n)
-LABEL: "Start", "Node n", "Goal", "g(n)", "h(n)", "f(n)"
-UKURAN: 900x500 piksel
-FORMAT: PNG, latar belakang putih
-</prompt>
-
 ### 🎬 Video Pembelajaran
 
 | No | Judul | Channel | Durasi | Link |
