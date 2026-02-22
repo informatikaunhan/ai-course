@@ -34,28 +34,9 @@ Pencarian adalah proses menemukan **urutan tindakan** yang membawa agen dari **s
 | **Goal Test** | Fungsi untuk cek apakah goal | Apakah tiles tersusun 1-8? |
 | **Path Cost** | Total biaya dari path | Jumlah gerakan |
 
-![Komponen Problem Pencarian](images/ss02-01-search-problem-components.png)
+![Komponen Problem Pencarian](images/p02-01-komponen-problem-pencarian.png)
 
 *Gambar 1.1: Lima komponen formulasi problem pencarian*
-
-**[GEMINI IMAGE PROMPT]**
-<prompt>
-SUBJEK: Diagram komponen problem pencarian dengan contoh 8-puzzle
-GAYA: Ilustrasi vektor datar yang bersih, diagram ilmu komputer edukatif, kualitas buku teks, desain minimal
-TATA LETAK: Diagram pusat dengan lima cabang melingkar
-WARNA:
-- Pusat: #2563eb (biru) untuk "Problem Pencarian"
-- Komponen: #10b981 (hijau), #f59e0b (oranye), #8b5cf6 (ungu), #ec4899 (pink), #ef4444 (merah)
-- Latar belakang: #ffffff (putih)
-ELEMEN:
-1. Lingkaran pusat: "PROBLEM PENCARIAN"
-2. Lima cabang dengan kotak: State Space, Initial State, Actions, Goal Test, Path Cost
-3. Contoh kecil 8-puzzle di samping
-LABEL: "State Space", "Initial State", "Actions", "Goal Test", "Path Cost"
-UKURAN: 900x700 piksel
-FORMAT: PNG, latar belakang putih
-NEGATIF: Tanpa gradien, tanpa efek 3D, tanpa elemen fotorealistik
-</prompt>
 
 ### 🎬 Video Pembelajaran
 
