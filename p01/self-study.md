@@ -72,7 +72,7 @@ Setelah menyelesaikan belajar mandiri ini, Anda diharapkan mampu:
 
 Russell dan Norvig mengidentifikasi empat pendekatan dalam AI berdasarkan dua dimensi: (1) berpikir vs bertindak, dan (2) mirip manusia vs rasional/ideal.
 
-![Matriks Empat Pendekatan AI](images/ss01-01-four-approaches-matrix.png)
+![Matriks Empat Pendekatan AI](images/p01-01-four-approaches-ai.png)
 
 *Gambar 1.1: Matriks empat pendekatan dalam Kecerdasan Artifisial*
 
