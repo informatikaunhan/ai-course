@@ -76,30 +76,6 @@ Russell dan Norvig mengidentifikasi empat pendekatan dalam AI berdasarkan dua di
 
 *Gambar 1.1: Matriks empat pendekatan dalam Kecerdasan Artifisial*
 
-**[GEMINI IMAGE PROMPT]**
-<prompt>
-SUBJEK: Matriks empat pendekatan AI dalam format grid 2x2
-GAYA: Ilustrasi vektor datar yang bersih, diagram ilmu komputer edukatif, kualitas buku teks, desain minimal
-TATA LETAK: Grid 2x2 dengan pemisahan kuadran yang jelas
-WARNA:
-- Utama: #2563eb (biru) untuk elemen utama dan border
-- Sekunder: #10b981 (hijau) untuk kuadran terkait manusia
-- Aksen: #f59e0b (oranye) untuk kuadran terkait rasionalitas
-- Netral: #6b7280 (abu-abu) untuk label
-- Latar belakang: #ffffff (putih)
-ELEMEN:
-1. Kuadran kiri atas: Ikon otak dengan gelembung pikiran, label "Berpikir seperti Manusia"
-2. Kuadran kanan atas: Ikon logika/gear, label "Berpikir Rasional"
-3. Kuadran kiri bawah: Siluet manusia dengan robot, label "Bertindak seperti Manusia"
-4. Kuadran kanan bawah: Ikon target dengan centang, label "Bertindak Rasional" dengan highlight bintang
-5. Header kolom: "Mirip Manusia" (kiri), "Ideal/Rasional" (kanan)
-6. Header baris: "Berpikir" (atas), "Bertindak" (bawah)
-LABEL: "Berpikir seperti Manusia", "Berpikir Rasional", "Bertindak seperti Manusia", "Bertindak Rasional"
-UKURAN: 800x600 piksel
-FORMAT: PNG, latar belakang putih
-NEGATIF: Tanpa gradien, tanpa efek 3D, tanpa elemen fotorealistik, tanpa tekstur kompleks
-</prompt>
-
 | Pendekatan | Fokus | Metode | Contoh |
 |------------|-------|--------|--------|
 | Berpikir seperti Manusia | Cara manusia berpikir | Cognitive science, neuroscience | Cognitive architecture (ACT-R) |
@@ -134,32 +110,9 @@ NEGATIF: Tanpa gradien, tanpa efek 3D, tanpa elemen fotorealistik, tanpa tekstur
 - **Aktuator:** Melakukan tindakan ke lingkungan (motor, speaker, display)
 - **Agent Function:** Memetakan percept sequence ke action
 
-![Siklus Interaksi Agen-Lingkungan](images/ss01-02-agent-environment-cycle.png)
+![Siklus Interaksi Agen-Lingkungan](images/p01-02-agent-environment-interaction.png)
 
 *Gambar 1.2: Siklus interaksi agen dengan lingkungan*
-
-**[GEMINI IMAGE PROMPT]**
-<prompt>
-SUBJEK: Diagram siklus interaksi agen-lingkungan dengan sensor dan aktuator
-GAYA: Ilustrasi vektor datar yang bersih, diagram ilmu komputer edukatif, kualitas buku teks, desain minimal
-TATA LETAK: Susunan horizontal dengan loop umpan balik melingkar
-WARNA:
-- Utama: #2563eb (biru) untuk kotak agen
-- Sekunder: #10b981 (hijau) untuk lingkungan
-- Aksen: #f59e0b (oranye) untuk panah dan alur data
-- Merah: #ef4444 untuk aktuator
-- Latar belakang: #ffffff (putih)
-ELEMEN:
-1. Kotak biru tengah: "AGEN" berisi "Agent Function"
-2. Kotak hijau di kanan: "LINGKUNGAN"
-3. Panah atas dari lingkungan ke agen: "Percept" dengan ikon sensor
-4. Panah bawah dari agen ke lingkungan: "Action" dengan ikon aktuator
-5. Label: "Sensor", "Aktuator"
-LABEL: "Agen", "Lingkungan", "Percept", "Action", "Sensor", "Aktuator"
-UKURAN: 800x500 piksel
-FORMAT: PNG, latar belakang putih
-NEGATIF: Tanpa gradien, tanpa efek 3D, tanpa elemen fotorealistik
-</prompt>
 
 **Rational Agent vs Omniscient Agent:**
 - **Rational Agent:** Memaksimalkan hasil yang diharapkan berdasarkan informasi yang tersedia
@@ -195,32 +148,6 @@ NEGATIF: Tanpa gradien, tanpa efek 3D, tanpa elemen fotorealistik
 
 *Gambar 1.3: Hierarki lima jenis agen cerdas*
 
-**[GEMINI IMAGE PROMPT]**
-<prompt>
-SUBJEK: Diagram hierarki lima jenis agen cerdas dari Simple Reflex hingga Learning Agent
-GAYA: Ilustrasi vektor datar yang bersih, diagram ilmu komputer edukatif, kualitas buku teks, desain minimal
-TATA LETAK: Tangga naik dari kiri bawah ke kanan atas menunjukkan kompleksitas meningkat
-WARNA:
-- Level 1: #10b981 (hijau) untuk Simple Reflex
-- Level 2: #3b82f6 (biru) untuk Model-Based
-- Level 3: #f59e0b (oranye) untuk Goal-Based
-- Level 4: #ef4444 (merah) untuk Utility-Based
-- Level 5: #8b5cf6 (ungu) untuk Learning
-- Latar belakang: #ffffff (putih)
-ELEMEN:
-1. Lima kotak bertingkat naik:
-   - "Simple Reflex Agent" (hijau)
-   - "Model-Based Reflex Agent" (biru)
-   - "Goal-Based Agent" (oranye)
-   - "Utility-Based Agent" (merah)
-   - "Learning Agent" (ungu)
-2. Panah menunjukkan "Kompleksitas Meningkat →"
-3. Karakteristik kunci di samping setiap kotak
-LABEL: Nama kelima jenis agen, "Kompleksitas Meningkat"
-UKURAN: 900x600 piksel
-FORMAT: PNG, latar belakang putih
-NEGATIF: Tanpa gradien kompleks, tanpa efek 3D
-</prompt>
 
 **Kapan menggunakan jenis agen tertentu:**
 - **Simple Reflex:** Lingkungan fully observable, sederhana
