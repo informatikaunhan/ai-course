@@ -47,31 +47,7 @@ Setelah menyelesaikan belajar mandiri ini, Anda diharapkan mampu:
 
 ![Optimization Landscape](images/ss04-01-optimization-landscape.png)
 
-*Gambar 1.1: Optimization landscape dengan local/global maxima*
-
-**[GEMINI IMAGE PROMPT]**
-<prompt>
-SUBJEK: Landscape optimisasi 2D dengan local maxima, global maximum, plateau, ridge
-GAYA: Ilustrasi vektor datar yang bersih, diagram ilmu komputer edukatif, kualitas buku teks, desain minimal
-TATA LETAK: Grafik garis dengan sumbu x (state space) dan sumbu y (objective function)
-WARNA:
-- Garis landscape: #2563eb (biru) solid tebal
-- Global maximum: #10b981 (hijau) dengan bintang
-- Local maxima: #f59e0b (oranye) dengan titik
-- Plateau: #8b5cf6 (ungu) area datar
-- Current state: #ef4444 (merah) dengan panah
-- Latar belakang: #ffffff (putih)
-ELEMEN:
-1. Kurva bergelombang dengan beberapa puncak dan lembah
-2. Puncak tertinggi ditandai "Global Maximum" dengan bintang hijau
-3. Dua puncak lebih rendah ditandai "Local Maximum"
-4. Area datar di tengah ditandai "Plateau"
-5. Area sempit ditandai "Ridge"
-LABEL: "Global Maximum", "Local Maximum", "Plateau", "Ridge", "State Space", "f(x)"
-UKURAN: 900x500 piksel
-FORMAT: PNG, latar belakang putih
-NEGATIF: Tanpa gradien, tanpa efek 3D, tanpa elemen fotorealistik
-</prompt>
+*Gambar 4.1: Optimization landscape dengan local/global maxima*
 
 ### 🎬 Video Pembelajaran
 
@@ -127,30 +103,9 @@ function HILL-CLIMBING(problem):
 - **Plateau:** Area datar, tidak tahu ke mana harus bergerak
 - **Ridge:** Area sempit, sulit diikuti dengan langkah diskret
 
-![Hill Climbing Variants](images/ss04-02-hill-climbing-variants.png)
+![Hill Climbing Variants](images/p04-03-hill-climbing-variants.png)
 
-*Gambar 2.1: Variasi Hill Climbing dan masalahnya*
-
-**[GEMINI IMAGE PROMPT]**
-<prompt>
-SUBJEK: Diagram variasi Hill Climbing menunjukkan Steepest-Ascent, First-Choice, Random-Restart
-GAYA: Ilustrasi vektor datar yang bersih, diagram ilmu komputer edukatif, kualitas buku teks
-TATA LETAK: Tiga panel horizontal menunjukkan skenario berbeda
-WARNA:
-- Landscape: #2563eb (biru) solid
-- Current state: #ef4444 (merah) titik
-- Path: #10b981 (hijau) garis putus-putus
-- Local maxima: #f59e0b (oranye)
-- Latar belakang: #ffffff (putih)
-ELEMEN:
-1. Panel 1: Steepest-Ascent memilih neighbor terbaik
-2. Panel 2: First-Choice memilih neighbor pertama yang lebih baik
-3. Panel 3: Random-Restart dari posisi berbeda
-LABEL: "Steepest-Ascent", "First-Choice", "Random-Restart"
-UKURAN: 900x400 piksel
-FORMAT: PNG, latar belakang putih
-NEGATIF: Tanpa gradien, tanpa efek 3D
-</prompt>
+*Gambar 4.2: Variasi Hill Climbing dan masalahnya*
 
 ### 🎬 Video Pembelajaran
 
@@ -203,30 +158,9 @@ function SIMULATED-ANNEALING(problem, schedule):
 - **Geometric:** T(t) = T₀ × α^t (paling umum, α ≈ 0.95)
 - **Logarithmic:** T(t) = T₀ / log(t + 1)
 
-![Simulated Annealing Process](images/ss04-03-simulated-annealing.png)
+![Simulated Annealing Process](images/p04-04-simulated-annealing-process.png)
 
-*Gambar 3.1: Proses Simulated Annealing dengan cooling schedule*
-
-**[GEMINI IMAGE PROMPT]**
-<prompt>
-SUBJEK: Diagram proses Simulated Annealing menunjukkan eksplorasi pada T tinggi dan eksploitasi pada T rendah
-GAYA: Ilustrasi vektor datar yang bersih, diagram ilmu komputer edukatif, kualitas buku teks
-TATA LETAK: Dua panel atas-bawah dengan grafik cooling di samping
-WARNA:
-- Landscape: #2563eb (biru) solid
-- Path T tinggi: #ef4444 (merah) garis zigzag
-- Path T rendah: #10b981 (hijau) garis smooth
-- Temperature curve: #f59e0b (oranye)
-- Latar belakang: #ffffff (putih)
-ELEMEN:
-1. Panel atas: T tinggi - path acak, banyak eksplorasi
-2. Panel bawah: T rendah - path lebih fokus ke puncak
-3. Grafik samping: Temperature vs Time menurun
-LABEL: "High Temperature (Exploration)", "Low Temperature (Exploitation)", "Cooling Schedule"
-UKURAN: 900x600 piksel
-FORMAT: PNG, latar belakang putih
-NEGATIF: Tanpa gradien, tanpa efek 3D
-</prompt>
+*Gambar 4.3: Proses Simulated Annealing dengan cooling schedule*
 
 ### 🎬 Video Pembelajaran
 
@@ -294,35 +228,10 @@ function GENETIC-ALGORITHM(population, fitness):
 - **Two-point:** Potong di dua titik, tukar bagian tengah
 - **Uniform:** Setiap gen dipilih random dari salah satu parent
 
-![Genetic Algorithm Flow](images/ss04-04-genetic-algorithm.png)
+![Genetic Algorithm Flow](p04-06-genetic-algorithm-components.png)
 
-*Gambar 4.1: Alur Algoritma Genetika*
+*Gambar 4.4: Alur Algoritma Genetika*
 
-**[GEMINI IMAGE PROMPT]**
-<prompt>
-SUBJEK: Diagram alur Algoritma Genetika menunjukkan siklus evolusi
-GAYA: Ilustrasi vektor datar yang bersih, diagram ilmu komputer edukatif, kualitas buku teks
-TATA LETAK: Flowchart circular dengan langkah-langkah GA
-WARNA:
-- Population: #2563eb (biru)
-- Selection: #10b981 (hijau)
-- Crossover: #f59e0b (oranye)
-- Mutation: #ef4444 (merah)
-- Arrows: #6b7280 (abu-abu)
-- Latar belakang: #ffffff (putih)
-ELEMEN:
-1. Box "Initial Population" di atas
-2. Box "Fitness Evaluation"
-3. Box "Selection" dengan ikon filter
-4. Box "Crossover" dengan ikon DNA bersilang
-5. Box "Mutation" dengan ikon perubahan kecil
-6. Box "New Population"
-7. Arrow kembali ke Fitness Evaluation
-LABEL: "Population", "Fitness Evaluation", "Selection", "Crossover", "Mutation", "New Generation"
-UKURAN: 800x700 piksel
-FORMAT: PNG, latar belakang putih
-NEGATIF: Tanpa gradien, tanpa efek 3D
-</prompt>
 
 ### 🎬 Video Pembelajaran
 
