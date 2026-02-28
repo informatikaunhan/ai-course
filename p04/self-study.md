@@ -228,7 +228,7 @@ function GENETIC-ALGORITHM(population, fitness):
 - **Two-point:** Potong di dua titik, tukar bagian tengah
 - **Uniform:** Setiap gen dipilih random dari salah satu parent
 
-![Genetic Algorithm Flow](p04-06-genetic-algorithm-components.png)
+![Genetic Algorithm Flow](images/p04-06-genetic-algorithm-components.png)
 
 *Gambar 4.4: Alur Algoritma Genetika*
 
